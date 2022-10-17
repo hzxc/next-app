@@ -12,6 +12,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
 import { wagmiClient } from 'conf';
+import React from 'react';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -23,7 +24,7 @@ type AppPropsWithLayout = AppProps & {
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
-  const queryClient = new QueryClient();
+  const [queryClient] = React.useState(() => new QueryClient());
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
