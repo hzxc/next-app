@@ -6,10 +6,10 @@ import { NextPageWithLayout } from 'pages/_app';
 import { ReactElement, useEffect } from 'react';
 
 const Wagmi: NextPageWithLayout = () => {
-  const { data } = useCakePrice();
+  const { data, isFetching } = useCakePrice();
   useEffect(() => {
-    console.log(data);
-  }, [data]);
+    console.log(isFetching ? 'fetching' : 'idle');
+  }, [isFetching]);
   return (
     <div className='p-8'>
       <IconButton
