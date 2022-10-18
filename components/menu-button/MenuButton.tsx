@@ -32,7 +32,7 @@ export const MenuButtonContext = createContext<IMenuButtonContext>({
 });
 
 type Props = MenuButtonProps & HTMLAttributes<HTMLDivElement>;
-const defaultClass: string = 'relative z-40';
+const defaultClass: string = 'relative';
 
 export const MenuButton: React.FC<Props> = (props) => {
   const {

@@ -10,7 +10,7 @@ import { ReactElement } from 'react';
 
 const MenuPage: NextPageWithLayout = () => {
   return (
-    <div className='p-2'>
+    <div className='flex flex-col'>
       <Menu>
         <MenuItem>Getting Started</MenuItem>
         <MenuItem>Add React to a Website</MenuItem>
@@ -25,8 +25,7 @@ const MenuPage: NextPageWithLayout = () => {
       </Menu>
 
       <hr />
-
-      <Menu mode='horizontal'>
+      <Menu mode='horizontal' className='z-[999]'>
         <MenuItem>Trade</MenuItem>
         <MenuItem>Earn</MenuItem>
         <MenuItem>Win</MenuItem>
@@ -51,20 +50,6 @@ const MenuPage: NextPageWithLayout = () => {
           <PanMenuItem>Pancake</PanMenuItem>
         </PanSubMenu>
       </PanMenu>
-
-      <hr />
-
-      <Menu mode='horizontal'>
-        <MenuItem>Trade</MenuItem>
-        <MenuItem>Earn</MenuItem>
-        <MenuItem>Win</MenuItem>
-        <MenuItem>NFT</MenuItem>
-        <SubMenu subTitle='Open'>
-          <MenuItem>Modal</MenuItem>
-          <MenuItem>Button</MenuItem>
-          <MenuItem>Pancake</MenuItem>
-        </SubMenu>
-      </Menu>
 
       <hr />
 

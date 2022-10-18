@@ -76,8 +76,8 @@ export const SubMenu: React.FC<Props> = (props) => {
       <Transition visible={menuOpen} timeout={300} classNames='zoom-in-top'>
         <ul
           className={`${
-            context.mode === 'horizontal' ? 'absolute z-40 bg-white' : ''
-          } flex flex-col flex-nowrap items-start justify-start gap-0.5 pl-4`}
+            context.mode === 'horizontal' ? 'absolute' : ''
+          } flex flex-col flex-nowrap items-start justify-start gap-0.5 pl-4 bg-white`}
         >
           {childrenComponent}
         </ul>
