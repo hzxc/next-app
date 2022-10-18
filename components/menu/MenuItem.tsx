@@ -7,8 +7,9 @@ export interface MenuItemProps {
 }
 
 type Props = MenuItemProps & LiHTMLAttributes<HTMLLIElement>;
+// [&>*:first-child]:block
 const defaultClass: string =
-  'cursor-pointer hover:opacity-70 [&>*:first-child]:block [&>*:first-child]:px-3 [&>*:first-child]:py-1.5';
+  'cursor-pointer hover:opacity-70 [&>*:first-child]:px-3 [&>*:first-child]:py-1.5';
 const activeClass: string = 'font-semibold text-cyan-500 !border-l-cyan-500';
 const horizontalActiveClass: string =
   'font-semibold text-cyan-500 !border-b-cyan-500';

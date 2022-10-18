@@ -64,7 +64,9 @@ export const SubMenu: React.FC<Props> = (props) => {
       if (childElement.type.displayName === 'MenuItem') {
         return React.cloneElement(childElement, {
           index: `${index}-${i}`,
-          className: `${childElement.props.className}`,
+          className: `${
+            childElement.props.className ? childElement.props.className : ''
+          }`,
         });
       } else {
         console.error(

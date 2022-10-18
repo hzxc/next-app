@@ -15,6 +15,7 @@ import WalletSvg from 'public/images/pancake/wallet.svg';
 import { PancakeRouterABI, IBEP20ABI } from 'abi/bsc';
 import { utils } from 'ethers';
 import { useEffect } from 'react';
+import DotSvg from 'public/images/pancake/dot.svg';
 
 export const Header: React.FC = () => {
   const { visible, close, open } = useToggle(false);
@@ -110,9 +111,8 @@ export const Header: React.FC = () => {
               <MenuItem>
                 <IconButton
                   className='w-full my-[-2px]'
-                  rightIcon={
-                    <ArrowExitSvg className='w-5 h-5 text-violet-900/80' />
-                  }
+                  rightSize='20px'
+                  rightIcon={<ArrowExitSvg />}
                 >
                   Perpetual
                 </IconButton>
@@ -120,9 +120,8 @@ export const Header: React.FC = () => {
               <MenuItem>
                 <IconButton
                   className='w-full my-[-2px]'
-                  rightIcon={
-                    <ArrowExitSvg className='w-5 h-5 text-violet-900/80' />
-                  }
+                  rightSize='20px'
+                  rightIcon={<ArrowExitSvg />}
                 >
                   Bridge
                 </IconButton>
@@ -145,28 +144,30 @@ export const Header: React.FC = () => {
             </SubMenu>
             <SubMenu
               subTitle={
-                <IconButton rightSize='16px' rightSrc='/images/pancake/dot.svg'>
+                <IconButton
+                  rightSize='16px'
+                  rightIcon={<DotSvg className='text-[#ed4b9e]' />}
+                >
                   •••
                 </IconButton>
               }
             >
               <MenuItem>Info</MenuItem>
-              <MenuItem>Info</MenuItem>
-              <MenuItem className='border-b'>
+              <MenuItem>
                 <div className='flex items-center justify-between'>
-                  <p>Voting</p>
-                  <button className='px-2 py-px text-sm font-normal rounded-full border-2 text-emerald-400 border-emerald-400 my-[-5px]'>
-                    VOTE NOW
+                  IFO
+                  <button className='px-2 py-px text-sm font-normal rounded-full border-2 text-[#ed4b9e] border-[#ed4b9e] my-[-5px]'>
+                    LIVE
                   </button>
                 </div>
               </MenuItem>
+              <MenuItem className='border-b'>Voting</MenuItem>
               <MenuItem className='border-b'>Leaderboard</MenuItem>
               <MenuItem>
                 <IconButton
                   className='w-full my-[-2px]'
-                  rightIcon={
-                    <ArrowExitSvg className='w-5 h-5 text-violet-900/80' />
-                  }
+                  rightSize='20px'
+                  rightIcon={<ArrowExitSvg />}
                 >
                   Blog
                 </IconButton>
@@ -174,9 +175,8 @@ export const Header: React.FC = () => {
               <MenuItem>
                 <IconButton
                   className='w-full my-[-2px]'
-                  rightIcon={
-                    <ArrowExitSvg className='w-5 h-5 text-violet-900/80' />
-                  }
+                  rightSize='20px'
+                  rightIcon={<ArrowExitSvg />}
                 >
                   Doc
                 </IconButton>
