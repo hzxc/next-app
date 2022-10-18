@@ -207,7 +207,7 @@ export const Header: React.FC = () => {
                 leftSize='32px'
                 leftSrc='/images/pancake/56.png'
                 rightIcon={<ArrowDownSvg />}
-                customStyle={{
+                style={{
                   boxShadow: 'rgb(0 0 0 / 10%) 0px -2px 0px inset',
                 }}
               >

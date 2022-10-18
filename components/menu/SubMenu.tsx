@@ -77,7 +77,7 @@ export const SubMenu: React.FC<Props> = (props) => {
         <ul
           className={`${
             context.mode === 'horizontal' ? 'absolute' : ''
-          } flex flex-col flex-nowrap items-start justify-start gap-0.5 pl-4 bg-white`}
+          } flex flex-col flex-nowrap items-start justify-start gap-0.5 pl-4`}
         >
           {childrenComponent}
         </ul>

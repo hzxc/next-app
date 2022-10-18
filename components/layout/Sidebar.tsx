@@ -39,22 +39,19 @@ export default function Sidebar() {
             <Link href='/samples/menu'>Menu</Link>
           </MenuItem>
           <MenuItem>
+            <Link href='/samples/menu-button'>Menu Button</Link>
+          </MenuItem>
+          <MenuItem>
             <Link href='/samples/toggle'>Toggle</Link>
           </MenuItem>
           <MenuItem>
             <Link href='/samples/modal'>Modal</Link>
           </MenuItem>
           <MenuItem>
-            <Link href='/samples/pan-menu'>Pan Menu</Link>
-          </MenuItem>
-          <MenuItem>
             <Link href='/samples/transition'>Transition</Link>
           </MenuItem>
           <MenuItem>
             <Link href='/samples/tab'>Tab</Link>
-          </MenuItem>
-          <MenuItem>
-            <Link href='/samples/menu-button'>Menu Button</Link>
           </MenuItem>
         </SubMenu>
         <SubMenu subTitle='Wagmi'>
