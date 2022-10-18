@@ -66,7 +66,7 @@ const ButtonPage: NextPageWithLayout = () => {
         <span>Pancake Button:</span>
         <PanButton>Connect Wallet</PanButton>
         <PanButton className='w-72 h-12 rounded-2xl'>Connect Wallet</PanButton>
-        <PanButton className='py-0 px-2'>scan risk</PanButton>
+        <PanButton className='!py-0 !px-2'>scan risk</PanButton>
       </div>
       <hr />
       <div className='flex gap-4 flex-wrap items-center justify-start p-4'>
