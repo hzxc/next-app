@@ -23,9 +23,8 @@ export const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
           <TabItem>
             <IconButton
               className='w-full my-[-2px]'
-              rightIcon={
-                <ArrowUpRight className='w-5 h-5 text-violet-900/80' />
-              }
+              rightSize='20px'
+              rightIcon={<ArrowUpRight />}
             >
               Blog
             </IconButton>
@@ -33,9 +32,8 @@ export const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
           <TabItem>
             <IconButton
               className='w-full my-[-2px]'
-              rightIcon={
-                <ArrowUpRight className='w-5 h-5 text-violet-900/80' />
-              }
+              rightSize='20px'
+              rightIcon={<ArrowUpRight />}
             >
               Bridge
             </IconButton>

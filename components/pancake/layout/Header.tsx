@@ -16,76 +16,14 @@ import { PancakeRouterABI, IBEP20ABI } from 'abi/bsc';
 import { utils } from 'ethers';
 import { useEffect } from 'react';
 import DotSvg from 'public/images/pancake/dot.svg';
+import { useCakePrice } from 'hooks/pancake';
 
 export const Header: React.FC = () => {
   const { visible, close, open } = useToggle(false);
   const { chain } = useNetwork();
-
   const [isConnected, address] = useInitConnect();
-
-  // const { data, isError, isLoading } = useContractRead({
-  //   // address: '0x10ED43C718714eb63d5aA57B78B54704E256024E',
-  //   address: '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
-  //   abi: [
-  //     {
-  //       inputs: [],
-  //       name: 'decimals',
-  //       outputs: [
-  //         {
-  //           internalType: 'uint8',
-  //           name: '',
-  //           type: 'uint8',
-  //         },
-  //       ],
-  //       stateMutability: 'view',
-  //       type: 'function',
-  //     },
-  //   ],
-  //   functionName: 'decimals',
-  //   args: [],
-  // });
-
-  // const { data, isError, isLoading, isSuccess } = useContractRead({
-  //   addressOrName: '0x10ED43C718714eb63d5aA57B78B54704E256024E',
-  //   contractInterface: PancakeRouterABI,
-  //   functionName: 'getAmountsOut',
-  //   chainId: 56,
-  //   args: [
-  //     utils.parseEther('1'),
-  //     ['0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82', '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56'],
-  //   ],
-  // });
-
-  const { data, isError, isLoading, isSuccess } = useContractRead<
-    typeof PancakeRouterABI,
-    'getAmountsOut'
-  >({
-    address: '0x10ED43C718714eb63d5aA57B78B54704E256024E',
-    abi: PancakeRouterABI,
-    functionName: 'getAmountsOut',
-    chainId: 56,
-    args: [
-      utils.parseEther('1'),
-      [
-        '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
-        '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56',
-      ],
-    ],
-  });
-
-  // const { data, isError, isLoading, isSuccess } = useContractRead({
-  //   address: '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
-  //   abi: IBEP20ABI,
-  //   functionName: 'symbol',
-  //   chainId: 56,
-  // });
-
-  useEffect(() => {
-    const wei = utils.parseEther('1');
-    // console.log('wei:', wei.toString());
-
-    console.log('data', data);
-  }, [data]);
+  const { data: cakePrice } = useCakePrice();
+  useEffect(() => {}, []);
 
   return (
     <>
@@ -186,16 +124,18 @@ export const Header: React.FC = () => {
         </div>
         <div className='flex items-center gap-4 justify-start'>
           <IconButton
-            className='font-semibold hover:[&>div>span:first-child]:hover:scale-125 [&>div>span:first-child]:transition-transform'
+            className='font-semibold [&>div>span:first-child]:hover:scale-125 [&>div>span:first-child]:transition-transform'
             leftSrc='/images/pancake/pancake.svg'
           >
-            <span></span>
+            {cakePrice
+              ? utils.formatUnits(cakePrice[1], 18).substring(0, 5)
+              : undefined}
           </IconButton>
-          <IconButton>
-            <LanguageSvg className='w-6 h-6' />
+          <IconButton className='hover:opacity-70 active:translate-y-px'>
+            <LanguageSvg />
           </IconButton>
-          <IconButton>
-            <SettingSvg className='w-6 h-6' />
+          <IconButton className='hover:opacity-70 active:translate-y-px'>
+            <SettingSvg />
           </IconButton>
           <MenuButton
             pos='left-[-38px]'
