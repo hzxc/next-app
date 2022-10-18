@@ -1,7 +1,7 @@
 import { Transition } from 'components';
 import React, { FunctionComponentElement, ReactNode } from 'react';
 import { LiHTMLAttributes, useContext, useState } from 'react';
-import { IoIosArrowDown } from 'react-icons/io';
+
 import { MenuContext } from './Menu';
 import { MenuItemProps } from './MenuItem';
 
@@ -64,7 +64,7 @@ export const SubMenu: React.FC<Props> = (props) => {
       if (childElement.type.displayName === 'MenuItem') {
         return React.cloneElement(childElement, {
           index: `${index}-${i}`,
-          className: `${childElement.props.className}`,
+          className: `${childElement.props.className} w-64 first:rounded-t-md last:rounded-b-md`,
         });
       } else {
         console.error(
@@ -77,7 +77,7 @@ export const SubMenu: React.FC<Props> = (props) => {
         <ul
           className={`${
             context.mode === 'horizontal' ? 'absolute z-40 bg-white' : ''
-          } flex flex-col flex-nowrap items-start justify-start gap-0.5 pl-4`}
+          } flex flex-col flex-nowrap items-start justify-start border py-1 rounded-xl`}
         >
           {childrenComponent}
         </ul>
@@ -87,28 +87,17 @@ export const SubMenu: React.FC<Props> = (props) => {
   return (
     <li key={index} className={mergeClass} {...hoverEvents}>
       <div
-        className={`flex items-center cursor-pointer hover:opacity-70${
-          context.mode === 'vertical'
-            ? ' border-l-4 border-l-transparent'
-            : ' border-b-4 border-b-transparent'
-        } px-3 py-1.5${
+        className={`flex items-center cursor-pointer rounded-2xl my-1 hover:bg-zinc-100 px-4 py-4${
           context.index.startsWith(index + '-')
-            ? ' font-semibold text-cyan-500'
+            ? ' font-semibold text-[#7645d9]'
             : ''
         }`}
         style={{ lineHeight: '100%' }}
         {...clickEvents}
       >
         <span>{subTitle}</span>
-        <span className='mt-[-6px] mb-[-8px] mx-1'>
-          <IoIosArrowDown
-            className={`${
-              menuOpen ? 'rotate-180 text-cyan-500' : 'rotate-0'
-            } transition-transform`}
-            size={24}
-          />
-        </span>
       </div>
+
       {renderChildren()}
     </li>
   );

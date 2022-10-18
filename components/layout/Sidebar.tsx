@@ -17,12 +17,12 @@ export default function Sidebar() {
         <MenuItem>
           <Link href=''>Shibaswap</Link>
         </MenuItem>
-        <SubMenu title='Ethers'>
+        <SubMenu subTitle='Ethers'>
           <MenuItem>
             <Link href='/samples/ethers'>Base</Link>
           </MenuItem>
         </SubMenu>
-        <SubMenu title='Samples'>
+        <SubMenu subTitle='Samples'>
           <MenuItem>
             <Link href='/samples/env'>Env Page</Link>
           </MenuItem>
@@ -57,7 +57,7 @@ export default function Sidebar() {
             <Link href='/samples/menu-button'>Menu Button</Link>
           </MenuItem>
         </SubMenu>
-        <SubMenu title='Wagmi'>
+        <SubMenu subTitle='Wagmi'>
           <MenuItem>
             <Link href='/samples/wagmi/token-info'>Token Info</Link>
           </MenuItem>
@@ -77,7 +77,7 @@ export default function Sidebar() {
             <Link href='/samples/wagmi/send-transaction'>Send Transaction</Link>
           </MenuItem>
         </SubMenu>
-        <SubMenu title='Binance Smart Chain'>
+        <SubMenu subTitle='Binance Smart Chain'>
           <MenuItem>
             <Link href='/samples/bsc'>Link</Link>
           </MenuItem>

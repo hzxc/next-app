@@ -9,7 +9,9 @@ AppContext.displayName = 'AppContext';
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   return (
-    <AppContext.Provider value={{ contextName: 'AppContext' }}>{children}</AppContext.Provider>
+    <AppContext.Provider value={{ contextName: 'AppContext' }}>
+      {children}
+    </AppContext.Provider>
   );
 };
 

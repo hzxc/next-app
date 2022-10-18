@@ -10,12 +10,12 @@ interface IconButtonProps {
   col?: boolean;
   leftSize?: string;
   rightSize?: string;
-  tailClass?: 'default' | 'panEx' | 'panMb';
+  exClassName?: 'default' | 'panEx' | 'panMb';
   customStyle?: React.CSSProperties;
 }
 
 const defaultInitialProps: IconButtonProps = {
-  tailClass: 'default',
+  exClassName: 'default',
   leftIcon: undefined,
   rightIcon: undefined,
   leftSrc: undefined,
@@ -44,16 +44,16 @@ export const IconButton: React.FC<Props> = (props) => {
     leftSize,
     rightSize,
     col,
-    tailClass,
+    exClassName,
     style,
     ...restProps
   } = {
     ...defaultInitialProps,
     ...props,
   };
-  const mergeClass = `${tailClass === 'default' ? defaultClass : ''} ${
-    tailClass === 'panEx' ? PanExClass : ''
-  } ${tailClass === 'panMb' ? PanMenuButtonClass : ''} ${
+  const mergeClass = `${exClassName === 'default' ? defaultClass : ''} ${
+    exClassName === 'panEx' ? PanExClass : ''
+  } ${exClassName === 'panMb' ? PanMenuButtonClass : ''} ${
     className ? ' ' + className : ''
   }`;
 

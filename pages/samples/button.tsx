@@ -45,14 +45,14 @@ const ButtonPage: NextPageWithLayout = () => {
         ></IconButton>
         <IconButton leftSrc='/images/pancake/panExDown.svg'></IconButton>
         <IconButton
-          tailClass='panEx'
+          exClassName='panEx'
           leftIcon={<PanExDown />}
           rightIcon={<PanExUpDown className='text-white' />}
           leftSize='20px'
           rightSize='20px'
         ></IconButton>
         <IconButton
-          tailClass='panMb'
+          exClassName='panMb'
           leftSize='32px'
           leftSrc='/images/pancake/56.png'
           rightIcon={<ArrowDownSvg />}

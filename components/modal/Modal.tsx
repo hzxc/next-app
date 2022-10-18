@@ -1,6 +1,6 @@
 import { TransitionRef } from 'components';
 import { Portal } from 'components/portal';
-import { ReactNode, useEffect, useRef } from 'react';
+import { ReactNode, useRef } from 'react';
 
 export const Modal: React.FC<{ visible: boolean; children: ReactNode }> = ({
   visible,
@@ -14,7 +14,12 @@ export const Modal: React.FC<{ visible: boolean; children: ReactNode }> = ({
     </div>
   );
   return (
-    <TransitionRef visible={visible} timeout={300} nodeRef={nodeRef} classNames='fade-modal'>
+    <TransitionRef
+      visible={visible}
+      timeout={300}
+      nodeRef={nodeRef}
+      classNames='fade-modal'
+    >
       <Portal>{ModalDom}</Portal>
     </TransitionRef>
   );
