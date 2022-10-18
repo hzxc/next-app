@@ -27,7 +27,7 @@ const defaultInitialProps: IconButtonProps = {
 };
 
 type Props = IconButtonProps & ButtonHTMLAttributes<HTMLButtonElement>;
-const defaultClass: string = 'align-baseline';
+const defaultClass: string = '';
 const PanExClass: string =
   'align-middle active:translate-y-px align-middle rounded-full p-[6px] text-cyan-500 [&>div>span:first-child]:block [&>div>span:last-child]:hidden shadow-sm shadow-gray-700 active:shadow-none bg-[#eeeaf4] [&>div>span:last-child]:hover:block [&>div>span:first-child]:hover:hidden hover:bg-[#6edbe3]';
 const PanMenuButtonClass: string =

@@ -12,12 +12,11 @@ import { useTokens } from 'hooks/pancake';
 import { ReactElement, useEffect } from 'react';
 import { NextPageWithLayout } from 'pages/_app';
 import { IconButton } from 'components';
-import { useAppDispatch, useAppSelector } from 'redux/hooks';
-import { setBaseTokens } from 'redux/pancake/pancakePersistSlice';
+import { useAppSelector } from 'redux/hooks';
 
 import { selectPancake } from 'redux/pancake/pancakeSlice';
 import { selectPancakePersist } from 'redux/pancake/pancakePersistSlice';
-import { baseTokens } from 'data/pancake';
+import { IoMdRefresh } from 'react-icons/io';
 
 const Pancake: NextPageWithLayout = () => {
   const { visible, close, open } = useToggle(false);
@@ -38,23 +37,25 @@ const Pancake: NextPageWithLayout = () => {
       <TokenModal visible={visible} close={close} />
       <div className='w-80 flex flex-col border rounded-3xl bg-white'>
         <div className='p-6 border-b'>
-          <div className='flex justify-between'>
+          <div className='flex items-center justify-between'>
             <IconButton
               leftIcon={<ChartSvg className='w-6 h-6' />}
             ></IconButton>
-            <span className='text-xl font-semibold text-indigo-900 pl-14'>
+            <span className='text-xl font-semibold text-[#280d5f] pl-14'>
               Swap
             </span>
             <div className='flex gap-2'>
               <IconButton
-                leftIcon={<SettingSvg className='w-6 h-6' />}
+                className='text-[#7a6eaa] hover:opacity-70 active:translate-y-px'
+                leftIcon={<SettingSvg />}
               ></IconButton>
               <IconButton
-                leftIcon={<HistorySvg className='w-6 h-6' />}
+                className='text-[#7a6eaa]  hover:opacity-70 active:translate-y-px'
+                leftIcon={<HistorySvg />}
               ></IconButton>
               <IconButton
-                className='text-[#D7CAEC]'
-                leftIcon={<ArrowLoaddingSvg className='w-6 h-6' />}
+                className='text-[#D7CAEC] hover:opacity-70 active:translate-y-px'
+                leftIcon={<IoMdRefresh />}
               ></IconButton>
             </div>
           </div>
@@ -95,7 +96,8 @@ const Pancake: NextPageWithLayout = () => {
               CAKE
             </IconButton>
             <IconButton
-              className='align-bottom text-[#7a6eaa]'
+              className='align-middle text-[#7a6eaa] active:translate-y-px hover:opacity-70'
+              leftSize='16px'
               leftIcon={<PanCopy />}
             ></IconButton>
           </div>
