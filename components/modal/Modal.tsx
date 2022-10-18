@@ -9,7 +9,10 @@ export const Modal: React.FC<{ visible: boolean; children: ReactNode }> = ({
   const nodeRef = useRef(null);
 
   const ModalDom = (
-    <div ref={nodeRef} className='fixed top-0 left-0 right-0 bottom-0 z-50'>
+    <div
+      ref={nodeRef}
+      className='font-kanit fixed top-0 left-0 right-0 bottom-0 z-50'
+    >
       {children}
     </div>
   );

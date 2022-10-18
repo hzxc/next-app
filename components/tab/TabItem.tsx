@@ -31,7 +31,8 @@ const TabItem: FC<Props> = (props) => {
       style={{ lineHeight: '100%' }}
       onClick={handleClick}
     >
-      {typeof children === 'string' ? <div>{children}</div> : children}
+      {/* {typeof children === 'string' ? <div>{children}</div> : children} */}
+      <div>{children}</div>
     </li>
   );
 };

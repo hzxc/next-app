@@ -10,7 +10,7 @@ export const PanModal: React.FC<{
     <Modal visible={visible}>
       <div
         onClick={close}
-        className={`w-full h-full flex items-center justify-center bg-[#280d5f99]/60 font-kanit text-base`}
+        className={`w-full h-full flex items-center justify-center bg-[#280d5f99]/60 text-base`}
       >
         <div
           onClick={(e) => {

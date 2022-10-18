@@ -25,7 +25,7 @@ const MenuPage: NextPageWithLayout = () => {
       </Menu>
 
       <hr />
-      <Menu mode='horizontal' className='z-[999]'>
+      <Menu mode='horizontal'>
         <MenuItem>Trade</MenuItem>
         <MenuItem>Earn</MenuItem>
         <MenuItem>Win</MenuItem>
