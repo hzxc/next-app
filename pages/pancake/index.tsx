@@ -106,7 +106,7 @@ const Pancake: NextPageWithLayout = () => {
             type='text'
           />
           <div className='w-full p-1 flex justify-end gap-1'>
-            <PanButton className='py-[2px] px-2 text-xs'>SCAN RISK</PanButton>
+            <PanButton className='!py-[2px] !px-2 text-xs'>SCAN RISK</PanButton>
             <PanQuestionMask className='text-[#7a6eaa]' />
           </div>
           <div className='w-full flex items-center justify-between px-4 pb-3'>
