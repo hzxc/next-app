@@ -6,20 +6,27 @@ import { IToken } from './pancakeSlice';
 interface PancakePersistState {
   baseTokens: IToken[];
   tokens: IToken[] | null;
-  // loadedAt: string | null;
 }
 
 const initialState: PancakePersistState = {
   baseTokens: baseTokens,
   tokens: null,
-  // loadedAt: null,
 };
 export const pancakePersistSlice = createSlice({
   name: 'pancakePersist',
   initialState,
   reducers: {
-    addToken: (state, action: PayloadAction<IToken>) => {
-      state.baseTokens.push(action.payload);
+    importToken: (state, action: PayloadAction<IToken>) => {
+      state.baseTokens.push({ ...action.payload, source: undefined });
+
+      if (state.tokens) {
+        const idx = state.tokens.findIndex((e) => {
+          return e.address === action.payload.address;
+        });
+        if (idx) {
+          state.tokens.splice(idx, 1);
+        }
+      }
     },
     setBaseTokens: (state, action: PayloadAction<IToken[]>) => {
       state.baseTokens = action.payload;
@@ -30,7 +37,8 @@ export const pancakePersistSlice = createSlice({
   },
 });
 
-export const { setTokens, setBaseTokens } = pancakePersistSlice.actions;
+export const { setTokens, setBaseTokens, importToken } =
+  pancakePersistSlice.actions;
 
 export const selectPancakePersist = (state: RootState) => state.pancakePersist;
 

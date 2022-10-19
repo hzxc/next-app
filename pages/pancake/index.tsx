@@ -38,7 +38,7 @@ const Pancake: NextPageWithLayout = () => {
   }, [isIdle, mutate, pancakePersist.tokens]);
   return (
     <div>
-      <TokenModal visible={visible} close={close} source={source} />
+      <TokenModal visible={visible} modalClose={close} source={source} />
       <div className='w-80 flex flex-col border rounded-3xl bg-white'>
         <div className='p-6 border-b'>
           <div className='flex items-center justify-between'>
