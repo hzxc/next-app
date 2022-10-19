@@ -7,11 +7,19 @@ import { useDebounce } from 'use-debounce';
 import { useSearch } from 'hooks/pancake';
 import { PanModal } from './PanModal';
 import PanQuestionMarkSvg from 'public/images/pancake/panQuestionMark.svg';
+import { useAppDispatch, useAppSelector } from 'redux/hooks';
+import {
+  selectPancake,
+  setInputCurrency,
+  setOutputCurrency,
+} from 'redux/pancake/pancakeSlice';
 
 export const TokenModal: React.FC<{ visible: boolean; close: () => void }> = ({
   visible,
   close,
 }) => {
+  const pancake = useAppSelector(selectPancake);
+  const dispatch = useAppDispatch();
   const [searchParam, setSearchParam] = useState<string>('');
   const [debouncedSearchParam] = useDebounce(searchParam, 400);
   const { data } = useSearch(debouncedSearchParam);
@@ -26,10 +34,11 @@ export const TokenModal: React.FC<{ visible: boolean; close: () => void }> = ({
   }) => {
     return tokens[index].symbol ? (
       <div
+        onClick={tokens[index].source ? undefined : () => {}}
         className={`flex items-center justify-between ${
           tokens[index].source
             ? 'cursor-auto'
-            : 'cursor-pointer hover:bg-gray-100'
+            : 'cursor-pointer hover:bg-[#faf9fa]'
         } px-5 py-1 gap-2`}
         style={style}
       >
