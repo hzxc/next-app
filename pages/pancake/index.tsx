@@ -8,7 +8,7 @@ import PanCopy from 'public/images/pancake/panCopy.svg';
 import PanQuestionMask from 'public/images/pancake/panQuestionMark.svg';
 import { useToggle } from 'hooks';
 import { useTokens } from 'hooks/pancake';
-import { ReactElement, useEffect } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { NextPageWithLayout } from 'pages/_app';
 import { IconButton } from 'components';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
@@ -27,6 +27,7 @@ const Pancake: NextPageWithLayout = () => {
   const pancake = useAppSelector(selectPancake);
   const pancakePersist = useAppSelector(selectPancakePersist);
   const dispatch = useAppDispatch();
+  const [source, setSource] = useState<'in' | 'out'>('in');
   useEffect(() => {
     if (!pancakePersist.tokens && isIdle) {
       console.log('get tokens from network');
@@ -37,7 +38,7 @@ const Pancake: NextPageWithLayout = () => {
   }, [isIdle, mutate, pancakePersist.tokens]);
   return (
     <div>
-      <TokenModal visible={visible} close={close} />
+      <TokenModal visible={visible} close={close} source={source} />
       <div className='w-80 flex flex-col border rounded-3xl bg-white'>
         <div className='p-6 border-b'>
           <div className='flex items-center justify-between'>
@@ -67,7 +68,10 @@ const Pancake: NextPageWithLayout = () => {
         <div className='flex flex-col items-start justify-start p-4 gap-2 text-indigo-900 font-semibold'>
           <div className='px-2 space-x-2'>
             <IconButton
-              onClick={open}
+              onClick={() => {
+                setSource('in');
+                open();
+              }}
               className='align-middle active:translate-y-px [&>div>span:last-child]:!ml-[-2px]'
               leftSrc={
                 pancake.inputCurrency.logoURI
@@ -107,7 +111,10 @@ const Pancake: NextPageWithLayout = () => {
           </div>
           <div className='px-2 space-x-2'>
             <IconButton
-              onClick={open}
+              onClick={() => {
+                setSource('out');
+                open();
+              }}
               className='align-middle active:translate-y-px [&>div>span:last-child]:!ml-[-2px]'
               leftSrc={
                 pancake.outputCurrency.logoURI

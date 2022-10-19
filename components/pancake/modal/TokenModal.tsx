@@ -14,10 +14,11 @@ import {
   setOutputCurrency,
 } from 'redux/pancake/pancakeSlice';
 
-export const TokenModal: React.FC<{ visible: boolean; close: () => void }> = ({
-  visible,
-  close,
-}) => {
+export const TokenModal: React.FC<{
+  visible: boolean;
+  close: () => void;
+  source: 'in' | 'out';
+}> = ({ visible, close, source }) => {
   const pancake = useAppSelector(selectPancake);
   const dispatch = useAppDispatch();
   const [searchParam, setSearchParam] = useState<string>('');
@@ -34,7 +35,19 @@ export const TokenModal: React.FC<{ visible: boolean; close: () => void }> = ({
   }) => {
     return tokens[index].symbol ? (
       <div
-        onClick={tokens[index].source ? undefined : () => {}}
+        onClick={
+          tokens[index].source
+            ? undefined
+            : () => {
+                if (source === 'in') {
+                  dispatch(setInputCurrency(tokens[index]));
+                  close();
+                } else {
+                  dispatch(setOutputCurrency(tokens[index]));
+                  close();
+                }
+              }
+        }
         className={`flex items-center justify-between ${
           tokens[index].source
             ? 'cursor-auto'
