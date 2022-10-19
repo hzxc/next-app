@@ -13,6 +13,7 @@ import {
   setInputCurrency,
   setOutputCurrency,
 } from 'redux/pancake/pancakeSlice';
+import { BNB, BTCB, BUSD, CAKE } from 'data/pancake';
 
 export const TokenModal: React.FC<{
   visible: boolean;
@@ -133,24 +134,49 @@ export const TokenModal: React.FC<{
             <p className='text-sm'>Common tokens</p>
             <div className='flex items-center justify-around'>
               <IconButton
+                onClick={() => {
+                  source === 'in'
+                    ? dispatch(setInputCurrency(BNB))
+                    : dispatch(setOutputCurrency(BNB));
+
+                  close();
+                }}
                 className='hover:bg-[#faf9fa] p-[6px] rounded-xl border border-[#f6f6f6]'
                 leftSrc='/images/pancake/bnb.svg'
               >
                 BNB
               </IconButton>
               <IconButton
+                onClick={() => {
+                  source === 'in'
+                    ? dispatch(setInputCurrency(BUSD))
+                    : dispatch(setOutputCurrency(BUSD));
+                  close();
+                }}
                 className='hover:bg-[#faf9fa] p-[6px] rounded-xl border border-[#f6f6f6]'
                 leftSrc='/images/pancake/busd.png'
               >
                 BUSD
               </IconButton>
               <IconButton
+                onClick={() => {
+                  source === 'in'
+                    ? dispatch(setInputCurrency(CAKE))
+                    : dispatch(setOutputCurrency(CAKE));
+                  close();
+                }}
                 className='hover:bg-[#faf9fa] p-[6px] rounded-xl border border-[#f6f6f6]'
                 leftSrc='https://tokens.pancakeswap.finance/images/0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82.png'
               >
                 CAKE
               </IconButton>
               <IconButton
+                onClick={() => {
+                  source === 'in'
+                    ? dispatch(setInputCurrency(BTCB))
+                    : dispatch(setOutputCurrency(BTCB));
+                  close();
+                }}
                 className='hover:bg-[#faf9fa] p-[6px] rounded-xl border border-[#f6f6f6]'
                 leftSrc='/images/pancake/btc.png'
               >
