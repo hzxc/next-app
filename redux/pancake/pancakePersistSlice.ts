@@ -18,16 +18,14 @@ export const pancakePersistSlice = createSlice({
   name: 'pancakePersist',
   initialState,
   reducers: {
-    addBaseToken: (state, action: PayloadAction<IToken>) => {
+    addToken: (state, action: PayloadAction<IToken>) => {
       state.baseTokens.push(action.payload);
     },
-    removeBaseToken: (state, action: PayloadAction<string>) => {},
     setBaseTokens: (state, action: PayloadAction<IToken[]>) => {
       state.baseTokens = action.payload;
     },
     setTokens: (state, action: PayloadAction<IToken[]>) => {
       state.tokens = action.payload;
-      // state.loadedAt = dayjs().format();
     },
   },
 });

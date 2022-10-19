@@ -2,7 +2,6 @@ import { Layout, PanButton, TokenModal } from 'components/pancake';
 import ChartSvg from '/public/images/pancake/chart.svg';
 import SettingSvg from '/public/images/pancake/setting.svg';
 import HistorySvg from '/public/images/pancake/history.svg';
-import ArrowLoaddingSvg from '/public/images/pancake/arrowLoading.svg';
 import PanExDown from 'public/images/pancake/panExDown.svg';
 import PanExUpDown from 'public/images/pancake/PanExUpDown.svg';
 import PanCopy from 'public/images/pancake/panCopy.svg';
@@ -12,9 +11,13 @@ import { useTokens } from 'hooks/pancake';
 import { ReactElement, useEffect } from 'react';
 import { NextPageWithLayout } from 'pages/_app';
 import { IconButton } from 'components';
-import { useAppSelector } from 'redux/hooks';
+import { useAppDispatch, useAppSelector } from 'redux/hooks';
 
-import { selectPancake } from 'redux/pancake/pancakeSlice';
+import {
+  selectPancake,
+  setInputCurrency,
+  setOutputCurrency,
+} from 'redux/pancake/pancakeSlice';
 import { selectPancakePersist } from 'redux/pancake/pancakePersistSlice';
 import { IoMdRefresh } from 'react-icons/io';
 
@@ -23,7 +26,7 @@ const Pancake: NextPageWithLayout = () => {
   const { mutate, isIdle } = useTokens();
   const pancake = useAppSelector(selectPancake);
   const pancakePersist = useAppSelector(selectPancakePersist);
-
+  const dispatch = useAppDispatch();
   useEffect(() => {
     if (!pancakePersist.tokens && isIdle) {
       console.log('get tokens from network');
@@ -65,12 +68,23 @@ const Pancake: NextPageWithLayout = () => {
           <div className='px-2 space-x-2'>
             <IconButton
               onClick={open}
-              className='active:translate-y-px [&>div>span:last-child]:!ml-[-2px]'
-              leftSrc='/images/pancake/bnb.svg'
+              className='align-middle active:translate-y-px [&>div>span:last-child]:!ml-[-2px]'
+              leftSrc={
+                pancake.inputCurrency.logoURI
+                  ? pancake.inputCurrency.logoURI
+                  : '/images/pancake/panQuestionMark.svg'
+              }
               rightSrc='/images/pancake/arrowDown.svg'
             >
-              BNB
+              {pancake.inputCurrency.symbol}
             </IconButton>
+            {pancake.inputCurrency.address.length >= 40 ? (
+              <IconButton
+                className='align-middle text-[#7a6eaa] active:translate-y-px hover:opacity-70'
+                leftSize='16px'
+                leftIcon={<PanCopy />}
+              ></IconButton>
+            ) : undefined}
           </div>
           <input
             placeholder='0.0'
@@ -84,22 +98,33 @@ const Pancake: NextPageWithLayout = () => {
               rightSize='20px'
               leftIcon={<PanExDown />}
               rightIcon={<PanExUpDown className='text-white' />}
+              onClick={() => {
+                const tmp = pancake.outputCurrency;
+                dispatch(setOutputCurrency(pancake.inputCurrency));
+                dispatch(setInputCurrency(tmp));
+              }}
             ></IconButton>
           </div>
           <div className='px-2 space-x-2'>
             <IconButton
               onClick={open}
-              className='align-bottom active:translate-y-px [&>div>span:last-child]:!ml-[-2px]'
-              leftSrc='/images/pancake/pancake.svg'
+              className='align-middle active:translate-y-px [&>div>span:last-child]:!ml-[-2px]'
+              leftSrc={
+                pancake.outputCurrency.logoURI
+                  ? pancake.outputCurrency.logoURI
+                  : '/images/pancake/panQuestionMark.svg'
+              }
               rightSrc='/images/pancake/arrowDown.svg'
             >
-              CAKE
+              {pancake.outputCurrency.symbol}
             </IconButton>
-            <IconButton
-              className='align-middle text-[#7a6eaa] active:translate-y-px hover:opacity-70'
-              leftSize='16px'
-              leftIcon={<PanCopy />}
-            ></IconButton>
+            {pancake.outputCurrency.address.length >= 40 ? (
+              <IconButton
+                className='align-middle text-[#7a6eaa] active:translate-y-px hover:opacity-70'
+                leftSize='16px'
+                leftIcon={<PanCopy />}
+              ></IconButton>
+            ) : undefined}
           </div>
 
           <input

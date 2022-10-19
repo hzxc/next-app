@@ -13,28 +13,29 @@ export interface IToken {
 }
 
 interface PancakeState {
-  baseTokens: IToken[];
-  tokens: IToken[];
-  // inputCurrency: string;
-  // outputCurrency: string;
+  inputCurrency: IToken;
+  outputCurrency: IToken;
 }
 
 const initialState: PancakeState = {
-  baseTokens: baseTokens,
-  tokens: [],
+  inputCurrency: baseTokens[0],
+  outputCurrency: baseTokens[1],
 };
 
 export const pancakeSlice = createSlice({
   name: 'pancake',
   initialState,
   reducers: {
-    setTokens: (state, action: PayloadAction<IToken[]>) => {
-      state.tokens = [...action.payload];
+    setInputCurrency: (state, action: PayloadAction<IToken>) => {
+      state.inputCurrency = { ...action.payload };
+    },
+    setOutputCurrency: (state, action: PayloadAction<IToken>) => {
+      state.outputCurrency = { ...action.payload };
     },
   },
 });
 
-export const { setTokens } = pancakeSlice.actions;
+export const { setInputCurrency, setOutputCurrency } = pancakeSlice.actions;
 
 export const selectPancake = (state: RootState) => state.pancake;
 
