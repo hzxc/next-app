@@ -120,8 +120,6 @@ const Pancake: NextPageWithLayout = () => {
 
           <PanButton className='w-72 h-12'>Connect Wallet</PanButton>
         </div>
-        <div>tokens.length:{pancake.baseTokens.length}</div>
-        <div>persist baseTokens.length:{pancakePersist.baseTokens?.length}</div>
         <div>persist tokens.length:{pancakePersist.tokens?.length}</div>
       </div>
     </div>
