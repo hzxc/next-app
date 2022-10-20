@@ -1,5 +1,4 @@
 import { IBEP20ABI } from 'abi/bsc';
-import { MulticallABI } from 'abi/MulticallAbi';
 import { Layout } from 'components/layout';
 import { ethers } from 'ethers';
 import { NextPageWithLayout } from 'pages/_app';
