@@ -21,6 +21,9 @@ export default function Sidebar() {
           <MenuItem>
             <Link href='/samples/ethers'>Base</Link>
           </MenuItem>
+          <MenuItem>
+            <Link href='/samples/ethers/multicall'>Multicall</Link>
+          </MenuItem>
         </SubMenu>
         <SubMenu subTitle='Samples'>
           <MenuItem>

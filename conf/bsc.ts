@@ -18,10 +18,20 @@ const bscUrls: string[] = [
   'https://bsc-dataseed4.ninicoin.io',
 ];
 
+const bscTestUrls: string[] = ['https://bsctestapi.terminet.io/rpc'];
+
 export const bscProvider = new ethers.providers.JsonRpcProvider(
   bscUrls[Math.floor(Math.random() * 13)],
   {
     name: 'bsc',
     chainId: 56,
+  }
+);
+
+export const bscTestProvider = new ethers.providers.JsonRpcProvider(
+  bscTestUrls[0],
+  {
+    name: 'bsc testnet',
+    chainId: 97,
   }
 );

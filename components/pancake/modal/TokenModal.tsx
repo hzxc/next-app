@@ -129,6 +129,12 @@ export const TokenModal: React.FC<{
             <PanButton
               onClick={() => {
                 dispatch(importToken(tokens[index]));
+                if (source === 'in') {
+                  dispatch(setInputCurrency(tokens[index]));
+                } else if (source === 'out') {
+                  dispatch(setOutputCurrency(tokens[index]));
+                }
+
                 close();
               }}
               className='h-full w-24 shrink'

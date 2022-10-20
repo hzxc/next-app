@@ -5,7 +5,7 @@ import { useCakePrice } from 'hooks/pancake';
 import { NextPageWithLayout } from 'pages/_app';
 import { ReactElement, useEffect } from 'react';
 
-const Wagmi: NextPageWithLayout = () => {
+const Index: NextPageWithLayout = () => {
   const { data, isFetching } = useCakePrice();
   useEffect(() => {
     console.log(isFetching ? 'fetching' : 'idle');
@@ -22,8 +22,8 @@ const Wagmi: NextPageWithLayout = () => {
   );
 };
 
-Wagmi.getLayout = function getLayout(page: ReactElement) {
+Index.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };
 
-export default Wagmi;
+export default Index;
