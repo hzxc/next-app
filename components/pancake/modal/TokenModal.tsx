@@ -95,7 +95,7 @@ export const TokenModal: React.FC<{
             tokens[index].source ? 'opacity-40' : ''
           }`}
         >
-          <p className='w-52 whitespace-nowrap overflow-hidden text-ellipsis text-[#bdc2c4]'>
+          <p className='w-52 truncate text-[#bdc2c4]'>
             <span
               className={`${
                 tokens[index].source ? '' : 'font-semibold'
