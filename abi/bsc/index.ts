@@ -1,2 +1,2 @@
-export * from './PancakeRouterABI';
+export * from '../pancake/PancakeRouterABI';
 export * from './IBEP20ABI';
