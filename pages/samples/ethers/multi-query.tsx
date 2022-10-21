@@ -58,7 +58,7 @@ const MultiQuery: NextPageWithLayout = () => {
       console.log('symbolRet', symbolRet);
       // console.log('ret[1]', ret[1]);
       const [decimalsRet] = abiCoder.decode(['uint'], ret[1][1]);
-      console.log('decimalsRet', decimalsRet);
+      // console.log('decimalsRet', decimalsRet);
       const decimalsRetNumber = BigNumber.from(ret[1][1]).toNumber();
       console.log('decimalsRetNumber', decimalsRetNumber);
       const [nameRet] = abiCoder.decode(['string'], ret[1][2]);
