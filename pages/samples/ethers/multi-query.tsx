@@ -56,7 +56,7 @@ const MultiQuery: NextPageWithLayout = () => {
       console.log(ret[0].toNumber());
       const [symbolRet] = abiCoder.decode(['string'], ret[1][0]);
       console.log('symbolRet', symbolRet);
-      console.log('ret[1][1]', ret[1]);
+      // console.log('ret[1]', ret[1]);
       const [decimalsRet] = abiCoder.decode(['uint'], ret[1][1]);
       console.log('decimalsRet', decimalsRet);
       const decimalsRetNumber = BigNumber.from(ret[1][1]).toNumber();
@@ -66,7 +66,7 @@ const MultiQuery: NextPageWithLayout = () => {
 
       const [cakePriceRet] = abiCoder.decode(['uint[]'], ret[1][3]);
       // utils.formatUnits(data[1], 18)
-      console.log('cakePriceRet', JSON.stringify(cakePriceRet));
+      // console.log('cakePriceRet', JSON.stringify(cakePriceRet));
       setData({
         blockNumber: blockNumberRet,
         symbol: symbolRet,
@@ -82,9 +82,11 @@ const MultiQuery: NextPageWithLayout = () => {
   return (
     <div className='overflow-auto	p-8'>
       <div className='p-4'>
-        <Button onClick={queryHandler}>Multi Query</Button>
+        <Button className='text-sm' onClick={queryHandler}>
+          Click Multi Query
+        </Button>
       </div>
-      Cake:{JSON.stringify(data)}
+      {data ? 'CAKE:' + JSON.stringify(data) : undefined}
     </div>
   );
 };
