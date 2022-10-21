@@ -22,7 +22,10 @@ export default function Sidebar() {
             <Link href='/samples/ethers'>Base</Link>
           </MenuItem>
           <MenuItem>
-            <Link href='/samples/ethers/multicall'>Multicall</Link>
+            <Link href='/samples/ethers/sighash'>Sighash</Link>
+          </MenuItem>
+          <MenuItem>
+            <Link href='/samples/ethers/multi-query'>Multi Query</Link>
           </MenuItem>
         </SubMenu>
         <SubMenu subTitle='Samples'>
