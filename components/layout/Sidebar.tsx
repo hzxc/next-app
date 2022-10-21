@@ -19,7 +19,7 @@ export default function Sidebar() {
         </MenuItem>
         <SubMenu subTitle='Ethers'>
           <MenuItem>
-            <Link href='/samples/ethers'>Base</Link>
+            <Link href='/samples/ethers'>Index</Link>
           </MenuItem>
           <MenuItem>
             <Link href='/samples/ethers/sighash'>Sighash</Link>
@@ -62,7 +62,7 @@ export default function Sidebar() {
         </SubMenu>
         <SubMenu subTitle='Wagmi'>
           <MenuItem>
-            <Link href='/samples/wagmi/token-info'>Token Info</Link>
+            <Link href='/samples/wagmi'>Index</Link>
           </MenuItem>
           <MenuItem>
             <Link href='/samples/wagmi/contract-read'>Contract Read</Link>
