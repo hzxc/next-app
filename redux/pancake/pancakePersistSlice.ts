@@ -17,7 +17,11 @@ export const pancakePersistSlice = createSlice({
   initialState,
   reducers: {
     importToken: (state, action: PayloadAction<IToken>) => {
-      state.baseTokens.push({ ...action.payload, source: undefined });
+      state.baseTokens.push({
+        ...action.payload,
+        name: `Added by user•${action.payload.name}`,
+        source: undefined,
+      });
 
       if (state.tokens) {
         const idx = state.tokens.findIndex((e) => {

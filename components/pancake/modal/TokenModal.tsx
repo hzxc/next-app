@@ -9,6 +9,7 @@ import { PanModal } from './PanModal';
 import PanQuestionMarkSvg from 'public/images/pancake/panQuestionMark.svg';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import {
+  IToken,
   selectPancake,
   setInputCurrency,
   setOutputCurrency,
@@ -31,6 +32,42 @@ export const TokenModal: React.FC<{
   const close = () => {
     modalClose();
     setSearchParam('');
+  };
+
+  const handleTknClick = (tkn: IToken) => {
+    if (source === 'in' && tkn.address !== pancake.inputCurrency.address) {
+      if (tkn.address === pancake.outputCurrency.address) {
+        const tmp = pancake.inputCurrency;
+        dispatch(setInputCurrency(tkn));
+        dispatch(setOutputCurrency(tmp));
+        close();
+      } else {
+        dispatch(setInputCurrency(tkn));
+        close();
+      }
+    } else if (
+      source === 'out' &&
+      tkn.address !== pancake.outputCurrency.address
+    ) {
+      if (tkn.address === pancake.inputCurrency.address) {
+        const tmp = pancake.outputCurrency;
+        dispatch(setOutputCurrency(tkn));
+        dispatch(setInputCurrency(tmp));
+        close();
+      } else {
+        dispatch(setOutputCurrency(tkn));
+        close();
+      }
+    }
+  };
+
+  const tknClass = (tkn: IToken) => {
+    return `${
+      (tkn.address === pancake.inputCurrency.address && source === 'in') ||
+      (tkn.address === pancake.outputCurrency.address && source === 'out')
+        ? 'opacity-40 !cursor-default hover:bg-white'
+        : ''
+    }`;
   };
 
   const Row = ({
@@ -182,49 +219,44 @@ export const TokenModal: React.FC<{
             <div className='flex items-center justify-around'>
               <IconButton
                 onClick={() => {
-                  source === 'in'
-                    ? dispatch(setInputCurrency(BNB))
-                    : dispatch(setOutputCurrency(BNB));
-
-                  close();
+                  handleTknClick(BNB);
                 }}
-                className='hover:bg-[#faf9fa] p-[6px] rounded-xl border border-[#f6f6f6]'
+                className={`hover:bg-[#faf9fa] p-[6px] rounded-xl border border-[#f6f6f6] ${tknClass(
+                  BNB
+                )}`}
                 leftSrc='/images/pancake/bnb.svg'
               >
                 BNB
               </IconButton>
               <IconButton
                 onClick={() => {
-                  source === 'in'
-                    ? dispatch(setInputCurrency(BUSD))
-                    : dispatch(setOutputCurrency(BUSD));
-                  close();
+                  handleTknClick(BUSD);
                 }}
-                className='hover:bg-[#faf9fa] p-[6px] rounded-xl border border-[#f6f6f6]'
+                className={`hover:bg-[#faf9fa] p-[6px] rounded-xl border border-[#f6f6f6] ${tknClass(
+                  BUSD
+                )}`}
                 leftSrc='/images/pancake/busd.png'
               >
                 BUSD
               </IconButton>
               <IconButton
                 onClick={() => {
-                  source === 'in'
-                    ? dispatch(setInputCurrency(CAKE))
-                    : dispatch(setOutputCurrency(CAKE));
-                  close();
+                  handleTknClick(CAKE);
                 }}
-                className='hover:bg-[#faf9fa] p-[6px] rounded-xl border border-[#f6f6f6]'
+                className={`hover:bg-[#faf9fa] p-[6px] rounded-xl border border-[#f6f6f6] ${tknClass(
+                  CAKE
+                )}`}
                 leftSrc='https://tokens.pancakeswap.finance/images/0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82.png'
               >
                 CAKE
               </IconButton>
               <IconButton
                 onClick={() => {
-                  source === 'in'
-                    ? dispatch(setInputCurrency(BTCB))
-                    : dispatch(setOutputCurrency(BTCB));
-                  close();
+                  handleTknClick(BTCB);
                 }}
-                className='hover:bg-[#faf9fa] p-[6px] rounded-xl border border-[#f6f6f6]'
+                className={`hover:bg-[#faf9fa] p-[6px] rounded-xl border border-[#f6f6f6] ${tknClass(
+                  BTCB
+                )}`}
                 leftSrc='/images/pancake/btc.png'
               >
                 BTCB

@@ -5,9 +5,11 @@ import { IToken } from 'redux/pancake/pancakeSlice';
 import { http, isError } from 'utils';
 import { setTokens } from 'redux/pancake/pancakePersistSlice';
 import { selectPancakePersist } from 'redux/pancake/pancakePersistSlice';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { bscProvider } from 'conf';
 import { IBEP20ABI } from 'abi/bsc';
+import { bscMultiQueryAddr } from 'data';
+import { MultiQueryABI } from 'abi';
 
 const getTokens = async () => {
   console.log('getTokens');
@@ -76,26 +78,50 @@ const searchTokens = async (
       return extendedResult;
     }
 
-    const contract = new ethers.Contract(param, IBEP20ABI, bscProvider);
+    const mutiQueryContr = new ethers.Contract(
+      bscMultiQueryAddr,
+      MultiQueryABI,
+      bscProvider
+    );
+    const bep20Iface = new ethers.utils.Interface(IBEP20ABI);
+    const funcSymbol = bep20Iface.encodeFunctionData('symbol', []);
+    const funcDecimals = bep20Iface.encodeFunctionData('decimals', []);
+    const funcName = bep20Iface.encodeFunctionData('name', []);
+    const abiCoder = ethers.utils.defaultAbiCoder;
+
     try {
-      const symbol: string = await contract.symbol();
-      const decimals = await contract.decimals();
+      const ret = await mutiQueryContr.multiQuery([
+        [param, funcSymbol],
+        [param, funcDecimals],
+        [param, funcName],
+      ]);
+
+      console.log('reg', ret);
+
+      const [symbol] = abiCoder.decode(['string'], ret[1][0]);
+      const decimals = BigNumber.from(ret[1][1]).toNumber();
+      const [name] = abiCoder.decode(['string'], ret[1][2]);
+
+      console.log('symbol', symbol);
+      console.log('decimals', decimals);
+      console.log('name', name);
 
       return [
         {
-          name: symbol,
+          name: name,
           symbol: symbol,
           address: ethers.utils.getAddress(param),
           chainId: 56,
-          decimals: Number(decimals),
+          decimals: decimals,
           logoURI: '/images/pancake/panQuestionMark.svg',
           source: 'BscScan',
         },
       ];
     } catch (error) {
-      throw new Error(
-        isError(error) ? error.message : 'get token from bsc error'
-      );
+      // throw new Error(
+      //   isError(error) ? error.message : 'get token from bsc error'
+      // );
+      return [];
     }
   } else if (param.length > 0) {
     const baseResult = baseTokens.filter((t) =>
