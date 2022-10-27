@@ -35,6 +35,11 @@ const Pancake: NextPageWithLayout = () => {
     pancake.outputCurrency.address,
   ]);
 
+  const [curBal, setCurBal] = useState({
+    inBal: '',
+    outBal: '',
+  });
+
   useEffect(() => {
     if (!pancakePersist.tokens && isIdle) {
       console.log('get tokens from network');
@@ -43,6 +48,21 @@ const Pancake: NextPageWithLayout = () => {
       console.log('get tokens from local storage');
     }
   }, [isIdle, mutate, pancakePersist.tokens]);
+
+  useEffect(() => {
+    if (bal) {
+      const inNum = bal[0].isZero()
+        ? '0'
+        : ethers.utils.formatUnits(bal[0], pancake.inputCurrency.decimals);
+      const outNum = bal[1].isZero()
+        ? '0'
+        : ethers.utils.formatUnits(bal[1], pancake.outputCurrency.decimals);
+      setCurBal({
+        inBal: inNum.substring(0, inNum.indexOf('.') + 6),
+        outBal: outNum.substring(0, outNum.indexOf('.') + 6),
+      });
+    }
+  }, [balSuc]);
   return (
     <div>
       <TokenModal visible={visible} modalClose={close} source={source} />
@@ -73,35 +93,34 @@ const Pancake: NextPageWithLayout = () => {
           <div className='text-sm text-center'>Trade tokens in an instant</div>
         </div>
         <div className='flex flex-col items-start justify-start p-4 gap-2 text-indigo-900 font-semibold'>
-          <div className='px-2 space-x-2'>
-            <IconButton
-              onClick={() => {
-                setSource('in');
-                open();
-              }}
-              className='align-middle active:translate-y-px [&>div>span:last-child]:!ml-[-2px]'
-              leftSrc={
-                pancake.inputCurrency.logoURI
-                  ? pancake.inputCurrency.logoURI
-                  : '/images/pancake/panQuestionMark.svg'
-              }
-              rightSrc='/images/pancake/arrowDown.svg'
-            >
-              {pancake.inputCurrency.symbol}
-            </IconButton>
-            {pancake.inputCurrency.address !== ethers.constants.AddressZero ? (
+          <div className='w-full flex items-center justify-between px-2 space-x-2'>
+            <div>
               <IconButton
-                className='align-middle text-[#7a6eaa] active:translate-y-px hover:opacity-70'
-                leftSize='16px'
-                leftIcon={<PanCopy />}
-              ></IconButton>
-            ) : undefined}
-            <span>
-              {balSuc
-                ? `Balance :${ethers.utils
-                    .formatUnits(bal[0], pancake.inputCurrency.decimals)
-                    .substring(0, 7)}`
-                : undefined}
+                onClick={() => {
+                  setSource('in');
+                  open();
+                }}
+                className='align-middle active:translate-y-px [&>div>span:last-child]:!ml-[-2px]'
+                leftSrc={
+                  pancake.inputCurrency.logoURI
+                    ? pancake.inputCurrency.logoURI
+                    : '/images/pancake/panQuestionMark.svg'
+                }
+                rightSrc='/images/pancake/arrowDown.svg'
+              >
+                {pancake.inputCurrency.symbol}
+              </IconButton>
+              {pancake.inputCurrency.address !==
+              ethers.constants.AddressZero ? (
+                <IconButton
+                  className='align-middle text-[#7a6eaa] active:translate-y-px hover:opacity-70'
+                  leftSize='16px'
+                  leftIcon={<PanCopy />}
+                ></IconButton>
+              ) : undefined}
+            </div>
+            <span className='font-normal text-sm text-[#7a6eaa]'>
+              {curBal.inBal ? 'Balance:' + curBal.inBal : ''}
             </span>
           </div>
           <input
@@ -123,38 +142,33 @@ const Pancake: NextPageWithLayout = () => {
               }}
             ></IconButton>
           </div>
-          <div className='px-2 space-x-2'>
-            <IconButton
-              onClick={() => {
-                setSource('out');
-                open();
-              }}
-              className='align-middle active:translate-y-px [&>div>span:last-child]:!ml-[-2px]'
-              leftSrc={
-                pancake.outputCurrency.logoURI
-                  ? pancake.outputCurrency.logoURI
-                  : '/images/pancake/panQuestionMark.svg'
-              }
-              rightSrc='/images/pancake/arrowDown.svg'
-            >
-              {pancake.outputCurrency.symbol}
-            </IconButton>
-            {pancake.outputCurrency.address.length >= 40 ? (
+          <div className='w-full flex items-center justify-between px-2 space-x-2'>
+            <div>
               <IconButton
-                className='align-middle text-[#7a6eaa] active:translate-y-px hover:opacity-70'
-                leftSize='16px'
-                leftIcon={<PanCopy />}
-              ></IconButton>
-            ) : undefined}
-            <span>
-              <span>
-                {balSuc
-                  ? `Balance :${ethers.utils.formatUnits(
-                      bal[1],
-                      pancake.outputCurrency.decimals
-                    )}`
-                  : undefined}
-              </span>
+                onClick={() => {
+                  setSource('out');
+                  open();
+                }}
+                className='align-middle active:translate-y-px [&>div>span:last-child]:!ml-[-2px]'
+                leftSrc={
+                  pancake.outputCurrency.logoURI
+                    ? pancake.outputCurrency.logoURI
+                    : '/images/pancake/panQuestionMark.svg'
+                }
+                rightSrc='/images/pancake/arrowDown.svg'
+              >
+                {pancake.outputCurrency.symbol}
+              </IconButton>
+              {pancake.outputCurrency.address.length >= 40 ? (
+                <IconButton
+                  className='align-middle text-[#7a6eaa] active:translate-y-px hover:opacity-70'
+                  leftSize='16px'
+                  leftIcon={<PanCopy />}
+                ></IconButton>
+              ) : undefined}
+            </div>
+            <span className='font-normal text-sm text-[#7a6eaa]'>
+              {curBal.outBal ? 'Balance:' + curBal.outBal : ''}
             </span>
           </div>
 
