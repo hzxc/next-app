@@ -7,7 +7,7 @@ import PanExUpDown from 'public/images/pancake/PanExUpDown.svg';
 import PanCopy from 'public/images/pancake/panCopy.svg';
 import PanQuestionMask from 'public/images/pancake/panQuestionMark.svg';
 import { useToggle } from 'hooks';
-import { useTokens } from 'hooks/pancake';
+import { useCurrencyBalance, useTokens } from 'hooks/pancake';
 import { ReactElement, useEffect, useState } from 'react';
 import { NextPageWithLayout } from 'pages/_app';
 import { IconButton } from 'components';
@@ -20,6 +20,7 @@ import {
 } from 'redux/pancake/pancakeSlice';
 import { selectPancakePersist } from 'redux/pancake/pancakePersistSlice';
 import { IoMdRefresh } from 'react-icons/io';
+import { ethers, utils } from 'ethers';
 
 const Pancake: NextPageWithLayout = () => {
   const { visible, close, open } = useToggle(false);
@@ -28,6 +29,12 @@ const Pancake: NextPageWithLayout = () => {
   const pancakePersist = useAppSelector(selectPancakePersist);
   const dispatch = useAppDispatch();
   const [source, setSource] = useState<'in' | 'out'>('in');
+
+  const { data: bal, isSuccess: balSuc } = useCurrencyBalance([
+    pancake.inputCurrency.address,
+    pancake.outputCurrency.address,
+  ]);
+
   useEffect(() => {
     if (!pancakePersist.tokens && isIdle) {
       console.log('get tokens from network');
@@ -82,13 +89,20 @@ const Pancake: NextPageWithLayout = () => {
             >
               {pancake.inputCurrency.symbol}
             </IconButton>
-            {pancake.inputCurrency.address.length >= 40 ? (
+            {pancake.inputCurrency.address !== ethers.constants.AddressZero ? (
               <IconButton
                 className='align-middle text-[#7a6eaa] active:translate-y-px hover:opacity-70'
                 leftSize='16px'
                 leftIcon={<PanCopy />}
               ></IconButton>
             ) : undefined}
+            <span>
+              {balSuc
+                ? `Balance :${ethers.utils
+                    .formatUnits(bal[0], pancake.inputCurrency.decimals)
+                    .substring(0, 7)}`
+                : undefined}
+            </span>
           </div>
           <input
             placeholder='0.0'
@@ -132,6 +146,16 @@ const Pancake: NextPageWithLayout = () => {
                 leftIcon={<PanCopy />}
               ></IconButton>
             ) : undefined}
+            <span>
+              <span>
+                {balSuc
+                  ? `Balance :${ethers.utils.formatUnits(
+                      bal[1],
+                      pancake.outputCurrency.decimals
+                    )}`
+                  : undefined}
+              </span>
+            </span>
           </div>
 
           <input

@@ -4,7 +4,7 @@ export const baseTokens: IToken[] = [
   {
     name: 'Binance Chain Native Token',
     symbol: 'BNB',
-    address: '0x',
+    address: '0x0000000000000000000000000000000000000000',
     chainId: 56,
     decimals: 18,
     logoURI: '/images/pancake/bnb.svg',

@@ -12,7 +12,6 @@ import { MenuButton, MenuButtonItem } from 'components/menu-button';
 import { IconButton } from 'components';
 import ArrowDownSvg from 'public/images/pancake/arrowDown.svg';
 import WalletSvg from 'public/images/pancake/wallet.svg';
-import { PancakeRouterABI, IBEP20ABI } from 'abi/bsc';
 import { utils } from 'ethers';
 import { useEffect } from 'react';
 import DotSvg from 'public/images/pancake/dot.svg';
@@ -184,7 +183,7 @@ export const Header: React.FC = () => {
                   exClassName='panMb'
                   leftIcon={<WalletSvg className='text-[#1fc7d4]' />}
                   rightIcon={<ArrowDownSvg />}
-                  customStyle={{
+                  customstyle={{
                     boxShadow: 'rgb(0 0 0 / 10%) 0px -2px 0px inset',
                   }}
                 >

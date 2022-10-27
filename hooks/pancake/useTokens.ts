@@ -59,10 +59,13 @@ const searchTokens = async (
   baseTokens: IToken[]
 ) => {
   console.log('searchTokens');
+
   if (param.length >= 40) {
     if (!ethers.utils.isAddress(param)) {
       return [];
     }
+
+    param = ethers.utils.getAddress(param);
 
     const baseResult = baseTokens.filter(
       (t) => t.address.toLowerCase() === param.toLowerCase()
@@ -96,21 +99,15 @@ const searchTokens = async (
         [param, funcName],
       ]);
 
-      console.log('reg', ret);
-
       const [symbol] = abiCoder.decode(['string'], ret[1][0]);
       const decimals = BigNumber.from(ret[1][1]).toNumber();
       const [name] = abiCoder.decode(['string'], ret[1][2]);
-
-      console.log('symbol', symbol);
-      console.log('decimals', decimals);
-      console.log('name', name);
 
       return [
         {
           name: name,
           symbol: symbol,
-          address: ethers.utils.getAddress(param),
+          address: param,
           chainId: 56,
           decimals: decimals,
           logoURI: '/images/pancake/panQuestionMark.svg',

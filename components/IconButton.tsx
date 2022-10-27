@@ -11,7 +11,7 @@ interface IconButtonProps {
   leftSize?: string;
   rightSize?: string;
   exClassName?: 'default' | 'panEx' | 'panMb';
-  customStyle?: React.CSSProperties;
+  customstyle?: React.CSSProperties;
 }
 
 const defaultInitialProps: IconButtonProps = {
