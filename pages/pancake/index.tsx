@@ -30,7 +30,7 @@ const Pancake: NextPageWithLayout = () => {
   const dispatch = useAppDispatch();
   const [source, setSource] = useState<'in' | 'out'>('in');
 
-  const { data: bal, isSuccess: balSuc } = useCurrencyBalance([
+  const { data: bal } = useCurrencyBalance([
     pancake.inputCurrency.address,
     pancake.outputCurrency.address,
   ]);
@@ -47,7 +47,7 @@ const Pancake: NextPageWithLayout = () => {
     } else {
       console.log('get tokens from local storage');
     }
-  }, [isIdle, mutate, pancakePersist.tokens]);
+  }, []);
 
   useEffect(() => {
     if (bal && bal.length > 1) {
@@ -159,7 +159,8 @@ const Pancake: NextPageWithLayout = () => {
               >
                 {pancake.outputCurrency.symbol}
               </IconButton>
-              {pancake.outputCurrency.address.length >= 40 ? (
+              {pancake.outputCurrency.address !==
+              ethers.constants.AddressZero ? (
                 <IconButton
                   className='align-middle text-[#7a6eaa] active:translate-y-px hover:opacity-70'
                   leftSize='16px'

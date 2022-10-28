@@ -12,7 +12,6 @@ import { bscMultiQueryAddr } from 'data';
 import { MultiQueryABI } from 'abi';
 
 const getTokens = async () => {
-  console.log('getTokens');
   const array: IToken[] = [];
   const map = new Map();
   const extended = await http('/pancake/pancakeswap-extended.json');
@@ -154,17 +153,13 @@ export const useTokens = () => {
 };
 
 export const useSearch = (param: string) => {
-  console.log('searchTokens', param);
   const pancake = useAppSelector(selectPancakePersist);
 
-  return useQuery<IToken[], Error>(
-    ['searchPancakeTokens', param.trim()],
-    () => {
-      if (param === '') {
-        return pancake.baseTokens;
-      } else {
-        return searchTokens(param, pancake.tokens || [], pancake.baseTokens);
-      }
+  return useQuery<IToken[], Error>(['searchPancakeTokens', param], () => {
+    if (param === '') {
+      return pancake.baseTokens;
+    } else {
+      return searchTokens(param, pancake.tokens || [], pancake.baseTokens);
     }
-  );
+  });
 };

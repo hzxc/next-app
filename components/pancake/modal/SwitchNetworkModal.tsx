@@ -4,11 +4,14 @@ import Image from 'next/image';
 import WarningSvg from 'public/images/pancake/warning.svg';
 import { PanButton } from '../button';
 import { PanModal } from './PanModal';
+import { useConnect, useDisconnect, useSwitchNetwork } from 'wagmi';
 
-export const SwitchNetworkModal: React.FC<{ visible: boolean; close: () => void }> = ({
-  visible,
-  close,
-}) => {
+export const SwitchNetworkModal: React.FC<{
+  visible: boolean;
+  close: () => void;
+}> = ({ visible, close }) => {
+  const { switchNetwork } = useSwitchNetwork();
+  const { disconnect } = useDisconnect();
   return (
     <PanModal visible={visible} close={close}>
       <div className='overflow-hidden w-96 rounded-3xl text-[#280d5f] bg-white'>
@@ -32,8 +35,21 @@ export const SwitchNetworkModal: React.FC<{ visible: boolean; close: () => void 
               <WarningSvg className='text-[#ffb237]' />
               <span>Please switch your network to continue.</span>
             </p>
-            <PanButton className='w-full h-12'>Switch network in wallet</PanButton>
-            <PanButton className='w-full h-12 !shadow-none  text-[#1fc7d4] !bg-white ring-2 ring-[#1fc7d4]'>
+            <PanButton
+              onClick={() => {
+                switchNetwork?.(56);
+              }}
+              className='w-full h-12'
+            >
+              Switch network in wallet
+            </PanButton>
+            <PanButton
+              onClick={() => {
+                disconnect();
+                close();
+              }}
+              className='w-full h-12 !shadow-none  text-[#1fc7d4] !bg-white ring-2 ring-[#1fc7d4]'
+            >
               Disconnect Wallet
             </PanButton>
           </div>

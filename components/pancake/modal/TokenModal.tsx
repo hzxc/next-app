@@ -1,6 +1,6 @@
 import { PanButton } from '../button';
 import { FixedSizeList as List } from 'react-window';
-import { CSSProperties, useEffect, useState } from 'react';
+import { CSSProperties, useState } from 'react';
 import { IconButton } from 'components';
 import CloseSvg from 'public/images/pancake/close.svg';
 import { useDebounce } from 'use-debounce';
@@ -25,13 +25,15 @@ export const TokenModal: React.FC<{
 }> = ({ visible, modalClose, source }) => {
   const pancake = useAppSelector(selectPancake);
   const dispatch = useAppDispatch();
-  const [searchParam, setSearchParam] = useState<string>('');
+  const [searchParam, setSearchParam] = useState('');
   const [debouncedSearchParam] = useDebounce(searchParam, 400);
-  const { data } = useSearch(debouncedSearchParam);
-  const tokens = data || [];
+  const { data: tokens } = useSearch(debouncedSearchParam);
+  // const tokens = data || [];
   const close = () => {
-    modalClose();
-    setSearchParam('');
+    if (visible) {
+      modalClose();
+      setSearchParam('');
+    }
   };
 
   const handleTknClick = (tkn: IToken) => {
@@ -77,122 +79,128 @@ export const TokenModal: React.FC<{
     index: number;
     style: CSSProperties | undefined;
   }) => {
-    return tokens[index].symbol ? (
-      <div
-        onClick={
-          tokens[index].source
-            ? undefined
-            : () => {
-                if (
-                  source === 'in' &&
-                  tokens[index].address !== pancake.inputCurrency.address
-                ) {
-                  if (
-                    tokens[index].address === pancake.outputCurrency.address
-                  ) {
-                    const tmp = { ...pancake.inputCurrency };
-                    dispatch(setInputCurrency(tokens[index]));
-                    dispatch(setOutputCurrency(tmp));
-                    close();
-                  } else {
-                    dispatch(setInputCurrency(tokens[index]));
-                    close();
-                  }
-                } else if (
-                  source === 'out' &&
-                  tokens[index].address !== pancake.outputCurrency.address
-                ) {
-                  if (tokens[index].address === pancake.inputCurrency.address) {
-                    const tmp = { ...pancake.outputCurrency };
-                    dispatch(setOutputCurrency(tokens[index]));
-                    dispatch(setInputCurrency(tmp));
-                    close();
-                  } else {
-                    dispatch(setOutputCurrency(tokens[index]));
-                    close();
-                  }
-                }
-              }
-        }
-        className={`flex items-center justify-between ${
-          tokens[index].source
-            ? 'cursor-default'
-            : 'cursor-pointer hover:bg-[#faf9fa]'
-        } ${
-          tokens[index].address === pancake.inputCurrency.address ||
-          tokens[index].address === pancake.outputCurrency.address
-            ? 'opacity-40 !cursor-default hover:bg-white'
-            : ''
-        } px-5 py-1 gap-2`}
-        style={style}
-      >
-        <IconButton leftSrc={tokens[index]?.logoURI}></IconButton>
+    if (tokens) {
+      return tokens[index].symbol ? (
         <div
-          className={`flex-col grow overflow-hidden ${
-            tokens[index].source ? 'opacity-40' : ''
-          }`}
-        >
-          <p className='w-52 truncate text-[#bdc2c4]'>
-            <span
-              className={`${
-                tokens[index].source ? '' : 'font-semibold'
-              } text-[#280d5f]`}
-            >
-              {tokens[index].symbol}
-            </span>
-            <span className='ml-2 font-normal text-xs'>
-              {tokens[index].source ? tokens[index].name : ''}
-            </span>
-          </p>
-          <p className='text-sm'>
-            {tokens[index].source ? (
-              <IconButton
-                className='cursor-default'
-                rightSize='12px'
-                rightSrc={`/images/pancake/${tokens[index].source?.replaceAll(
-                  ' ',
-                  ''
-                )}.png`}
-              >
-                {'via ' + tokens[index].source}
-              </IconButton>
-            ) : (
-              tokens[index].name
-            )}
-          </p>
-        </div>
-        <div className='shrink h-full'>
-          {tokens[index].source ? (
-            <PanButton
-              onClick={() => {
-                dispatch(importToken(tokens[index]));
-                if (source === 'in') {
-                  dispatch(setInputCurrency(tokens[index]));
-                } else if (source === 'out') {
-                  dispatch(setOutputCurrency(tokens[index]));
+          onClick={
+            tokens[index].source
+              ? undefined
+              : () => {
+                  if (
+                    source === 'in' &&
+                    tokens[index].address !== pancake.inputCurrency.address
+                  ) {
+                    if (
+                      tokens[index].address === pancake.outputCurrency.address
+                    ) {
+                      const tmp = { ...pancake.inputCurrency };
+                      dispatch(setInputCurrency(tokens[index]));
+                      dispatch(setOutputCurrency(tmp));
+                      close();
+                    } else {
+                      dispatch(setInputCurrency(tokens[index]));
+                      close();
+                    }
+                  } else if (
+                    source === 'out' &&
+                    tokens[index].address !== pancake.outputCurrency.address
+                  ) {
+                    if (
+                      tokens[index].address === pancake.inputCurrency.address
+                    ) {
+                      const tmp = { ...pancake.outputCurrency };
+                      dispatch(setOutputCurrency(tokens[index]));
+                      dispatch(setInputCurrency(tmp));
+                      close();
+                    } else {
+                      dispatch(setOutputCurrency(tokens[index]));
+                      close();
+                    }
+                  }
                 }
+          }
+          className={`flex items-center justify-between ${
+            tokens[index].source
+              ? 'cursor-default'
+              : 'cursor-pointer hover:bg-[#faf9fa]'
+          } ${
+            tokens[index].address === pancake.inputCurrency.address ||
+            tokens[index].address === pancake.outputCurrency.address
+              ? 'opacity-40 !cursor-default hover:bg-white'
+              : ''
+          } px-5 py-1 gap-2`}
+          style={style}
+        >
+          <IconButton leftSrc={tokens[index]?.logoURI}></IconButton>
+          <div
+            className={`flex-col grow overflow-hidden ${
+              tokens[index].source ? 'opacity-40' : ''
+            }`}
+          >
+            <p className='w-52 truncate text-[#bdc2c4]'>
+              <span
+                className={`${
+                  tokens[index].source ? '' : 'font-semibold'
+                } text-[#280d5f]`}
+              >
+                {tokens[index].symbol}
+              </span>
+              <span className='ml-2 font-normal text-xs'>
+                {tokens[index].source ? tokens[index].name : ''}
+              </span>
+            </p>
+            <p className='text-sm'>
+              {tokens[index].source ? (
+                <IconButton
+                  className='cursor-default'
+                  rightSize='12px'
+                  rightSrc={`/images/pancake/${tokens[index].source?.replaceAll(
+                    ' ',
+                    ''
+                  )}.png`}
+                >
+                  {'via ' + tokens[index].source}
+                </IconButton>
+              ) : (
+                tokens[index].name
+              )}
+            </p>
+          </div>
+          <div className='shrink h-full'>
+            {tokens[index].source ? (
+              <PanButton
+                onClick={() => {
+                  dispatch(importToken(tokens[index]));
+                  if (source === 'in') {
+                    dispatch(setInputCurrency(tokens[index]));
+                  } else if (source === 'out') {
+                    dispatch(setOutputCurrency(tokens[index]));
+                  }
 
-                close();
-              }}
-              className='h-full w-24 shrink'
-            >
-              Import
-            </PanButton>
-          ) : undefined}
+                  close();
+                }}
+                className='h-full w-24 shrink'
+              >
+                Import
+              </PanButton>
+            ) : undefined}
+          </div>
         </div>
-      </div>
-    ) : (
-      <div className='px-5 py-[9px] text-sm font-normal' style={style}>
-        <p className='flex items-center justify-between border border-[#e7e3eb] bg-[#faf9fa] w-full px-3 py-2 rounded-lg'>
-          <span>{tokens[index].name}</span>
-          <IconButton
-            className='align-middle cursor-default'
-            leftSize='16px'
-            leftIcon={<PanQuestionMarkSvg />}
-          ></IconButton>
-        </p>
-      </div>
-    );
+      ) : (
+        <div className='px-5 py-[9px] text-sm font-normal' style={style}>
+          <p className='flex items-center justify-between border border-[#e7e3eb] bg-[#faf9fa] w-full px-3 py-2 rounded-lg'>
+            <span>{tokens[index].name}</span>
+            <IconButton
+              className='align-middle cursor-default'
+              leftSize='16px'
+              leftIcon={<PanQuestionMarkSvg />}
+            ></IconButton>
+          </p>
+        </div>
+      );
+    } else {
+      return <div></div>;
+    }
   };
 
   return (
@@ -263,7 +271,7 @@ export const TokenModal: React.FC<{
               </IconButton>
             </div>
           </div>
-          {tokens.length === 0 ? (
+          {!tokens || tokens?.length === 0 ? (
             <div className='text-center text-[#7a6eaa]'>No results found.</div>
           ) : (
             <List

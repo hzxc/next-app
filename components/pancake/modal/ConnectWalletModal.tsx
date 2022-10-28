@@ -1,14 +1,22 @@
 import CloseSvg from 'public/images/pancake/close.svg';
 import { IconButton } from 'components';
 import { PanButton } from '../button';
-import { useConnect } from 'wagmi';
+import { useAccount, useConnect } from 'wagmi';
 import { PanModal } from './PanModal';
+import { useEffect } from 'react';
 
 export const ConnectWalletModal: React.FC<{
   visible: boolean;
   close: () => void;
 }> = ({ visible, close }) => {
   const { connect, connectors } = useConnect();
+  const { isConnected } = useAccount();
+
+  useEffect(() => {
+    if (isConnected) {
+      close();
+    }
+  }, [isConnected]);
   return (
     <PanModal visible={visible} close={close}>
       <div className='overflow-hidden w-80 rounded-3xl text-[#280d5f] bg-white'>
