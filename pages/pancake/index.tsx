@@ -20,7 +20,7 @@ import {
 } from 'redux/pancake/pancakeSlice';
 import { selectPancakePersist } from 'redux/pancake/pancakePersistSlice';
 import { IoMdRefresh } from 'react-icons/io';
-import { ethers, utils } from 'ethers';
+import { ethers } from 'ethers';
 
 const Pancake: NextPageWithLayout = () => {
   const { visible, close, open } = useToggle(false);
@@ -50,7 +50,7 @@ const Pancake: NextPageWithLayout = () => {
   }, [isIdle, mutate, pancakePersist.tokens]);
 
   useEffect(() => {
-    if (bal) {
+    if (bal && bal.length > 1) {
       const inNum = bal[0].isZero()
         ? '0'
         : ethers.utils.formatUnits(bal[0], pancake.inputCurrency.decimals);
@@ -62,7 +62,7 @@ const Pancake: NextPageWithLayout = () => {
         outBal: outNum.substring(0, outNum.indexOf('.') + 6),
       });
     }
-  }, [balSuc]);
+  }, [bal]);
   return (
     <div>
       <TokenModal visible={visible} modalClose={close} source={source} />
@@ -136,7 +136,7 @@ const Pancake: NextPageWithLayout = () => {
               leftIcon={<PanExDown />}
               rightIcon={<PanExUpDown className='text-white' />}
               onClick={() => {
-                const tmp = pancake.outputCurrency;
+                const tmp = { ...pancake.outputCurrency };
                 dispatch(setOutputCurrency(pancake.inputCurrency));
                 dispatch(setInputCurrency(tmp));
               }}

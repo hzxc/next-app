@@ -21,7 +21,7 @@ import { BNB, BTCB, BUSD, CAKE } from 'data/pancake';
 export const TokenModal: React.FC<{
   visible: boolean;
   modalClose: () => void;
-  source: 'in' | 'out';
+  source?: 'in' | 'out';
 }> = ({ visible, modalClose, source }) => {
   const pancake = useAppSelector(selectPancake);
   const dispatch = useAppDispatch();
@@ -37,7 +37,7 @@ export const TokenModal: React.FC<{
   const handleTknClick = (tkn: IToken) => {
     if (source === 'in' && tkn.address !== pancake.inputCurrency.address) {
       if (tkn.address === pancake.outputCurrency.address) {
-        const tmp = pancake.inputCurrency;
+        const tmp = { ...pancake.inputCurrency };
         dispatch(setInputCurrency(tkn));
         dispatch(setOutputCurrency(tmp));
         close();
@@ -50,7 +50,7 @@ export const TokenModal: React.FC<{
       tkn.address !== pancake.outputCurrency.address
     ) {
       if (tkn.address === pancake.inputCurrency.address) {
-        const tmp = pancake.outputCurrency;
+        const tmp = { ...pancake.outputCurrency };
         dispatch(setOutputCurrency(tkn));
         dispatch(setInputCurrency(tmp));
         close();
@@ -90,7 +90,7 @@ export const TokenModal: React.FC<{
                   if (
                     tokens[index].address === pancake.outputCurrency.address
                   ) {
-                    const tmp = pancake.inputCurrency;
+                    const tmp = { ...pancake.inputCurrency };
                     dispatch(setInputCurrency(tokens[index]));
                     dispatch(setOutputCurrency(tmp));
                     close();
@@ -103,7 +103,7 @@ export const TokenModal: React.FC<{
                   tokens[index].address !== pancake.outputCurrency.address
                 ) {
                   if (tokens[index].address === pancake.inputCurrency.address) {
-                    const tmp = pancake.outputCurrency;
+                    const tmp = { ...pancake.outputCurrency };
                     dispatch(setOutputCurrency(tokens[index]));
                     dispatch(setInputCurrency(tmp));
                     close();

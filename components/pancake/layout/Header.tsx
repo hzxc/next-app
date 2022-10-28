@@ -5,7 +5,7 @@ import SettingSvg from '/public/images/pancake/setting.svg';
 import LanguageSvg from 'public/images/pancake/language.svg';
 import { ConnectWalletModal } from '../modal/ConnectWalletModal';
 import { useToggle } from 'hooks';
-import { useContractRead, useNetwork } from 'wagmi';
+import { useNetwork } from 'wagmi';
 import { SwitchNetworkModal } from '../modal/SwitchNetworkModal';
 import { useInitConnect } from 'hooks/useInitConnect';
 import { MenuButton, MenuButtonItem } from 'components/menu-button';
@@ -183,7 +183,7 @@ export const Header: React.FC = () => {
                   exClassName='panMb'
                   leftIcon={<WalletSvg className='text-[#1fc7d4]' />}
                   rightIcon={<ArrowDownSvg />}
-                  customstyle={{
+                  style={{
                     boxShadow: 'rgb(0 0 0 / 10%) 0px -2px 0px inset',
                   }}
                 >

@@ -58,8 +58,6 @@ const searchTokens = async (
   tokens: IToken[],
   baseTokens: IToken[]
 ) => {
-  console.log('searchTokens');
-
   if (param.length >= 40) {
     if (!ethers.utils.isAddress(param)) {
       return [];
@@ -120,7 +118,7 @@ const searchTokens = async (
       // );
       return [];
     }
-  } else if (param.length > 0) {
+  } else {
     const baseResult = baseTokens.filter((t) =>
       t.symbol.toLowerCase().includes(param.toLowerCase())
     );
@@ -144,8 +142,6 @@ const searchTokens = async (
       return baseResult;
     }
   }
-
-  return baseTokens;
 };
 
 export const useTokens = () => {
@@ -158,10 +154,17 @@ export const useTokens = () => {
 };
 
 export const useSearch = (param: string) => {
-  param = param.trim();
+  console.log('searchTokens', param);
   const pancake = useAppSelector(selectPancakePersist);
 
-  return useQuery<IToken[], Error>(['searchPancakeTokens', param], () => {
-    return searchTokens(param, pancake.tokens || [], pancake.baseTokens);
-  });
+  return useQuery<IToken[], Error>(
+    ['searchPancakeTokens', param.trim()],
+    () => {
+      if (param === '') {
+        return pancake.baseTokens;
+      } else {
+        return searchTokens(param, pancake.tokens || [], pancake.baseTokens);
+      }
+    }
+  );
 };

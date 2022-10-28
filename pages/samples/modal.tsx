@@ -12,7 +12,7 @@ const Modal: NextPageWithLayout = () => {
     <Layout>
       <div className='m-auto p-8 space-x-2'>
         <Button onClick={open}>open modal</Button>
-        <TokenModal visible={visible} close={close} />
+        <TokenModal visible={visible} modalClose={close} />
       </div>
     </Layout>
   );

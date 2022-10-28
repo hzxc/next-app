@@ -55,7 +55,7 @@ const getBalance = async (act: string, tokens: string[]) => {
     throw new Error(isError(err) ? err.message : 'unknown error');
   }
 
-  console.log(result);
+  // console.log(result);
 
   return result;
 };
@@ -68,7 +68,7 @@ export const useCurrencyBalance = (tokens: string[]) => {
       if (isConnected && address) {
         return getBalance(address, tokens);
       } else {
-        return [BigNumber.from(0), BigNumber.from(0)];
+        return [];
       }
     }
   );
