@@ -27,6 +27,9 @@ export default function Sidebar() {
           <MenuItem>
             <Link href='/samples/ethers/multi-query'>Multi Query</Link>
           </MenuItem>
+          <MenuItem>
+            <Link href='/samples/ethers/best-trade'>Best Trade</Link>
+          </MenuItem>
         </SubMenu>
         <SubMenu subTitle='Samples'>
           <MenuItem>

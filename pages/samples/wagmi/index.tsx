@@ -3,7 +3,7 @@ import { Layout } from 'components/layout';
 import { utils } from 'ethers';
 import { useCakePrice } from 'hooks/pancake';
 import { NextPageWithLayout } from 'pages/_app';
-import { ReactElement, useEffect } from 'react';
+import { ReactElement } from 'react';
 
 const Index: NextPageWithLayout = () => {
   return <div className='p-8'>Wagmi</div>;
