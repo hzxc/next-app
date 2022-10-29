@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { MultiQueryABI } from 'abi';
-import { IBEP20ABI } from 'abi/bsc';
+import { MultiQueryABI } from 'abis';
+import { IBEP20ABI } from 'abis/bsc';
 import { bscProvider } from 'conf';
 import { bscMultiQueryAddr } from 'data';
 import { BigNumber, ethers } from 'ethers';

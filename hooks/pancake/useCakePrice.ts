@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { PancakeRouterABI } from 'abi/bsc';
+import { PancakeRouterABI } from 'abis/bsc';
 import { bscProvider } from 'conf';
 import { bscBusdAddr, bscCakeAddr, bscPancakeRouterAddr } from 'data';
 import { ethers, utils } from 'ethers';

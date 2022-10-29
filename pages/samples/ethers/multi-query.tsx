@@ -1,7 +1,7 @@
-import { IBEP20ABI, PancakeRouterABI } from 'abi/bsc';
-import { MulticallABI } from 'abi/MulticallABI';
-import { MultiQueryABI } from 'abi';
-import { UniSwapRouterV3ABI } from 'abi/uniswap';
+import { IBEP20ABI, PancakeRouterABI } from 'abis/bsc';
+import { MulticallABI } from 'abis/MulticallABI';
+import { MultiQueryABI } from 'abis';
+import { UniSwapRouterV3ABI } from 'abis/uniswap';
 import { Button } from 'components';
 import { Layout } from 'components/layout';
 import { bscProvider } from 'conf';
