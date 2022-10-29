@@ -30,11 +30,6 @@ export default function Sidebar() {
           <MenuItem>
             <Link href='/samples/ethers/best-trade'>Best Trade</Link>
           </MenuItem>
-          <MenuItem>
-            <Link href='/samples/ethers/uniswap-fetcher'>
-              Uniswap Sdk Fetcher
-            </Link>
-          </MenuItem>
         </SubMenu>
         <SubMenu subTitle='Samples'>
           <MenuItem>
