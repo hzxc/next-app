@@ -4,30 +4,66 @@ import { Layout } from 'components/layout';
 import { ethers, utils } from 'ethers';
 import { getBnbBalance, useCakePrice } from 'hooks/pancake';
 import { NextPageWithLayout } from 'pages/_app';
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
 import { ChainId, Pair, Token, TokenAmount, Trade } from '@uniswap/sdk';
+import { pancakeBestPath } from 'utils/path';
+import { bscBusdAddr, bscCakeAddr } from 'data/constants';
+import { TradeDirection } from 'simple-uniswap-sdk';
+import { stringify } from 'querystring';
 
 const BestTrade: NextPageWithLayout = () => {
-  const HOT = new Token(
-    ChainId.MAINNET,
-    '0xc0FFee0000000000000000000000000000000000',
-    18,
-    'HOT',
-    'Caffeine'
-  );
-  const NOT = new Token(
-    ChainId.MAINNET,
-    '0xDeCAf00000000000000000000000000000000000',
-    18,
-    'NOT',
-    'Caffeine'
-  );
+  const [trade, setTrade] = useState({
+    fromToken: bscBusdAddr,
+    toToken: bscCakeAddr,
+    amountToTrade: '1',
+  });
 
-  const pair = new Pair(
-    new TokenAmount(HOT, '2000000000000000000'),
-    new TokenAmount(NOT, '1000000000000000000')
+  const [path, setPath] = useState<string[]>([]);
+  const bestPathHandle = () => {
+    pancakeBestPath(bscBusdAddr, bscCakeAddr, '1', TradeDirection.output).then(
+      (ret) => {
+        setPath([
+          ret.bestRouteQuote.routeText,
+          ...ret.bestRouteQuote.routePathArray,
+        ]);
+      }
+    );
+  };
+  return (
+    <div className='flex flex-col items-center p-8 gap-2'>
+      <input
+        className='border w-96'
+        type='text'
+        value={trade.fromToken}
+        onChange={(e) => {
+          setTrade({ ...trade, fromToken: e.target.value });
+        }}
+        placeholder='from token'
+      />
+
+      <input
+        className='border w-96'
+        type='text'
+        value={trade.toToken}
+        onChange={(e) => {
+          setTrade({ ...trade, toToken: e.target.value });
+        }}
+        placeholder='to token'
+      />
+      <input
+        className='border w-96'
+        type='text'
+        value={trade.amountToTrade}
+        onChange={(e) => {
+          setTrade({ ...trade, amountToTrade: e.target.value });
+        }}
+        placeholder='amount to trade'
+      />
+      <Button onClick={bestPathHandle}>Pancake Get Best Path</Button>
+
+      <p className='break-all'>{JSON.stringify(path)}</p>
+    </div>
   );
-  return <div className='p-8'>BestTrade</div>;
 };
 
 BestTrade.getLayout = function getLayout(page: ReactElement) {

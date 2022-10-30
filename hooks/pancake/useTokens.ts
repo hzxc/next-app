@@ -8,7 +8,7 @@ import { selectPancakePersist } from 'redux/pancake/pancakePersistSlice';
 import { BigNumber, ethers } from 'ethers';
 import { bscProvider } from 'conf';
 import { IBEP20ABI } from 'abis/bsc';
-import { bscMultiQueryAddr } from 'data';
+import { bscMultiQueryAddr } from 'data/constants';
 import { MultiQueryABI } from 'abis';
 
 const getTokens = async () => {

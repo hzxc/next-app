@@ -10,7 +10,7 @@ import {
   bscCakeAddr,
   bscMultiQueryAddr,
   bscPancakeRouterAddr,
-} from 'data';
+} from 'data/constants';
 import { BigNumber, ethers, utils } from 'ethers';
 import { NextPageWithLayout } from 'pages/_app';
 import { ReactElement, useState } from 'react';

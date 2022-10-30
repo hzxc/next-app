@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { MultiQueryABI } from 'abis';
 import { IBEP20ABI } from 'abis/bsc';
 import { bscProvider } from 'conf';
-import { bscMultiQueryAddr } from 'data';
+import { bscMultiQueryAddr } from 'data/constants';
 import { BigNumber, ethers } from 'ethers';
 import { isError } from 'utils';
 import { useAccount } from 'wagmi';

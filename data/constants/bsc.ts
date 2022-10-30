@@ -7,3 +7,4 @@ export const bscTestNetCakeAddr = '0xFa60D973F7642B748046464e165A65B7323b0DEE';
 export const bscTestNetMultiQueryAddr =
   '0x594bCBb4c72dA609aaEb80fD795581CdA125640E';
 export const bscPanFactoryAddr = '0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73';
+export const bscWBnbAddr = '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c';
