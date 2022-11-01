@@ -12,6 +12,7 @@ import { ReactElement, useEffect, useState } from 'react';
 import { NextPageWithLayout } from 'pages/_app';
 import { IconButton } from 'components';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
+import { useDebounce } from 'use-debounce';
 
 import {
   selectPancake,
@@ -21,6 +22,10 @@ import {
 import { selectPancakePersist } from 'redux/pancake/pancakePersistSlice';
 import { IoMdRefresh } from 'react-icons/io';
 import { ethers } from 'ethers';
+import { useGetAmounts } from 'hooks/pancake/useGetAmounts';
+import { useBscBestPath } from 'hooks/pancake/useBscBestPath';
+import { TradeDirection } from 'simple-uniswap-sdk';
+import { toNumber } from 'utils';
 
 const Pancake: NextPageWithLayout = () => {
   const { visible, close, open } = useToggle(false);
@@ -29,6 +34,8 @@ const Pancake: NextPageWithLayout = () => {
   const pancakePersist = useAppSelector(selectPancakePersist);
   const dispatch = useAppDispatch();
   const [source, setSource] = useState<'in' | 'out'>('in');
+  const [inVal, setInVal] = useState('');
+  const [outVal, setOutVal] = useState('');
 
   const { data: bal } = useCurrencyBalance([
     pancake.inputCurrency.address,
@@ -63,8 +70,27 @@ const Pancake: NextPageWithLayout = () => {
       });
     }
   }, [bal]);
+
+  const [tradeParam, setTradeParam] = useState({
+    amountToTrade: '',
+    direction: TradeDirection.input,
+  });
+
+  const [amountToTradeDebounce] = useDebounce(tradeParam.amountToTrade, 400);
+  const [directionDebounce] = useDebounce(tradeParam.direction, 400);
+
+  const { data: pathData } = useBscBestPath({
+    fromToken: pancake.inputCurrency.address,
+    toToken: pancake.outputCurrency.address,
+    amountToTrade: amountToTradeDebounce,
+    direction: directionDebounce,
+  });
   return (
     <div>
+      <div className='p-8'>
+        <p>tradeParam:{JSON.stringify(tradeParam)}</p>
+        <p className='break-all'>pathData:{JSON.stringify(pathData)}</p>
+      </div>
       <TokenModal visible={visible} modalClose={close} source={source} />
       <div className='w-80 flex flex-col border rounded-3xl bg-white'>
         <div className='p-6 border-b'>
@@ -127,7 +153,18 @@ const Pancake: NextPageWithLayout = () => {
             placeholder='0.0'
             className='h-14 px-4 w-full pb-4 font-normal bg-[#eeeaf4] ring ring-[#eeeaf4] focus-visible:outline-0 rounded-2xl text-right placeholder:text-[#7a6eaa] '
             type='text'
+            value={inVal}
+            onChange={(e) => {
+              if (!isNaN(Number(e.target.value))) {
+                setTradeParam({
+                  amountToTrade: e.target.value,
+                  direction: TradeDirection.output,
+                });
+                setInVal(e.target.value);
+              }
+            }}
           />
+
           <div className='p-1 w-full text-center'>
             <IconButton
               exClassName='panEx'
@@ -177,6 +214,16 @@ const Pancake: NextPageWithLayout = () => {
             placeholder='0.0'
             className='h-14 px-4 w-full pb-4 font-normal bg-[#eeeaf4] ring ring-[#eeeaf4] focus-visible:outline-0 rounded-2xl text-right placeholder:text-[#7a6eaa] '
             type='text'
+            value={outVal}
+            onChange={(e) => {
+              if (!isNaN(Number(e.target.value))) {
+                setTradeParam({
+                  amountToTrade: e.target.value,
+                  direction: TradeDirection.input,
+                });
+                setOutVal(e.target.value);
+              }
+            }}
           />
           <div className='w-full p-1 flex justify-end gap-1'>
             <PanButton className='!py-[2px] !px-2 text-xs'>SCAN RISK</PanButton>

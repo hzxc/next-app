@@ -30,6 +30,9 @@ export default function Sidebar() {
           <MenuItem>
             <Link href='/samples/ethers/best-path'>Best Path</Link>
           </MenuItem>
+          <MenuItem>
+            <Link href='/samples/ethers/sort-tokens'>Sort Tokens</Link>
+          </MenuItem>
         </SubMenu>
         <SubMenu subTitle='Samples'>
           <MenuItem>

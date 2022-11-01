@@ -63,7 +63,7 @@ const getBalance = async (act: string, tokens: string[]) => {
 export const useCurrencyBalance = (tokens: string[]) => {
   const { address, isConnected } = useAccount();
   return useQuery<BigNumber[], Error>(
-    ['BalanceOf', isConnected, tokens],
+    ['BscBalanceOf', isConnected, tokens],
     () => {
       if (isConnected && address) {
         return getBalance(address, tokens);

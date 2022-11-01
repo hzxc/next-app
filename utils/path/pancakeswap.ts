@@ -6,7 +6,6 @@ import {
   Multicall3Addr,
 } from 'data/constants';
 import {
-  ChainId,
   TradeDirection,
   UniswapPair,
   UniswapPairSettings,
@@ -25,7 +24,8 @@ export const pancakeBestPath = async (
     // the contract address of the token you want to convert TO
     toTokenContractAddress: toToken,
     // the ethereum address of the user using this part of the dApp
-    ethereumAddress: '0xB1E6079212888f0bE0cf55874B2EB9d7a5e02cD9',
+    // ethereumAddress: '0xB1E6079212888f0bE0cf55874B2EB9d7a5e02cD9',
+    ethereumAddress: '0x55cf452D43EfAfb505335cEe7e0BB368a37c322c',
     // you can pass in the provider url as well if you want
     // providerUrl: YOUR_PROVIDER_URL,
     // OR if you want to inject your own ethereum provider (no need for chainId if so)
@@ -107,6 +107,8 @@ export const pancakeBestPath = async (
     amountToTrade,
     direction
   );
+
+  console.log(findBestRoute);
   // console.log(findBestRoute.bestRouteQuote.routeText);
   return findBestRoute;
 };
