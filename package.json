@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@pancakeswap/sdk": "^3.1.0",
     "@reduxjs/toolkit": "^1.8.6",
     "@tanstack/react-query": "^4.13.0",
     "@tanstack/react-query-devtools": "^4.13.0",
