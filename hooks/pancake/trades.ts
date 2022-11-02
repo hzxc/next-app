@@ -1,10 +1,25 @@
-import { Currency } from 'sdk/pancake';
+import {
+  ADDITIONAL_BASES,
+  BASES_TO_CHECK_TRADES_AGAINST,
+  CUSTOM_BASES,
+} from 'data/constants/pancake';
+import { ChainId, Currency, Pair, Token } from 'packages/pancake/sdk';
+import { useMemo } from 'react';
+import { wrappedCurrency } from 'utils/wrappedCurrency';
+import { useAccount } from 'wagmi';
+import flatMap from 'lodash/flatMap';
 
 export function useAllCommonPairs(
   currencyA?: Currency,
   currencyB?: Currency
 ): Pair[] {
-  const { chainId } = useActiveWeb3React();
+  const { connector: activeConnector } = useAccount();
+  const id = activeConnector?.id;
+  let chainId: ChainId | undefined = undefined;
+
+  if (id && id in ChainId) {
+    chainId = Number(id);
+  }
 
   const [tokenA, tokenB] = chainId
     ? [wrappedCurrency(currencyA, chainId), wrappedCurrency(currencyB, chainId)]
@@ -20,7 +35,6 @@ export function useAllCommonPairs(
     const additionalB = tokenB
       ? ADDITIONAL_BASES[chainId]?.[tokenB.address] ?? []
       : [];
-
     return [...common, ...additionalA, ...additionalB];
   }, [chainId, tokenA, tokenB]);
 

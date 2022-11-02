@@ -1,61 +1,26 @@
-import invariant from 'tiny-invariant';
 import JSBI from 'jsbi';
-
+import invariant from 'tiny-invariant';
 import {
   BigintIsh,
-  ZERO,
-  ONE,
-  TWO,
-  THREE,
-  SolidityType,
-  SOLIDITY_TYPE_MAXIMA,
-} from './constants';
-import { ethers } from 'ethers';
-
-export function validateSolidityTypeInstance(
-  value: JSBI,
-  solidityType: SolidityType
-): void {
-  invariant(
-    JSBI.greaterThanOrEqual(value, ZERO),
-    `${value} is not a ${solidityType}.`
-  );
-  invariant(
-    JSBI.lessThanOrEqual(value, SOLIDITY_TYPE_MAXIMA[solidityType]),
-    `${value} is not a ${solidityType}.`
-  );
-}
+  Currency,
+  CurrencyAmount,
+  Percent,
+  Price,
+} from 'packages/pancake/sdk-core';
+import { getAddress } from 'ethers/lib/utils';
 
 // warns if addresses are not checksummed
 export function validateAndParseAddress(address: string): string {
   try {
-    const checksummedAddress = ethers.utils.getAddress(address);
+    const checksummedAddress = getAddress(address);
     return checksummedAddress;
-  } catch {
+  } catch (error) {
     invariant(false, `${address} is not a valid address.`);
   }
 }
 
 export function parseBigintIsh(bigintIsh: BigintIsh): JSBI {
   return bigintIsh instanceof JSBI ? bigintIsh : JSBI.BigInt(bigintIsh);
-}
-
-// mock the on-chain sqrt function
-export function sqrt(y: JSBI): JSBI {
-  validateSolidityTypeInstance(y, SolidityType.uint256);
-  let z: JSBI = ZERO;
-  let x: JSBI;
-  if (JSBI.greaterThan(y, THREE)) {
-    z = y;
-    x = JSBI.add(JSBI.divide(y, TWO), ONE);
-    while (JSBI.lessThan(x, z)) {
-      z = x;
-      x = JSBI.divide(JSBI.add(JSBI.divide(y, x), x), TWO);
-    }
-  } else if (JSBI.notEqual(y, ZERO)) {
-    z = ONE;
-  }
-  return z;
 }
 
 // given an array of items sorted by `comparator`, insert an item into its sort index and constrain the size to
@@ -95,4 +60,26 @@ export function sortedInsert<T>(
     items.splice(lo, 0, add);
     return isFull ? items.pop()! : null;
   }
+}
+
+/**
+ * Returns the percent difference between the mid price and the execution price, i.e. price impact.
+ * @param midPrice mid price before the trade
+ * @param inputAmount the input amount of the trade
+ * @param outputAmount the output amount of the trade
+ */
+export function computePriceImpact<
+  TBase extends Currency,
+  TQuote extends Currency
+>(
+  midPrice: Price<TBase, TQuote>,
+  inputAmount: CurrencyAmount<TBase>,
+  outputAmount: CurrencyAmount<TQuote>
+): Percent {
+  const quotedOutputAmount = midPrice.quote(inputAmount);
+  // calculate price impact := (exactQuote - outputAmount) / exactQuote
+  const priceImpact = quotedOutputAmount
+    .subtract(outputAmount)
+    .divide(quotedOutputAmount);
+  return new Percent(priceImpact.numerator, priceImpact.denominator);
 }

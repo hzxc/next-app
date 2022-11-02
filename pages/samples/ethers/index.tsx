@@ -11,7 +11,11 @@ import {
 import { getBnbBalance, useCakePrice } from 'hooks/pancake';
 import { NextPageWithLayout } from 'pages/_app';
 import { ReactElement, useEffect, useState } from 'react';
-import { FACTORY_ADDRESS_MAP, INIT_CODE_HASH_MAP } from 'sdk/pancake';
+import {
+  ChainId,
+  FACTORY_ADDRESS_MAP,
+  INIT_CODE_HASH_MAP,
+} from 'packages/pancake/sdk';
 import { isError } from 'utils';
 
 const Index: NextPageWithLayout = () => {
@@ -95,6 +99,14 @@ const Index: NextPageWithLayout = () => {
           }}
         >
           GetCreate2Address
+        </Button>
+
+        <Button
+          onClick={() => {
+            console.log('1' in ChainId);
+          }}
+        >
+          Enum Test
         </Button>
       </div>
     </div>
