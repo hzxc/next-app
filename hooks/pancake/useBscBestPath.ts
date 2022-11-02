@@ -31,10 +31,10 @@ export const useBscBestPath = (param: {
   direction: TradeDirection;
 }) => {
   return useQuery<BestPathResp, Error>(['BscBestPath', param], async () => {
+    console.log(param);
     invariant(
-      param.fromToken.length < 40 ||
-        param.toToken.length < 40 ||
-        'useBscBestPath param error!'
+      param.fromToken.length >= 40 && param.toToken.length >= 40,
+      'useBscBestPath param error!'
     );
 
     if (param.fromToken === ethers.constants.AddressZero) {

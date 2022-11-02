@@ -1,10 +1,17 @@
 import { spawn } from 'child_process';
 import { Button, IconButton } from 'components';
 import { Layout } from 'components/layout';
+import { bscBusdAddr, bscCakeAddr } from 'data/constants';
 import { ethers, utils } from 'ethers';
+import {
+  getCreate2Address,
+  solidityKeccak256,
+  solidityPack,
+} from 'ethers/lib/utils';
 import { getBnbBalance, useCakePrice } from 'hooks/pancake';
 import { NextPageWithLayout } from 'pages/_app';
 import { ReactElement, useEffect, useState } from 'react';
+import { FACTORY_ADDRESS_MAP, INIT_CODE_HASH_MAP } from 'sdk/pancake';
 import { isError } from 'utils';
 
 const Index: NextPageWithLayout = () => {
@@ -32,6 +39,7 @@ const Index: NextPageWithLayout = () => {
         }
       });
   };
+
   return (
     <div className='p-8'>
       <IconButton
@@ -54,6 +62,41 @@ const Index: NextPageWithLayout = () => {
         {bnbBal ? <span>{bnbBal}</span> : undefined}
       </div>
       <div>{err}</div>
+      <div className='p-8 space-x-2'>
+        <Button
+          onClick={() => {
+            console.log(
+              solidityPack(['address', 'address'], [bscCakeAddr, bscBusdAddr])
+            );
+          }}
+        >
+          Solidity Pack
+        </Button>
+        <Button
+          onClick={() => {
+            console.log(
+              getCreate2Address(
+                FACTORY_ADDRESS_MAP[56],
+                solidityKeccak256(
+                  ['bytes'],
+                  [
+                    solidityPack(
+                      ['address', 'address'],
+                      [
+                        '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
+                        '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56',
+                      ]
+                    ),
+                  ]
+                ),
+                INIT_CODE_HASH_MAP[56]
+              )
+            );
+          }}
+        >
+          GetCreate2Address
+        </Button>
+      </div>
     </div>
   );
 };

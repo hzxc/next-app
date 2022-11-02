@@ -1,25 +1,27 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@pancakeswap/sdk': ^3.1.0
   '@reduxjs/toolkit': ^1.8.6
   '@svgr/webpack': ^6.5.1
   '@tanstack/react-query': ^4.13.0
   '@tanstack/react-query-devtools': ^4.13.0
+  '@types/big.js': ^6.1.6
   '@types/node': 18.11.0
   '@types/qs': ^6.9.7
   '@types/react': 18.0.21
   '@types/react-dom': 18.0.6
   '@types/react-transition-group': ^4.4.5
   '@types/react-window': ^1.8.5
-  '@uniswap/sdk': ^3.0.3
   autoprefixer: ^10.4.13
   axios: ^1.1.3
+  big.js: ^6.2.1
   dayjs: ^1.11.6
+  decimal.js-light: ^2.5.1
   eslint: 8.25.0
   eslint-config-next: 12.3.1
   eslint-config-prettier: ^8.5.0
   ethers: ^5.7.2
+  jsbi: ^4.3.0
   next: 12.3.1
   postcss: ^8.4.18
   prettier: 2.7.1
@@ -37,19 +39,21 @@ specifiers:
   tailwind-scrollbar: 2.1.0-preview.0
   tailwindcss: ^3.2.1
   tiny-invariant: ^1.3.1
+  toformat: ^2.0.0
   typescript: 4.8.4
   use-debounce: ^8.0.4
   wagmi: ^0.7.8
 
 dependencies:
-  '@pancakeswap/sdk': 3.1.0
   '@reduxjs/toolkit': 1.8.6_kuo2ie247izvzll3jejufdtq3q
   '@tanstack/react-query': 4.13.0_biqbaboplfbrettd7655fr4n2y
   '@tanstack/react-query-devtools': 4.13.0_vwr3yfyniquaygdm2roeczqxuu
-  '@uniswap/sdk': 3.0.3
   axios: 1.1.3
+  big.js: 6.2.1
   dayjs: 1.11.6
+  decimal.js-light: 2.5.1
   ethers: 5.7.2
+  jsbi: 4.3.0
   next: 12.3.1_biqbaboplfbrettd7655fr4n2y
   qs: 6.11.0
   react: 18.2.0
@@ -63,11 +67,13 @@ dependencies:
   redux-persist-expire: 1.1.1_react@18.2.0
   simple-uniswap-sdk: 3.7.0
   tiny-invariant: 1.3.1
+  toformat: 2.0.0
   use-debounce: 8.0.4_react@18.2.0
   wagmi: 0.7.8_ir5rj4sfbt34e63yhlgyn6mx7a
 
 devDependencies:
   '@svgr/webpack': 6.5.1
+  '@types/big.js': 6.1.6
   '@types/node': 18.11.0
   '@types/qs': 6.9.7
   '@types/react': 18.0.21
@@ -1990,24 +1996,6 @@ packages:
       fastq: 1.13.0
     dev: true
 
-  /@pancakeswap/sdk/3.1.0:
-    resolution: {integrity: sha512-GL/k6wo6BOtxsrOZalzj2ZF8SLBWiHXuIXsf58uy0/I+NND+UhRUdj048ck1Zj6aJlbn4GS9ve7W46Qzg2NznQ==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      '@ethersproject/address': ^5.0.0
-      '@ethersproject/contracts': ^5.0.0
-      '@ethersproject/networks': ^5.0.0
-      '@ethersproject/providers': ^5.0.0
-      '@ethersproject/solidity': ^5.0.0
-    dependencies:
-      big.js: 5.2.2
-      decimal.js-light: 2.5.1
-      jsbi: 3.2.5
-      tiny-invariant: 1.3.1
-      tiny-warning: 1.0.3
-      toformat: 2.0.0
-    dev: false
-
   /@pedrouid/environment/1.0.1:
     resolution: {integrity: sha512-HaW78NszGzRZd9SeoI3JD11JqY+lubnaOx7Pewj5pfjqWXOEATpeKIFb9Z4t2WBUK2iryiXX3lzWwmYWgUL0Ug==}
     dev: false
@@ -2303,6 +2291,10 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: true
 
+  /@types/big.js/6.1.6:
+    resolution: {integrity: sha512-0r9J+Zz9rYm2hOTwiMAVkm3XFQ4u5uTK37xrQMhc9bysn/sf/okzovWMYYIBMFTn/yrEZ11pusgLEaoarTlQbA==}
+    dev: true
+
   /@types/bn.js/4.11.6:
     resolution: {integrity: sha512-pqr857jrp2kPuO9uRjZ3PwnJTjoQy+fcdxvBTvHm6dkmEL9q+hDD/2j/0ELOBPtPnS8LjCX0gI9nbl8lVkadpg==}
     dependencies:
@@ -2454,30 +2446,6 @@ packages:
       '@typescript-eslint/types': 5.41.0
       eslint-visitor-keys: 3.3.0
     dev: true
-
-  /@uniswap/sdk/3.0.3:
-    resolution: {integrity: sha512-t4s8bvzaCFSiqD2qfXIm3rWhbdnXp+QjD3/mRaeVDHK7zWevs6RGEb1ohMiNgOCTZANvBayb4j8p+XFdnMBadQ==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      '@ethersproject/address': ^5.0.0-beta
-      '@ethersproject/contracts': ^5.0.0-beta
-      '@ethersproject/networks': ^5.0.0-beta
-      '@ethersproject/providers': ^5.0.0-beta
-      '@ethersproject/solidity': ^5.0.0-beta
-    dependencies:
-      '@uniswap/v2-core': 1.0.1
-      big.js: 5.2.2
-      decimal.js-light: 2.5.1
-      jsbi: 3.2.5
-      tiny-invariant: 1.3.1
-      tiny-warning: 1.0.3
-      toformat: 2.0.0
-    dev: false
-
-  /@uniswap/v2-core/1.0.1:
-    resolution: {integrity: sha512-MtybtkUPSyysqLY2U210NBDeCHX+ltHt3oADGdjqoThZaFRDKwM6k1Nb3F0A3hk5hwuQvytFWhrWHOEq6nVJ8Q==}
-    engines: {node: '>=10'}
-    dev: false
 
   /@wagmi/core/0.6.7_uwmz4gniyout2ivpdm7w2wosym:
     resolution: {integrity: sha512-l6O7pa4x4gAjvoXEX/V763mZR/YVtqCzHyVCIiVNe+NyvmdK5s30VXU9uyzrYozD6hwhAQJ+Jeow195N0Awr/A==}
@@ -2994,8 +2962,8 @@ packages:
     resolution: {integrity: sha512-s0IrSOzLlbvX7yp4WBfPITzpAU8sqQcpsmwXDiKwrG4r491vwCO/XpejasRNl0piBMe/DvP4Tz0mIS/X1DPJBQ==}
     dev: false
 
-  /big.js/5.2.2:
-    resolution: {integrity: sha512-vyL2OymJxmarO8gxMr0mhChsO9QGwhynfuu4+MHTAW6czfq9humCB7rKpUjDd9YUiDPU4mzpyupFSvOClAwbmQ==}
+  /big.js/6.2.1:
+    resolution: {integrity: sha512-bCtHMwL9LeDIozFn+oNhhFoq+yQ3BNdnsLSASUxLciOb1vgvpHsIO1dsENiGMgbb4SkP5TrzWzRiLddn8ahVOQ==}
     dev: false
 
   /bigint-buffer/1.1.5:
@@ -4783,8 +4751,8 @@ packages:
       argparse: 2.0.1
     dev: true
 
-  /jsbi/3.2.5:
-    resolution: {integrity: sha512-aBE4n43IPvjaddScbvWRA2YlTzKEynHzu7MqOyTipdHucf/VxS63ViCjxYRg86M8Rxwbt/GfzHl1kKERkt45fQ==}
+  /jsbi/4.3.0:
+    resolution: {integrity: sha512-SnZNcinB4RIcnEyZqFPdGPVgrg2AcnykiBy0sHVJQKHYeaLUvi3Exj+iaPpLnFVkDPZIV4U0yvgC9/R4uEAZ9g==}
     dev: false
 
   /jsesc/0.5.0:
@@ -6145,10 +6113,6 @@ packages:
     resolution: {integrity: sha512-AD5ih2NlSssTCwsMznbvwMZpJ1cbhkGd2uueNxzv2jDlEeZdU04JQfRnggJQ8DrcVBGjAsCKwFBbDlVNtEMlzw==}
     dev: false
 
-  /tiny-warning/1.0.3:
-    resolution: {integrity: sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==}
-    dev: false
-
   /to-fast-properties/2.0.0:
     resolution: {integrity: sha512-/OaKK0xYrs3DmxRYqL/yDc+FxFUVYhDlXMhRmv3z915w2HF1tnN1omB354j8VUGO/hbRzyD6Y3sA7v7GS/ceog==}
     engines: {node: '>=4'}
@@ -6586,7 +6550,7 @@ packages:
     dev: false
 
   github.com/ethereumjs/ethereumjs-abi/ee3994657fa7a427238e6ba92a84d0b529bbcde0:
-    resolution: {commit: ee3994657fa7a427238e6ba92a84d0b529bbcde0, repo: git+ssh://git@github.com/ethereumjs/ethereumjs-abi.git, type: git}
+    resolution: {tarball: https://codeload.github.com/ethereumjs/ethereumjs-abi/tar.gz/ee3994657fa7a427238e6ba92a84d0b529bbcde0}
     name: ethereumjs-abi
     version: 0.6.8
     dependencies:

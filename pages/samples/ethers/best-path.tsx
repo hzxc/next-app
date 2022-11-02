@@ -5,7 +5,6 @@ import { ethers, utils } from 'ethers';
 import { getBnbBalance, useCakePrice } from 'hooks/pancake';
 import { NextPageWithLayout } from 'pages/_app';
 import { ReactElement, useState } from 'react';
-import { ChainId, Pair, Token, TokenAmount, Trade } from '@uniswap/sdk';
 import { pancakeBestPath } from 'utils/path';
 import { bscBusdAddr, bscCakeAddr } from 'data/constants';
 import { TradeDirection } from 'simple-uniswap-sdk';
