@@ -33,6 +33,9 @@ export default function Sidebar() {
           <MenuItem>
             <Link href='/samples/ethers/sort-tokens'>Sort Tokens</Link>
           </MenuItem>
+          <MenuItem>
+            <Link href='/samples/ethers/units'>Units</Link>
+          </MenuItem>
         </SubMenu>
         <SubMenu subTitle='Samples'>
           <MenuItem>
