@@ -36,6 +36,11 @@ export default function Sidebar() {
           <MenuItem>
             <Link href='/samples/ethers/units'>Units</Link>
           </MenuItem>
+          <MenuItem>
+            <Link href='/samples/ethers/ethereum-multicall'>
+              Ethereum Multicall
+            </Link>
+          </MenuItem>
         </SubMenu>
         <SubMenu subTitle='Samples'>
           <MenuItem>

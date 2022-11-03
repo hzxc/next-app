@@ -16,6 +16,7 @@
     "big.js": "^6.2.1",
     "dayjs": "^1.11.6",
     "decimal.js-light": "^2.5.1",
+    "ethereum-multicall": "^2.15.0",
     "ethers": "^5.7.2",
     "jsbi": "^4.3.0",
     "lodash": "^4.17.21",

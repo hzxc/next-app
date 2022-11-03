@@ -1,12 +1,5 @@
+import { ChainId } from 'packages';
 import { ERC20Token } from './entities/token';
-
-export enum ChainId {
-  ETHEREUM = 1,
-  RINKEBY = 4,
-  GOERLI = 5,
-  BSC = 56,
-  BSC_TESTNET = 97,
-}
 
 export const FACTORY_ADDRESS = '0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73';
 

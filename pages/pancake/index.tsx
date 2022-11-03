@@ -10,7 +10,7 @@ import { useToggle } from 'hooks';
 import { useCurrencyBalance, useTokens } from 'hooks/pancake';
 import { ReactElement, useEffect, useState } from 'react';
 import { NextPageWithLayout } from 'pages/_app';
-import { IconButton } from 'components';
+import { Button, IconButton } from 'components';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import { useDebounce } from 'use-debounce';
 
@@ -26,6 +26,8 @@ import { useGetAmounts } from 'hooks/pancake/useGetAmounts';
 import { useBscBestPath } from 'hooks/pancake/useBscBestPath';
 import { TradeDirection } from 'simple-uniswap-sdk';
 import { toNumber } from 'utils';
+import { useChainId } from 'hooks/useChainId';
+import { useAccount } from 'wagmi';
 
 const Pancake: NextPageWithLayout = () => {
   const { visible, close, open } = useToggle(false);
@@ -85,6 +87,9 @@ const Pancake: NextPageWithLayout = () => {
     amountToTrade: amountToTradeDebounce,
     direction: directionDebounce,
   });
+
+  const chainId = useChainId();
+  const { isConnected, connector } = useAccount();
   return (
     <div>
       <div className='p-8'>
@@ -238,7 +243,9 @@ const Pancake: NextPageWithLayout = () => {
 
           <PanButton className='w-72 h-12'>Connect Wallet</PanButton>
         </div>
-        <div>persist tokens.length:{pancakePersist.tokens?.length}</div>
+        <div>
+          <p>persist tokens.length:{pancakePersist.tokens?.length}</p>
+        </div>
       </div>
     </div>
   );

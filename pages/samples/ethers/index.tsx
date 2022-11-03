@@ -11,12 +11,11 @@ import {
 import { getBnbBalance, useCakePrice } from 'hooks/pancake';
 import { NextPageWithLayout } from 'pages/_app';
 import { ReactElement, useEffect, useState } from 'react';
-import {
-  ChainId,
-  FACTORY_ADDRESS_MAP,
-  INIT_CODE_HASH_MAP,
-} from 'packages/pancake/sdk';
+import { FACTORY_ADDRESS_MAP, INIT_CODE_HASH_MAP } from 'packages/pancake/sdk';
 import { isError } from 'utils';
+import { ChainId } from 'packages';
+import { useChainId } from 'hooks/useChainId';
+import { useInitConnect } from 'hooks/useInitConnect';
 
 const Index: NextPageWithLayout = () => {
   const { data, isFetching } = useCakePrice();
@@ -43,6 +42,8 @@ const Index: NextPageWithLayout = () => {
         }
       });
   };
+  const [isConnected, address] = useInitConnect();
+  const chainId = useChainId();
 
   return (
     <div className='p-8'>
@@ -107,6 +108,18 @@ const Index: NextPageWithLayout = () => {
           }}
         >
           Enum Test
+        </Button>
+
+        <Button
+          onClick={() => {
+            chainId.then((chainId) => {
+              console.log('chainId', chainId);
+            });
+            console.log('isConnected', isConnected);
+            console.log('address', address);
+          }}
+        >
+          ChainId Test
         </Button>
       </div>
     </div>
