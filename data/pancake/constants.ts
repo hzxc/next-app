@@ -1,5 +1,5 @@
 import { BigNumber } from 'ethers';
-import { ChainId, JSBI, Percent, Token, WNATIVE } from 'packages/pancake/sdk';
+import { ChainId, JSBI, Percent, Token, WNATIVE } from 'eth';
 import {
   bscTokens,
   bscTestnetTokens,
@@ -7,10 +7,9 @@ import {
   USDT,
   BUSD,
   WBTC_ETH,
-} from 'packages/pancake/tokens';
-import { ChainMap, ChainTokenList } from './types';
+} from 'data/tokens';
 
-export const ROUTER_ADDRESS: ChainMap<string> = {
+export const ROUTER_ADDRESS = {
   [ChainId.ETHEREUM]: '0xEfF92A263d31888d860bD50809A8D171709b7b1c',
   [ChainId.RINKEBY]: '0xEfF92A263d31888d860bD50809A8D171709b7b1c',
   [ChainId.GOERLI]: '0xEfF92A263d31888d860bD50809A8D171709b7b1c',
@@ -19,7 +18,7 @@ export const ROUTER_ADDRESS: ChainMap<string> = {
 };
 
 // used to construct intermediary pairs for trading
-export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
+export const BASES_TO_CHECK_TRADES_AGAINST = {
   [ChainId.ETHEREUM]: [
     WNATIVE[ChainId.ETHEREUM],
     USDC[ChainId.ETHEREUM],
@@ -77,7 +76,7 @@ export const CUSTOM_BASES: {
 };
 
 // used for display in the default list when adding liquidity
-export const SUGGESTED_BASES: ChainTokenList = {
+export const SUGGESTED_BASES = {
   [ChainId.ETHEREUM]: [
     USDC[ChainId.ETHEREUM],
     USDT[ChainId.ETHEREUM],
@@ -103,7 +102,7 @@ export const SUGGESTED_BASES: ChainTokenList = {
 };
 
 // used to construct the list of all pairs we consider by default in the frontend
-export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
+export const BASES_TO_TRACK_LIQUIDITY_FOR = {
   [ChainId.ETHEREUM]: [
     USDC[ChainId.ETHEREUM],
     WNATIVE[ChainId.ETHEREUM],

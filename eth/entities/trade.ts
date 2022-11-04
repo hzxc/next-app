@@ -11,7 +11,7 @@ import {
   Percent,
   Price,
   Token,
-} from 'packages/pancake/sdk-core';
+} from '../core';
 
 import { computePriceImpact, sortedInsert } from '../utils';
 import { Pair } from './pair';

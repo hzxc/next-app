@@ -1,4 +1,4 @@
-import { ChainId, WETH9 } from '../sdk';
+import { ChainId, WETH9 } from 'eth';
 import { USDC, USDT, WBTC_ETH } from './common';
 
 export const ethereumTokens = {

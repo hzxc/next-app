@@ -42,7 +42,7 @@ const Index: NextPageWithLayout = () => {
         }
       });
   };
-  const [isConnected, address] = useInitConnect();
+  const [isConnected, address, activeConnector] = useInitConnect();
   const chainId = useChainId();
 
   return (
@@ -111,10 +111,11 @@ const Index: NextPageWithLayout = () => {
         </Button>
 
         <Button
-          onClick={() => {
+          onClick={async () => {
             chainId.then((chainId) => {
               console.log('chainId', chainId);
             });
+            console.log('chainId', await activeConnector?.getChainId());
             console.log('isConnected', isConnected);
             console.log('address', address);
           }}

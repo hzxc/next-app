@@ -12,7 +12,7 @@ import {
   _9975,
   BigintIsh,
   MINIMUM_LIQUIDITY,
-} from 'packages/pancake/sdk-core';
+} from '../core';
 
 import {
   getCreate2Address,

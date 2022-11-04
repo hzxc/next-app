@@ -1,5 +1,5 @@
 import invariant from 'tiny-invariant';
-import { Token, Currency, Price } from 'packages/pancake/sdk-core';
+import { Token, Currency, Price } from '../core';
 
 import { Pair } from './pair';
 

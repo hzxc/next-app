@@ -1,4 +1,4 @@
-import { ChainId, ERC20Token, WBNB } from '../sdk';
+import { ChainId, ERC20Token, WBNB } from 'eth';
 import { BUSD_TESTNET, CAKE_TESTNET } from './common';
 
 export const bscTestnetTokens = {

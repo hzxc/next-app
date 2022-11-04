@@ -8,4 +8,4 @@ export * from './router';
 
 export { computePriceImpact } from './utils';
 
-export * from 'packages/pancake/sdk-core';
+export * from './core';

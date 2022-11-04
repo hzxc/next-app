@@ -2,19 +2,18 @@ import {
   ADDITIONAL_BASES,
   BASES_TO_CHECK_TRADES_AGAINST,
   CUSTOM_BASES,
-} from 'data/constants/pancake';
-import { Currency, Pair, Token } from 'packages/pancake/sdk';
+} from 'data/pancake';
+import { Currency, Pair, Token } from 'eth';
 import { useMemo } from 'react';
 import { wrappedCurrency } from 'utils/wrappedCurrency';
-import { useAccount } from 'wagmi';
 import flatMap from 'lodash/flatMap';
+import { usePairs } from './usePairs';
 
 export async function useAllCommonPairs(
-  currencyA?: Currency,
-  currencyB?: Currency
+  currencyA: Currency,
+  currencyB: Currency
 ): Promise<Pair[]> {
-  const { connector } = useAccount();
-  const chainId = await connector?.getChainId();
+  const chainId = 56;
 
   const [tokenA, tokenB] = chainId
     ? [wrappedCurrency(currencyA, chainId), wrappedCurrency(currencyB, chainId)]

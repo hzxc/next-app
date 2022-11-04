@@ -1,4 +1,4 @@
-import { ChainId, ERC20Token, WETH9 } from '../sdk';
+import { ChainId, ERC20Token, WETH9 } from 'eth';
 import { USDC_GOERLI } from './common';
 
 export const goerliTestnetTokens = {

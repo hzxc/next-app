@@ -1,4 +1,4 @@
-import { Token } from 'packages/pancake/sdk-core';
+import { Token } from '../core';
 import { validateAndParseAddress } from '../utils';
 
 export interface SerializedToken {
@@ -13,6 +13,7 @@ export interface SerializedToken {
 // /**
 //  * Represents an ERC20 token with a unique address and some metadata.
 //  */
+
 export class ERC20Token extends Token {
   public constructor(
     chainId: number,
@@ -20,7 +21,9 @@ export class ERC20Token extends Token {
     decimals: number,
     symbol: string,
     name?: string,
-    projectLink?: string
+    projectLink?: string,
+    logoURI?: string,
+    source?: string
   ) {
     super(
       chainId,
@@ -28,7 +31,9 @@ export class ERC20Token extends Token {
       decimals,
       symbol,
       name,
-      projectLink
+      projectLink,
+      logoURI,
+      source
     );
   }
 }

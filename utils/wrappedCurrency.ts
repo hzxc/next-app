@@ -1,21 +1,7 @@
-import {
-  ChainId,
-  Currency,
-  CurrencyAmount,
-  Native,
-  Token,
-  WNATIVE,
-} from 'packages/pancake/sdk';
+import { ChainId, Currency, CurrencyAmount, Native, Token, WNATIVE } from 'eth';
 
-export function wrappedCurrency(
-  currency: Currency | undefined,
-  chainId: ChainId | undefined
-): Token | undefined {
-  return chainId && currency?.isNative
-    ? WNATIVE[chainId]
-    : currency?.isToken
-    ? currency
-    : undefined;
+export function wrappedCurrency(currency: Currency, chainId: ChainId): Token {
+  return currency.isNative ? WNATIVE[chainId] : currency;
 }
 
 export function wrappedCurrencyAmount(

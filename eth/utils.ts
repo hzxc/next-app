@@ -1,12 +1,6 @@
 import JSBI from 'jsbi';
 import invariant from 'tiny-invariant';
-import {
-  BigintIsh,
-  Currency,
-  CurrencyAmount,
-  Percent,
-  Price,
-} from 'packages/pancake/sdk-core';
+import { BigintIsh, Currency, CurrencyAmount, Percent, Price } from './core';
 import { getAddress } from 'ethers/lib/utils';
 
 // warns if addresses are not checksummed

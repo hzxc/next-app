@@ -1,5 +1,5 @@
 import invariant from 'tiny-invariant';
-import { Currency, Token, NativeCurrency } from 'packages/pancake/sdk-core';
+import { Currency, Token, NativeCurrency } from '../core';
 import { WNATIVE, NATIVE } from '../constants';
 
 /**

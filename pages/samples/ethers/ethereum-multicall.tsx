@@ -1,18 +1,25 @@
 import { Layout } from 'components/layout';
-import { ethers } from 'ethers';
+
 import { NextPageWithLayout } from 'pages/_app';
 import { ReactElement } from 'react';
 import multicall3ABI from 'abis/multicall3.json';
 import erc20ABI from 'abis/erc20.json';
 import { Interface } from 'ethers/lib/utils';
-import { bscCakeAddr, MULTICALL3 } from 'data/constants';
+import { bscCakeAddr } from 'data/constants';
 import { bscProvider } from 'conf';
 import { Button } from 'components';
+import IPancakePairABI from 'abis/bsc/IPancakePair.json';
+
 import {
   ContractCallContext,
   ContractCallResults,
   Multicall,
 } from 'ethereum-multicall';
+import { BigNumber } from 'ethers';
+import JSBI from 'jsbi';
+import { ERC20Token } from 'eth';
+import { getPair, usePair } from 'hooks/pancake/usePairs';
+import { bscTokens } from 'data/tokens';
 
 const multicall3Iface = new Interface(multicall3ABI);
 const erc20Iface = new Interface(erc20ABI);
@@ -43,7 +50,7 @@ const EthereumMulticall: NextPageWithLayout = () => {
 
   const contractCallContext: ContractCallContext[] = [
     {
-      reference: 'cakeContract',
+      reference: 'token',
       contractAddress: bscCakeAddr,
       abi: erc20ABI,
       calls: [
@@ -56,17 +63,54 @@ const EthereumMulticall: NextPageWithLayout = () => {
         },
       ],
     },
+    {
+      reference: 'pair',
+      contractAddress: '0x0eD7e52944161450477ee417DE9Cd3a859b14fD0',
+      abi: IPancakePairABI,
+      calls: [
+        {
+          reference: 'getReservesCall',
+          methodName: 'getReserves',
+          methodParameters: [],
+        },
+      ],
+    },
   ];
 
   const call = async () => {
-    const results: ContractCallResults = await multicall.call(
+    const { results }: ContractCallResults = await multicall.call(
       contractCallContext
     );
-    console.log(results);
+    console.log(results['token'].callsReturnContext);
+    console.log(results['pair'].callsReturnContext[0].returnValues[0]);
+    console.log(
+      BigNumber.from(
+        results['pair'].callsReturnContext[0].returnValues[0]
+      ).toString()
+    );
+    console.log(
+      JSBI.BigInt(
+        results['pair'].callsReturnContext[0].returnValues[0].hex
+      ).toString()
+    );
+    // console.log(
+    //   BigNumber.from(results['pair'].callsReturnContext[0].returnValues[0])
+    // );
   };
+
   return (
-    <div className='p-4'>
-      <Button onClick={call}>Multicall3</Button>
+    <div className='p-4 space-x-2'>
+      <Button onClick={call}>Ethereum Multicall</Button>
+      <Button
+        onClick={() => {
+          getPair(bscTokens.bnb, bscTokens.cake).then((ret) => {
+            console.log(ret);
+          });
+        }}
+      >
+        getPair
+        {/* 0x0eD7e52944161450477ee417DE9Cd3a859b14fD0 */}
+      </Button>
     </div>
   );
 };

@@ -1,10 +1,4 @@
-import {
-  TradeType,
-  Token,
-  CurrencyAmount,
-  Currency,
-  Percent,
-} from 'packages/pancake/sdk-core';
+import { TradeType, Token, CurrencyAmount, Currency, Percent } from './core';
 import { Trade } from './entities';
 import { validateAndParseAddress } from './utils';
 import invariant from 'tiny-invariant';

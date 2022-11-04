@@ -3,7 +3,7 @@ import { useAccount, useConnect, useMutation } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 
 export const useInitConnect = () => {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, connector: activeConnector } = useAccount();
   const { connectAsync } = useConnect({
     connector: new InjectedConnector(),
   });
@@ -16,5 +16,5 @@ export const useInitConnect = () => {
     }
   }, []);
 
-  return [isConnected, address] as const;
+  return [isConnected, address, activeConnector] as const;
 };

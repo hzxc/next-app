@@ -1,4 +1,4 @@
-import { ChainId, ERC20Token } from '../sdk';
+import { ChainId, ERC20Token } from 'eth';
 
 export const CAKE_MAINNET = new ERC20Token(
   ChainId.BSC,
