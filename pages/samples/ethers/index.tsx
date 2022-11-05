@@ -11,11 +11,10 @@ import {
 import { getBnbBalance, useCakePrice } from 'hooks/pancake';
 import { NextPageWithLayout } from 'pages/_app';
 import { ReactElement, useEffect, useState } from 'react';
-import { FACTORY_ADDRESS_MAP, INIT_CODE_HASH_MAP } from 'packages/pancake/sdk';
 import { isError } from 'utils';
-import { ChainId } from 'packages';
 import { useChainId } from 'hooks/useChainId';
 import { useInitConnect } from 'hooks/useInitConnect';
+import { ChainId, FACTORY_ADDRESS_MAP, INIT_CODE_HASH_MAP } from 'eth';
 
 const Index: NextPageWithLayout = () => {
   const { data, isFetching } = useCakePrice();

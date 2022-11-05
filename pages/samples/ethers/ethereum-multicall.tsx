@@ -18,8 +18,8 @@ import {
 import { BigNumber } from 'ethers';
 import JSBI from 'jsbi';
 import { ERC20Token } from 'eth';
-import { getPair, usePair } from 'hooks/pancake/usePairs';
 import { bscTokens } from 'data/tokens';
+import { getPair } from 'utils/pancake';
 
 const multicall3Iface = new Interface(multicall3ABI);
 const erc20Iface = new Interface(erc20ABI);
