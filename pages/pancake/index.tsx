@@ -6,7 +6,7 @@ import PanExDown from 'public/images/pancake/panExDown.svg';
 import PanExUpDown from 'public/images/pancake/PanExUpDown.svg';
 import PanCopy from 'public/images/pancake/panCopy.svg';
 import PanQuestionMask from 'public/images/pancake/panQuestionMark.svg';
-import { useDebounce, useToggle } from 'hooks';
+import { useToggle } from 'hooks';
 import { useCurrencyBalance, useTokens } from 'hooks/pancake';
 import { ReactElement, useEffect, useState } from 'react';
 import { NextPageWithLayout } from 'pages/_app';
@@ -14,7 +14,6 @@ import { IconButton } from 'components';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 
 import {
-  IToken,
   selectPancake,
   setInputCurrency,
   setOutputCurrency,
@@ -24,6 +23,7 @@ import { IoMdRefresh } from 'react-icons/io';
 import { ethers } from 'ethers';
 import { TradeDirection } from 'eth';
 import { useTrade } from 'hooks/pancake/useTrade';
+import { useDebounce } from 'use-debounce';
 
 const Pancake: NextPageWithLayout = () => {
   const { visible, close, open } = useToggle(false);
@@ -69,29 +69,38 @@ const Pancake: NextPageWithLayout = () => {
     }
   }, [bal]);
 
-  // const [tradeParam, setTradeParam] = useState({
-  //   amountToTrade: '',
-  //   direction: TradeDirection.input,
-  // });
-
-  // const [amountToTradeDebounce] = useDebounce(tradeParam.amountToTrade, 400);
-  // const [directionDebounce] = useDebounce(tradeParam.direction, 400);
-
-  const [tradeParam, setTradeParam] = useState<{
-    fromToken: IToken;
-    toToken: IToken;
-    amountToTrade: string;
-    direction: TradeDirection;
-  }>({
-    fromToken: pancake.inputCurrency,
-    toToken: pancake.outputCurrency,
+  const [tradeParam, setTradeParam] = useState({
     amountToTrade: '',
     direction: TradeDirection.input,
   });
 
-  const tradeParamDebounce = useDebounce(tradeParam, 400);
+  const [amountToTradeDebounce] = useDebounce(tradeParam.amountToTrade, 400);
+  const [directionDebounce] = useDebounce(tradeParam.direction, 400);
 
-  const { data: tradeData } = useTrade(tradeParamDebounce);
+  // const [tradeParam, setTradeParam] = useState<{
+  //   fromToken: IToken;
+  //   toToken: IToken;
+  //   amountToTrade: string;
+  //   direction: TradeDirection;
+  // }>({
+  //   fromToken: pancake.inputCurrency,
+  //   toToken: pancake.outputCurrency,
+  //   amountToTrade: '',
+  //   direction: TradeDirection.input,
+  // });
+
+  // const tradeParamDebounce = useDebounce(tradeParam, 400);
+
+  const { data: tradeData } = useTrade({
+    fromToken: pancake.inputCurrency,
+    toToken: pancake.outputCurrency,
+    amountToTrade: amountToTradeDebounce,
+    direction: directionDebounce,
+  });
+
+  useEffect(() => {
+    console.log(tradeData);
+  }, [tradeData]);
 
   return (
     <div>
@@ -161,7 +170,6 @@ const Pancake: NextPageWithLayout = () => {
             onChange={(e) => {
               if (!isNaN(Number(e.target.value))) {
                 setTradeParam({
-                  ...tradeParam,
                   amountToTrade: e.target.value,
                   direction: TradeDirection.input,
                 });
@@ -223,7 +231,6 @@ const Pancake: NextPageWithLayout = () => {
             onChange={(e) => {
               if (!isNaN(Number(e.target.value))) {
                 setTradeParam({
-                  ...tradeParam,
                   amountToTrade: e.target.value,
                   direction: TradeDirection.output,
                 });
