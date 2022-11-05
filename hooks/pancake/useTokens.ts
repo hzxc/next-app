@@ -13,7 +13,7 @@ import { MultiQueryABI } from 'abis';
 
 const getTokens = async () => {
   const array: IToken[] = [];
-  const map = new Map();
+  const map = new Map<string, number>();
   const extended = await http('/pancake/pancakeswap-extended.json');
   const cmc = await http('/pancake/cmc.json');
   const coingecko = await http('/pancake/coingecko.json');

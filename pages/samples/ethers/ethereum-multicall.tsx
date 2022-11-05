@@ -15,11 +15,16 @@ import {
   ContractCallResults,
   Multicall,
 } from 'ethereum-multicall';
-import { BigNumber } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import JSBI from 'jsbi';
-import { ERC20Token } from 'eth';
+import { CurrencyAmount, ERC20Token } from 'eth';
 import { bscTokens } from 'data/tokens';
-import { getPair } from 'utils/pancake';
+import {
+  getAllCommonPairs,
+  getPair,
+  tradeExactIn,
+  tradeExactOut,
+} from 'utils/pancake';
 
 const multicall3Iface = new Interface(multicall3ABI);
 const erc20Iface = new Interface(erc20ABI);
@@ -110,6 +115,54 @@ const EthereumMulticall: NextPageWithLayout = () => {
       >
         getPair
         {/* 0x0eD7e52944161450477ee417DE9Cd3a859b14fD0 */}
+      </Button>
+      <Button
+        onClick={() => {
+          getAllCommonPairs(bscTokens.bnb, bscTokens.cake).then((ret) => {
+            // console.log(ret);
+          });
+        }}
+      >
+        getAllCommonPairs
+      </Button>
+
+      <Button
+        onClick={() => {
+          tradeExactIn(
+            CurrencyAmount.fromRawAmount(
+              bscTokens.vai,
+              ethers.utils.parseEther('10').toString()
+            ),
+            bscTokens.usdt
+          ).then((ret) => {
+            console.log(ret);
+            console.log(ret?.executionPrice.denominator.toString());
+            console.log(ret?.executionPrice.numerator.toString());
+          });
+        }}
+      >
+        tradeExactIn
+      </Button>
+
+      <Button
+        onClick={() => {
+          tradeExactOut(
+            bscTokens.usdt,
+            CurrencyAmount.fromRawAmount(
+              bscTokens.vai,
+              ethers.utils.parseEther('10').toString()
+            )
+          ).then((ret) => {
+            console.log(ret);
+            console.log(ret?.executionPrice.denominator.toString());
+            console.log(ret?.executionPrice.numerator.toString());
+
+            console.log(ret?.executionPrice.scalar.denominator.toString());
+            console.log(ret?.executionPrice.scalar.numerator.toString());
+          });
+        }}
+      >
+        tradeExactOut
       </Button>
     </div>
   );
