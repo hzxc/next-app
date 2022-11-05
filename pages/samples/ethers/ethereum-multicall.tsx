@@ -104,7 +104,7 @@ const EthereumMulticall: NextPageWithLayout = () => {
   };
 
   return (
-    <div className='p-4 space-x-2'>
+    <div className='p-4 space-x-2 space-y-2'>
       <Button onClick={call}>Ethereum Multicall</Button>
       <Button
         onClick={() => {
@@ -163,6 +163,16 @@ const EthereumMulticall: NextPageWithLayout = () => {
         }}
       >
         tradeExactOut
+      </Button>
+      <Button
+        onClick={() => {
+          console.log(
+            'add',
+            JSBI.add(JSBI.BigInt('2'), JSBI.BigInt('1')).toString()
+          );
+        }}
+      >
+        JSBI.add
       </Button>
     </div>
   );
