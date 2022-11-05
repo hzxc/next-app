@@ -30,7 +30,7 @@ export const useGetAmounts = (param: {
   path: string[];
 }) => {
   const pancake = useAppSelector(selectPancake);
-  return useQuery<any>(['BscGetAmounts', param], () => {
+  return useQuery<any>(['PanGetAmounts', param], () => {
     return getAmounts(param);
   });
 };

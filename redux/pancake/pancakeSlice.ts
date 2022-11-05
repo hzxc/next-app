@@ -8,6 +8,7 @@ export interface IToken {
   address: string;
   chainId: number;
   decimals: number;
+  projectLink?: string;
   logoURI?: string;
   source?: string;
 }

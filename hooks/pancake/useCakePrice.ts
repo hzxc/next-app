@@ -19,5 +19,6 @@ const getCakeSellPrice = async () => {
 };
 
 export const useCakePrice = () => {
-  return useQuery<any>(['CakePrice'], getCakeSellPrice);
+  console.log('CakePrice');
+  return useQuery<any, Error>(['CakePrice'], getCakeSellPrice);
 };

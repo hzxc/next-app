@@ -6,15 +6,15 @@ import PanExDown from 'public/images/pancake/panExDown.svg';
 import PanExUpDown from 'public/images/pancake/PanExUpDown.svg';
 import PanCopy from 'public/images/pancake/panCopy.svg';
 import PanQuestionMask from 'public/images/pancake/panQuestionMark.svg';
-import { useToggle } from 'hooks';
+import { useDebounce, useToggle } from 'hooks';
 import { useCurrencyBalance, useTokens } from 'hooks/pancake';
 import { ReactElement, useEffect, useState } from 'react';
 import { NextPageWithLayout } from 'pages/_app';
-import { Button, IconButton } from 'components';
+import { IconButton } from 'components';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
-import { useDebounce } from 'use-debounce';
 
 import {
+  IToken,
   selectPancake,
   setInputCurrency,
   setOutputCurrency,
@@ -22,12 +22,8 @@ import {
 import { selectPancakePersist } from 'redux/pancake/pancakePersistSlice';
 import { IoMdRefresh } from 'react-icons/io';
 import { ethers } from 'ethers';
-import { useGetAmounts } from 'hooks/pancake/useGetAmounts';
-import { useBscBestPath } from 'hooks/pancake/useBscBestPath';
-import { TradeDirection } from 'simple-uniswap-sdk';
-import { toNumber } from 'utils';
-import { useChainId } from 'hooks/useChainId';
-import { useAccount } from 'wagmi';
+import { TradeDirection } from 'eth';
+import { useTrade } from 'hooks/pancake/useTrade';
 
 const Pancake: NextPageWithLayout = () => {
   const { visible, close, open } = useToggle(false);
@@ -73,29 +69,32 @@ const Pancake: NextPageWithLayout = () => {
     }
   }, [bal]);
 
-  const [tradeParam, setTradeParam] = useState({
+  // const [tradeParam, setTradeParam] = useState({
+  //   amountToTrade: '',
+  //   direction: TradeDirection.input,
+  // });
+
+  // const [amountToTradeDebounce] = useDebounce(tradeParam.amountToTrade, 400);
+  // const [directionDebounce] = useDebounce(tradeParam.direction, 400);
+
+  const [tradeParam, setTradeParam] = useState<{
+    fromToken: IToken;
+    toToken: IToken;
+    amountToTrade: string;
+    direction: TradeDirection;
+  }>({
+    fromToken: pancake.inputCurrency,
+    toToken: pancake.outputCurrency,
     amountToTrade: '',
     direction: TradeDirection.input,
   });
 
-  const [amountToTradeDebounce] = useDebounce(tradeParam.amountToTrade, 400);
-  const [directionDebounce] = useDebounce(tradeParam.direction, 400);
+  const tradeParamDebounce = useDebounce(tradeParam, 400);
 
-  const { data: pathData } = useBscBestPath({
-    fromToken: pancake.inputCurrency.address,
-    toToken: pancake.outputCurrency.address,
-    amountToTrade: amountToTradeDebounce,
-    direction: directionDebounce,
-  });
+  const { data: tradeData } = useTrade(tradeParamDebounce);
 
-  const chainId = useChainId();
-  const { isConnected, connector } = useAccount();
   return (
     <div>
-      <div className='p-8'>
-        <p>tradeParam:{JSON.stringify(tradeParam)}</p>
-        <p className='break-all'>pathData:{JSON.stringify(pathData)}</p>
-      </div>
       <TokenModal visible={visible} modalClose={close} source={source} />
       <div className='w-80 flex flex-col border rounded-3xl bg-white'>
         <div className='p-6 border-b'>
@@ -162,8 +161,9 @@ const Pancake: NextPageWithLayout = () => {
             onChange={(e) => {
               if (!isNaN(Number(e.target.value))) {
                 setTradeParam({
+                  ...tradeParam,
                   amountToTrade: e.target.value,
-                  direction: TradeDirection.output,
+                  direction: TradeDirection.input,
                 });
                 setInVal(e.target.value);
               }
@@ -223,8 +223,9 @@ const Pancake: NextPageWithLayout = () => {
             onChange={(e) => {
               if (!isNaN(Number(e.target.value))) {
                 setTradeParam({
+                  ...tradeParam,
                   amountToTrade: e.target.value,
-                  direction: TradeDirection.input,
+                  direction: TradeDirection.output,
                 });
                 setOutVal(e.target.value);
               }
