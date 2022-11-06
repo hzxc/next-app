@@ -11,7 +11,6 @@ import {
 } from 'eth';
 import { ethers } from 'ethers';
 import { IToken } from 'redux/pancake/pancakeSlice';
-import invariant from 'tiny-invariant';
 import { tradeExactIn, tradeExactOut } from 'utils/pancake';
 const CHAIN_ID = 56;
 
@@ -49,12 +48,18 @@ export const useTrade = (param: {
           toToken.logoURI,
           toToken.source
         );
-  console.log('useTrade', fromCurrency.address, toCurrency.address);
-  console.log('amountToTrade', amountToTrade);
+  // console.log('useTrade', fromCurrency.address, toCurrency.address);
+
   return useQuery<Trade<Currency, Currency, TradeType> | null, Error>(
     ['PanTrade', fromToken.address, toToken.address, amountToTrade, direction],
     () => {
-      invariant(amountToTrade, 'invalid amountToTrade');
+      console.log('get trade data');
+      if (!amountToTrade) {
+        return null;
+      }
+      // invariant(amountToTrade, 'invalid amountToTrade');
+      // console.log('amountToTrade', amountToTrade);
+
       if (param.direction === TradeDirection.input) {
         return tradeExactIn(
           CurrencyAmount.fromRawAmount(
@@ -71,27 +76,13 @@ export const useTrade = (param: {
             ethers.utils.parseEther(amountToTrade).toString()
           )
         );
-      } else {
-        return null;
       }
+      return null;
+    },
+    {
+      refetchOnWindowFocus: false,
+      retry: false,
+      keepPreviousData: true,
     }
   );
 };
-
-//   if (param.direction === TradeDirection.input) {
-//     tradeExactIn(
-//       CurrencyAmount.fromRawAmount(
-//         bscTokens.vai,
-//         ethers.utils.parseEther('10').toString()
-//       ),
-//       bscTokens.usdt
-//     );
-//   }
-
-//   tradeExactOut(
-//     bscTokens.usdt,
-//     CurrencyAmount.fromRawAmount(
-//       bscTokens.vai,
-//       ethers.utils.parseEther('10').toString()
-//     )
-//   );

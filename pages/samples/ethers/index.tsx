@@ -12,15 +12,15 @@ import { getBnbBalance, useCakePrice } from 'hooks/pancake';
 import { NextPageWithLayout } from 'pages/_app';
 import { ReactElement, useEffect, useState } from 'react';
 import { isError } from 'utils';
-import { useChainId } from 'hooks/useChainId';
+
 import { useInitConnect } from 'hooks/useInitConnect';
 import { ChainId, FACTORY_ADDRESS_MAP, INIT_CODE_HASH_MAP } from 'eth';
 
 const Index: NextPageWithLayout = () => {
   const { data, isFetching } = useCakePrice();
-  useEffect(() => {
-    console.log(isFetching ? 'fetching' : 'idle');
-  }, [isFetching]);
+  // useEffect(() => {
+  //   console.log(isFetching ? 'fetching' : 'idle');
+  // }, [isFetching]);
 
   const [bnbBal, setBnbBal] = useState('');
   const [addr, setAddr] = useState(
@@ -42,7 +42,6 @@ const Index: NextPageWithLayout = () => {
       });
   };
   const [isConnected, address, activeConnector] = useInitConnect();
-  const chainId = useChainId();
 
   return (
     <div className='p-8'>
@@ -111,9 +110,6 @@ const Index: NextPageWithLayout = () => {
 
         <Button
           onClick={async () => {
-            chainId.then((chainId) => {
-              console.log('chainId', chainId);
-            });
             console.log('chainId', await activeConnector?.getChainId());
             console.log('isConnected', isConnected);
             console.log('address', address);

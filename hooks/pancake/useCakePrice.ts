@@ -11,6 +11,7 @@ const router = new ethers.Contract(
 );
 
 const getCakeSellPrice = async () => {
+  // console.log('getCakePrice');
   return router.getAmountsOut(utils.parseEther('1'), [
     bscCakeAddr,
     // busd addr
@@ -19,6 +20,9 @@ const getCakeSellPrice = async () => {
 };
 
 export const useCakePrice = () => {
-  console.log('CakePrice');
-  return useQuery<any, Error>(['CakePrice'], getCakeSellPrice);
+  return useQuery<any, Error>(['CakePrice'], getCakeSellPrice, {
+    refetchOnWindowFocus: false,
+    refetchInterval: 30 * 1000,
+    // retryDelay: 10 * 1000,
+  });
 };

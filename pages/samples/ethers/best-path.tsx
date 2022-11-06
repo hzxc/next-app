@@ -5,9 +5,8 @@ import { ethers, utils } from 'ethers';
 import { getBnbBalance, useCakePrice } from 'hooks/pancake';
 import { NextPageWithLayout } from 'pages/_app';
 import { ReactElement, useState } from 'react';
-import { pancakeBestPath } from 'utils/path';
 import { bscBusdAddr, bscCakeAddr } from 'data/constants';
-import { TradeDirection } from 'simple-uniswap-sdk';
+import { TradeDirection } from 'eth';
 
 const BestPath: NextPageWithLayout = () => {
   const [trade, setTrade] = useState({
@@ -18,19 +17,19 @@ const BestPath: NextPageWithLayout = () => {
   });
 
   const [path, setPath] = useState<string[]>([]);
-  const bestPathHandle = () => {
-    pancakeBestPath(
-      trade.fromToken,
-      trade.toToken,
-      trade.amountToTrade,
-      trade.direction ? TradeDirection.output : TradeDirection.input
-    ).then((ret) => {
-      setPath([
-        ret.bestRouteQuote.routeText,
-        ...ret.bestRouteQuote.routePathArray,
-      ]);
-    });
-  };
+  // const bestPathHandle = () => {
+  //   pancakeBestPath(
+  //     trade.fromToken,
+  //     trade.toToken,
+  //     trade.amountToTrade,
+  //     trade.direction ? TradeDirection.output : TradeDirection.input
+  //   ).then((ret) => {
+  //     setPath([
+  //       ret.bestRouteQuote.routeText,
+  //       ...ret.bestRouteQuote.routePathArray,
+  //     ]);
+  //   });
+  // };
   return (
     <div className='flex flex-col items-center p-8 gap-2'>
       <input
@@ -71,7 +70,7 @@ const BestPath: NextPageWithLayout = () => {
         <span>direction:{trade.direction ? 'output' : 'input'}</span>
       </div>
 
-      <Button onClick={bestPathHandle}>Pancake Get Best Path</Button>
+      <Button onClick={() => {}}>Pancake Get Best Path</Button>
 
       <p className='break-all'>{JSON.stringify(path)}</p>
     </div>

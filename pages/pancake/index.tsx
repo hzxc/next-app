@@ -21,9 +21,15 @@ import {
 import { selectPancakePersist } from 'redux/pancake/pancakePersistSlice';
 import { IoMdRefresh } from 'react-icons/io';
 import { ethers } from 'ethers';
-import { TradeDirection } from 'eth';
+import { JSBI, TradeDirection } from 'eth';
 import { useTrade } from 'hooks/pancake/useTrade';
 import { useDebounce } from 'use-debounce';
+
+import _Big from 'big.js';
+import toFormat from 'toformat';
+import { toNumber } from 'utils';
+
+const Big = toFormat(_Big);
 
 const Pancake: NextPageWithLayout = () => {
   const { visible, close, open } = useToggle(false);
@@ -52,7 +58,7 @@ const Pancake: NextPageWithLayout = () => {
     } else {
       console.log('get tokens from local storage');
     }
-  }, []);
+  }, [isIdle, mutate]);
 
   useEffect(() => {
     if (bal && bal.length > 1) {
@@ -73,23 +79,8 @@ const Pancake: NextPageWithLayout = () => {
     amountToTrade: '',
     direction: TradeDirection.input,
   });
-
   const [amountToTradeDebounce] = useDebounce(tradeParam.amountToTrade, 400);
   const [directionDebounce] = useDebounce(tradeParam.direction, 400);
-
-  // const [tradeParam, setTradeParam] = useState<{
-  //   fromToken: IToken;
-  //   toToken: IToken;
-  //   amountToTrade: string;
-  //   direction: TradeDirection;
-  // }>({
-  //   fromToken: pancake.inputCurrency,
-  //   toToken: pancake.outputCurrency,
-  //   amountToTrade: '',
-  //   direction: TradeDirection.input,
-  // });
-
-  // const tradeParamDebounce = useDebounce(tradeParam, 400);
 
   const { data: tradeData } = useTrade({
     fromToken: pancake.inputCurrency,
@@ -99,13 +90,18 @@ const Pancake: NextPageWithLayout = () => {
   });
 
   useEffect(() => {
-    console.log(tradeData);
+    console.log('tradeData', tradeData);
   }, [tradeData]);
 
   return (
     <div>
+      {/* <div>{tradeData ? tradeData?.route.path.length : 'undefined'}</div>
+      <div>{amountToTradeDebounce}</div>
+      <div>{directionDebounce}</div> */}
+      {/* <div>{pancake.inputCurrency.address}</div> */}
+      {/* <div>{pancake.outputCurrency.address}</div> */}
       <TokenModal visible={visible} modalClose={close} source={source} />
-      <div className='w-80 flex flex-col border rounded-3xl bg-white'>
+      <div className='w-80 flex flex-col border border-[#e7e3eb] rounded-3xl bg-white shadow-sm'>
         <div className='p-6 border-b'>
           <div className='flex items-center justify-between'>
             <IconButton
@@ -238,22 +234,88 @@ const Pancake: NextPageWithLayout = () => {
               }
             }}
           />
+
           <div className='w-full p-1 flex justify-end gap-1'>
             <PanButton className='!py-[2px] !px-2 text-xs'>SCAN RISK</PanButton>
             <PanQuestionMask className='text-[#7a6eaa] h-5 w-5' />
           </div>
-          <div className='w-full flex items-center justify-between px-4 pb-3'>
-            <span className='text-xs font-normal text-violet-700'>
-              Slippage Tolerance
-            </span>
-            <span className='text-[#1fc7d4]'>0.5%</span>
+          <div className='w-full text-xs font-medium text-[#7645d9]'>
+            {tradeData ? (
+              <div className='flex items-center justify-between px-4'>
+                <span>Price</span>
+                <span className='text-[#1fc7d4] text-base'>
+                  {JSBI.divide(
+                    tradeData.executionPrice.numerator,
+                    tradeData.executionPrice.denominator
+                  )}
+                </span>
+              </div>
+            ) : undefined}
+            <div className='flex items-center justify-between px-4'>
+              <span>Slippage Tolerance</span>
+              <span className='text-[#1fc7d4] text-base'>0.5%</span>
+            </div>
           </div>
 
           <PanButton className='w-72 h-12'>Connect Wallet</PanButton>
         </div>
-        <div>
-          <p>persist tokens.length:{pancakePersist.tokens?.length}</p>
-        </div>
+        {tradeData ? (
+          <div className='px-4 pb-4 text-[#7a6eaa] text-sm'>
+            <div className='flex items-center justify-between'>
+              <IconButton
+                className='cursor-text'
+                rightSize='16px'
+                rightIcon={<PanQuestionMask />}
+              >
+                Minimum received
+              </IconButton>
+              <div className='text-[#280d5f] text-sm'>
+                {'VAI > BUSD > CAKE'}
+              </div>
+            </div>
+            <div className='flex items-center justify-between'>
+              <IconButton
+                className='cursor-text'
+                rightSize='16px'
+                rightIcon={<PanQuestionMask />}
+              >
+                Price Impact
+              </IconButton>
+              <div className='text-[#280d5f] text-sm'>
+                {toNumber(tradeData.priceImpact.toFixed())}
+                {/* {tradeData.priceImpact.toFixed()} */}
+              </div>
+            </div>
+            <div className='flex items-center justify-between'>
+              <IconButton
+                className='cursor-text'
+                rightSize='16px'
+                rightIcon={<PanQuestionMask />}
+              >
+                Liquidity Provider Fee
+              </IconButton>
+              <div className='text-[#280d5f] text-sm'>
+                {'VAI > BUSD > CAKE'}
+              </div>
+            </div>
+            <div className='flex items-center justify-between'>
+              <IconButton
+                className='cursor-text'
+                rightSize='16px'
+                rightIcon={<PanQuestionMask />}
+              >
+                Route
+              </IconButton>
+              <div className='text-[#280d5f] text-sm'>
+                {tradeData?.route.path.map((tkn, i) => {
+                  return (
+                    <span key={i}>{i ? ' > ' + tkn.symbol : tkn.symbol}</span>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        ) : undefined}
       </div>
     </div>
   );

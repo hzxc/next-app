@@ -14,7 +14,6 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
   public readonly currency: T;
 
   public readonly decimalScale: JSBI;
-
   /**
    * Returns a new currency amount instance from the unitless amount of token, i.e. the raw amount
    * @param currency the currency in the amount

@@ -18,6 +18,7 @@ export const getBnbBalance = (addr: string) => {
 };
 
 const getBalance = async (act: string, tokens: string[]) => {
+  // console.log('getBalance');
   tokens.forEach((item) => {
     if (!ethers.utils.isAddress(item)) {
       throw new Error(`address invalid ${item}`);
@@ -70,6 +71,7 @@ export const useCurrencyBalance = (tokens: string[]) => {
       } else {
         return [];
       }
-    }
+    },
+    { refetchOnWindowFocus: false, refetchInterval: 15 * 1000 }
   );
 };

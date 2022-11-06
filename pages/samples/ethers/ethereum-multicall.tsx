@@ -26,6 +26,12 @@ import {
   tradeExactOut,
 } from 'utils/pancake';
 
+import _Big from 'big.js';
+import toFormat from 'toformat';
+
+const Big = toFormat(_Big);
+Big.DP = 18;
+
 const multicall3Iface = new Interface(multicall3ABI);
 const erc20Iface = new Interface(erc20ABI);
 
@@ -131,13 +137,40 @@ const EthereumMulticall: NextPageWithLayout = () => {
           tradeExactIn(
             CurrencyAmount.fromRawAmount(
               bscTokens.vai,
-              ethers.utils.parseEther('10').toString()
+              ethers.utils.parseEther('111111').toString()
             ),
             bscTokens.usdt
           ).then((ret) => {
-            console.log(ret);
-            console.log(ret?.executionPrice.denominator.toString());
-            console.log(ret?.executionPrice.numerator.toString());
+            if (ret) {
+              console.log(ret);
+              const inputAmount = ret.inputAmount;
+              const outputAmount = ret.outputAmount;
+              console.log(ret.priceImpact.toSignificant());
+              console.log(ret.priceImpact.toFixed());
+              // const denominator = ret.executionPrice.input;
+              // const numerator = ret.executionPrice.numerator;
+              // const decimalScale = JSBI.exponentiate(
+              //   JSBI.BigInt(10),
+              //   JSBI.BigInt(18)
+              // );
+              // console.log(
+              //   'JSBI.divide(denominator, decimalScale)',
+              //   JSBI.divide(denominator, decimalScale).toString()
+              // );
+              // console.log(
+              //   'JSBI.divide(numerator, decimalScale)',
+              //   JSBI.divide(numerator, decimalScale).toString()
+              // );
+              // const dd = new Big(denominator.toString()).div(
+              //   decimalScale.toString()
+              // );
+              // const dn = new Big(numerator.toString()).div(
+              //   decimalScale.toString()
+              // );
+              // console.log(dd.toString());
+              // console.log(dn.toString());
+              // console.log(dd.div(dn).toString());
+            }
           });
         }}
       >
@@ -150,15 +183,32 @@ const EthereumMulticall: NextPageWithLayout = () => {
             bscTokens.usdt,
             CurrencyAmount.fromRawAmount(
               bscTokens.vai,
-              ethers.utils.parseEther('10').toString()
+              ethers.utils.parseEther('111111').toString()
             )
           ).then((ret) => {
-            console.log(ret);
-            console.log(ret?.executionPrice.denominator.toString());
-            console.log(ret?.executionPrice.numerator.toString());
+            if (ret) {
+              console.log(ret.priceImpact.toFixed());
+              // const denominator = ret?.executionPrice.denominator;
+              // const numerator = ret?.executionPrice.numerator;
+              // const decimalScale = JSBI.exponentiate(
+              //   JSBI.BigInt(10),
+              //   JSBI.BigInt(18)
+              // );
 
-            console.log(ret?.executionPrice.scalar.denominator.toString());
-            console.log(ret?.executionPrice.scalar.numerator.toString());
+              // const dd = new Big(denominator.toString()).div(
+              //   decimalScale.toString()
+              // );
+              // const dn = new Big(numerator.toString()).div(
+              //   decimalScale.toString()
+              // );
+              // // console.log(denominator.toString());
+              // // console.log(numerator.toString());
+
+              // console.log(dd);
+              // console.log(dn);
+              // console.log(dd.div(dn).toString());
+              // console.log(JSBI.toNumber(JSBI.divide(numerator, denominator)));
+            }
           });
         }}
       >
@@ -173,6 +223,24 @@ const EthereumMulticall: NextPageWithLayout = () => {
         }}
       >
         JSBI.add
+      </Button>
+      <Button
+        onClick={() => {
+          console.log(
+            'divide',
+            JSBI.divide(JSBI.BigInt('1'), JSBI.BigInt('2')).toString()
+          );
+        }}
+      >
+        JSBI.divide
+      </Button>
+
+      <Button
+        onClick={() => {
+          console.log(new Big(123.4567).toString());
+        }}
+      >
+        Big
       </Button>
     </div>
   );
