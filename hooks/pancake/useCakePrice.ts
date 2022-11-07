@@ -22,7 +22,7 @@ const getCakeSellPrice = async () => {
 export const useCakePrice = () => {
   return useQuery<any, Error>(['CakePrice'], getCakeSellPrice, {
     refetchOnWindowFocus: false,
-    refetchInterval: 30 * 1000,
+    refetchInterval: 60 * 1000,
     // retryDelay: 10 * 1000,
   });
 };

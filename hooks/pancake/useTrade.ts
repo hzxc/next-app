@@ -11,7 +11,12 @@ import {
 } from 'eth';
 import { ethers } from 'ethers';
 import { IToken } from 'redux/pancake/pancakeSlice';
-import { tradeExactIn, tradeExactOut } from 'utils/pancake';
+import {
+  tradeExactIn,
+  tradeExactInByPairs,
+  tradeExactOut,
+  tradeExactOutByPairs,
+} from 'utils/pancake';
 import { usePairs } from './usePairs';
 const CHAIN_ID = 56;
 
@@ -51,46 +56,53 @@ export const useTrade = (param: {
         );
   // console.log('useTrade', fromCurrency.address, toCurrency.address);
 
-  const { data: allowedPairs } = usePairs({
+  const { data: pairsData } = usePairs({
     tokenA: fromCurrency,
     tokenB: toCurrency,
   });
 
   return useQuery<Trade<Currency, Currency, TradeType> | null, Error>(
-    ['PanTrade', fromToken.address, toToken.address, amountToTrade, direction],
+    [
+      'PanTrade',
+      fromToken.address,
+      toToken.address,
+      amountToTrade,
+      pairsData ? pairsData[1] : '0x0eD7e52944161450477ee417DE9Cd3a859b14fD0',
+      direction,
+    ],
     () => {
       console.log('get trade data');
-      if (!amountToTrade || !allowedPairs) {
+      if (!amountToTrade || !pairsData) {
         return null;
       }
       // invariant(amountToTrade, 'invalid amountToTrade');
 
       if (param.direction === TradeDirection.input) {
-        return tradeExactIn(
+        return tradeExactInByPairs(
           CurrencyAmount.fromRawAmount(
             fromCurrency,
             ethers.utils.parseEther(amountToTrade).toString()
           ),
           toCurrency,
-          allowedPairs
+          pairsData[0]
         );
       } else if (param.direction === TradeDirection.output) {
-        return tradeExactOut(
+        return tradeExactOutByPairs(
           fromCurrency,
           CurrencyAmount.fromRawAmount(
             toCurrency,
             ethers.utils.parseEther(amountToTrade).toString()
           ),
-          allowedPairs
+          pairsData[0]
         );
       }
       return null;
     },
     {
       refetchOnWindowFocus: false,
-      retry: false,
+      // retry: false,
       keepPreviousData: true,
-      refetchInterval: 20 * 1000,
+      refetchInterval: 10 * 1000,
     }
   );
 };

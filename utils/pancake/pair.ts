@@ -103,7 +103,7 @@ export const getPair = async (
 export const getAllCommonPairs = async (
   currencyA: Currency,
   currencyB: Currency
-): Promise<Pair[]> => {
+): Promise<[Pair[], string]> => {
   const [tokenA, tokenB] = [
     wrappedCurrency(currencyA, CHAIN_ID),
     wrappedCurrency(currencyB, CHAIN_ID),
