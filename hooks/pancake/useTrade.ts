@@ -12,6 +12,7 @@ import {
 import { ethers } from 'ethers';
 import { IToken } from 'redux/pancake/pancakeSlice';
 import { tradeExactIn, tradeExactOut } from 'utils/pancake';
+import { usePairs } from './usePairs';
 const CHAIN_ID = 56;
 
 export const useTrade = (param: {
@@ -50,15 +51,19 @@ export const useTrade = (param: {
         );
   // console.log('useTrade', fromCurrency.address, toCurrency.address);
 
+  const { data: allowedPairs } = usePairs({
+    tokenA: fromCurrency,
+    tokenB: toCurrency,
+  });
+
   return useQuery<Trade<Currency, Currency, TradeType> | null, Error>(
     ['PanTrade', fromToken.address, toToken.address, amountToTrade, direction],
     () => {
       console.log('get trade data');
-      if (!amountToTrade) {
+      if (!amountToTrade || !allowedPairs) {
         return null;
       }
       // invariant(amountToTrade, 'invalid amountToTrade');
-      console.log('amountToTrade', amountToTrade);
 
       if (param.direction === TradeDirection.input) {
         return tradeExactIn(
@@ -66,7 +71,8 @@ export const useTrade = (param: {
             fromCurrency,
             ethers.utils.parseEther(amountToTrade).toString()
           ),
-          toCurrency
+          toCurrency,
+          allowedPairs
         );
       } else if (param.direction === TradeDirection.output) {
         return tradeExactOut(
@@ -74,7 +80,8 @@ export const useTrade = (param: {
           CurrencyAmount.fromRawAmount(
             toCurrency,
             ethers.utils.parseEther(amountToTrade).toString()
-          )
+          ),
+          allowedPairs
         );
       }
       return null;
@@ -83,6 +90,7 @@ export const useTrade = (param: {
       refetchOnWindowFocus: false,
       retry: false,
       keepPreviousData: true,
+      refetchInterval: 20 * 1000,
     }
   );
 };

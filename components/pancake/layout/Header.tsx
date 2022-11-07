@@ -150,7 +150,7 @@ export const Header: React.FC = () => {
                   boxShadow: 'rgb(0 0 0 / 10%) 0px -2px 0px inset',
                 }}
               >
-                BNB Smart Chain
+                <span className='sm:after:content-[""] md:after:content-["BNB"] lg:after:content-["BNB_Smart_Chain"] whitespace-nowrap'></span>
               </IconButton>
             }
           >
@@ -211,7 +211,10 @@ export const Header: React.FC = () => {
               </MenuButtonItem>
             </MenuButton>
           ) : (
-            <PanButton onClick={open}>Connect Wallet</PanButton>
+            <PanButton
+              onClick={open}
+              className='sm:after:content-["Connect"] lg:after:content-["Connect_Wallet"] whitespace-nowrap	'
+            ></PanButton>
           )}
           {/* <span>{chain?.id}</span> */}
         </div>

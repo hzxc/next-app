@@ -3,7 +3,7 @@ import {
   ONE_HUNDRED_PERCENT,
   ZERO_PERCENT,
 } from 'data/constants';
-import { Currency, CurrencyAmount, Percent, Trade, TradeType } from 'eth';
+import { Currency, CurrencyAmount, Pair, Percent, Trade, TradeType } from 'eth';
 import { getAllCommonPairs } from './pair';
 
 const MAX_HOPS = 3;
@@ -95,4 +95,57 @@ function isTradeBetter(
   return tradeA.executionPrice.asFraction
     .multiply(minimumDelta.add(ONE_HUNDRED_PERCENT))
     .lessThan(tradeB.executionPrice);
+}
+
+export const tradeExactInByPairs = async (
+  currencyAmountIn: CurrencyAmount<Currency>,
+  currencyOut: Currency,
+  allowedPairs: Pair[]
+): Promise<Trade<Currency, Currency, TradeType> | null> => {
+  let bestTradeSoFar: Trade<Currency, Currency, TradeType> | null = null;
+
+  for (let i = 1; i <= MAX_HOPS; i++) {
+    const currentTrade: Trade<Currency, Currency, TradeType> | null =
+      Trade.bestTradeExactIn(allowedPairs, currencyAmountIn, currencyOut, {
+        maxHops: i,
+        maxNumResults: 1,
+      })[0] ?? null;
+    // if current trade is best yet, save it
+    if (
+      isTradeBetter(
+        bestTradeSoFar,
+        currentTrade,
+        BETTER_TRADE_LESS_HOPS_THRESHOLD
+      )
+    ) {
+      bestTradeSoFar = currentTrade;
+    }
+  }
+
+  return bestTradeSoFar;
+};
+
+export async function tradeExactOutByPairs(
+  currencyIn: Currency,
+  currencyAmountOut: CurrencyAmount<Currency>,
+  allowedPairs: Pair[]
+): Promise<Trade<Currency, Currency, TradeType> | null> {
+  let bestTradeSoFar: Trade<Currency, Currency, TradeType> | null = null;
+  for (let i = 1; i <= MAX_HOPS; i++) {
+    const currentTrade =
+      Trade.bestTradeExactOut(allowedPairs, currencyIn, currencyAmountOut, {
+        maxHops: i,
+        maxNumResults: 1,
+      })[0] ?? null;
+    if (
+      isTradeBetter(
+        bestTradeSoFar,
+        currentTrade,
+        BETTER_TRADE_LESS_HOPS_THRESHOLD
+      )
+    ) {
+      bestTradeSoFar = currentTrade;
+    }
+  }
+  return bestTradeSoFar;
 }

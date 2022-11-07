@@ -260,9 +260,15 @@ const Pancake: NextPageWithLayout = () => {
                 <span>Price</span>
                 <div>
                   <span className='text-[#280d5f] text-base font-normal'>
-                    {`${tradeData.executionPrice.invert().toSignificant()} ${
-                      tradeData.executionPrice.baseCurrency.symbol
-                    } per ${tradeData.executionPrice.quoteCurrency.symbol}`}
+                    {`${tradeData.executionPrice
+                      .invert()
+                      .toSignificant()} ${tradeData.executionPrice.baseCurrency.symbol.replace(
+                      'WBNB',
+                      'BNB'
+                    )} per ${tradeData.executionPrice.quoteCurrency.symbol.replace(
+                      'WBNB',
+                      'BNB'
+                    )}`}
                   </span>
                   <IconButton
                     className='bg-gray-100 hover:bg-gray-200 rounded-full p-1 ml-1 align-bottom'
@@ -294,14 +300,20 @@ const Pancake: NextPageWithLayout = () => {
                 {tradeParam.direction
                   ? `${tradeData.inputAmount
                       .multiply(new Percent(1005, 1000))
-                      .toSignificant(4)} ${
-                      tradeData.inputAmount.currency.symbol
-                    }`
+                      .toSignificant(
+                        4
+                      )} ${tradeData.inputAmount.currency.symbol.replace(
+                      'WBNB',
+                      'BNB'
+                    )}`
                   : `${tradeData.outputAmount
                       .multiply(new Percent(995, 1000))
-                      .toSignificant(4)} ${
-                      tradeData.outputAmount.currency.symbol
-                    }`}
+                      .toSignificant(
+                        4
+                      )} ${tradeData.outputAmount.currency.symbol.replace(
+                      'WBNB',
+                      'BNB'
+                    )}`}
               </div>
             </div>
             <div className='flex items-center justify-between'>
@@ -359,7 +371,7 @@ const Pancake: NextPageWithLayout = () => {
                       )
                   )
                   .toSignificant(4) + ' '}
-                {tradeData.inputAmount.currency.symbol}
+                {tradeData.inputAmount.currency.symbol.replace('WBNB', 'BNB')}
               </div>
             </div>
             {tradeData.route.pairs.length > 1 ? (
@@ -374,7 +386,11 @@ const Pancake: NextPageWithLayout = () => {
                 <div className='text-[#280d5f] text-sm'>
                   {tradeData.route.path.map((tkn, i) => {
                     return (
-                      <span key={i}>{i ? ' > ' + tkn.symbol : tkn.symbol}</span>
+                      <span key={i}>
+                        {i
+                          ? ' > ' + tkn.symbol.replace('WBNB', 'BNB')
+                          : tkn.symbol.replace('WBNB', 'BNB')}
+                      </span>
                     );
                   })}
                 </div>
