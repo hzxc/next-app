@@ -27,7 +27,6 @@ import { useDebounce } from 'use-debounce';
 
 import _Big from 'big.js';
 import toFormat from 'toformat';
-import { toNumber } from 'utils';
 
 const Big = toFormat(_Big);
 
@@ -90,10 +89,14 @@ const Pancake: NextPageWithLayout = () => {
   });
 
   useEffect(() => {
+    console.log('useEffect tradeData');
     if (tradeData) {
       tradeParam.direction
         ? setInVal(tradeData.inputAmount.toSignificant())
         : setOutVal(tradeData.outputAmount.toSignificant());
+    } else {
+      setInVal('');
+      setOutVal('');
     }
   }, [tradeData]);
 

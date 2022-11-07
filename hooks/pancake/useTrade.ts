@@ -11,12 +11,7 @@ import {
 } from 'eth';
 import { ethers } from 'ethers';
 import { IToken } from 'redux/pancake/pancakeSlice';
-import {
-  tradeExactIn,
-  tradeExactInByPairs,
-  tradeExactOut,
-  tradeExactOutByPairs,
-} from 'utils/pancake';
+import { tradeExactInByPairs, tradeExactOutByPairs } from 'utils/pancake';
 import { usePairs } from './usePairs';
 const CHAIN_ID = 56;
 
@@ -72,7 +67,8 @@ export const useTrade = (param: {
     ],
     () => {
       console.log('get trade data');
-      if (!amountToTrade || !pairsData) {
+      console.log('amountToTrade', amountToTrade);
+      if (!amountToTrade || !pairsData || amountToTrade === '0') {
         return null;
       }
       // invariant(amountToTrade, 'invalid amountToTrade');
