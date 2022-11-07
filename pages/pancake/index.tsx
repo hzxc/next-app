@@ -104,7 +104,7 @@ const Pancake: NextPageWithLayout = () => {
       <div>{directionDebounce}</div> */}
       {/* <div>{pancake.inputCurrency.address}</div> */}
       {/* <div>{pancake.outputCurrency.address}</div> */}
-      {JSON.stringify(tradeParam)}
+      {/* {JSON.stringify(tradeParam)} */}
       <TokenModal visible={visible} modalClose={close} source={source} />
       <div className='flex flex-col border border-[#e7e3eb] rounded-3xl bg-white shadow-sm'>
         <div className='p-6 border-b'>
@@ -265,7 +265,7 @@ const Pancake: NextPageWithLayout = () => {
                     } per ${tradeData.executionPrice.quoteCurrency.symbol}`}
                   </span>
                   <IconButton
-                    className='bg-gray-100 hover:bg-gray-200 rounded-full p-1 ml-1'
+                    className='bg-gray-100 hover:bg-gray-200 rounded-full p-1 ml-1 align-bottom'
                     rightSize='14px'
                     rightSrc='/images/pancake/refresh.svg'
                   ></IconButton>
@@ -358,7 +358,8 @@ const Pancake: NextPageWithLayout = () => {
                         )
                       )
                   )
-                  .toSignificant(4)}
+                  .toSignificant(4) + ' '}
+                {tradeData.inputAmount.currency.symbol}
               </div>
             </div>
             {tradeData.route.pairs.length > 1 ? (
