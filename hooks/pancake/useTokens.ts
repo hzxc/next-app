@@ -2,7 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { baseTokens } from 'data/pancake';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import { IToken } from 'redux/pancake/pancakeSlice';
-import { http, isError } from 'utils';
+import { http } from 'utils';
 import { setTokens } from 'redux/pancake/pancakePersistSlice';
 import { selectPancakePersist } from 'redux/pancake/pancakePersistSlice';
 import { BigNumber, ethers } from 'ethers';

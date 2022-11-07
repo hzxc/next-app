@@ -58,7 +58,7 @@ export const useTrade = (param: {
         return null;
       }
       // invariant(amountToTrade, 'invalid amountToTrade');
-      // console.log('amountToTrade', amountToTrade);
+      console.log('amountToTrade', amountToTrade);
 
       if (param.direction === TradeDirection.input) {
         return tradeExactIn(

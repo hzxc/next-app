@@ -17,7 +17,7 @@ import {
 } from 'ethereum-multicall';
 import { BigNumber, ethers } from 'ethers';
 import JSBI from 'jsbi';
-import { CurrencyAmount, ERC20Token } from 'eth';
+import { CurrencyAmount, ERC20Token, Percent, _10000, _9975 } from 'eth';
 import { bscTokens } from 'data/tokens';
 import {
   getAllCommonPairs,
@@ -137,16 +137,40 @@ const EthereumMulticall: NextPageWithLayout = () => {
           tradeExactIn(
             CurrencyAmount.fromRawAmount(
               bscTokens.vai,
-              ethers.utils.parseEther('111111').toString()
+              ethers.utils.parseEther('1').toString()
             ),
             bscTokens.usdt
           ).then((ret) => {
             if (ret) {
               console.log(ret);
-              const inputAmount = ret.inputAmount;
-              const outputAmount = ret.outputAmount;
-              console.log(ret.priceImpact.toSignificant());
-              console.log(ret.priceImpact.toFixed());
+
+              console.log(
+                'inputAmount.toSignificant()',
+                ret.inputAmount.toSignificant()
+              );
+              console.log(
+                'outputAmount.toSignificant()',
+                ret.outputAmount.toSignificant()
+              );
+
+              console.log(
+                'executionPrice.toSignificant()',
+                ret.executionPrice.toSignificant()
+              );
+
+              console.log(
+                'executionPrice.invert().toSignificant()',
+                ret.executionPrice.invert().toSignificant()
+              );
+
+              const b = new Big(ret.inputAmount.toSignificant());
+              console.log(
+                b.div(new Big(ret.outputAmount.toSignificant())).toNumber()
+              );
+              // const inputAmount = ret.inputAmount;
+              // const outputAmount = ret.outputAmount;
+              // console.log(ret.priceImpact.toSignificant());
+              // console.log(ret.priceImpact.toFixed());
               // const denominator = ret.executionPrice.input;
               // const numerator = ret.executionPrice.numerator;
               // const decimalScale = JSBI.exponentiate(
@@ -226,10 +250,7 @@ const EthereumMulticall: NextPageWithLayout = () => {
       </Button>
       <Button
         onClick={() => {
-          console.log(
-            'divide',
-            JSBI.divide(JSBI.BigInt('1'), JSBI.BigInt('2')).toString()
-          );
+          console.log('divide', JSBI.divide(_9975, _10000).toString());
         }}
       >
         JSBI.divide
@@ -237,7 +258,9 @@ const EthereumMulticall: NextPageWithLayout = () => {
 
       <Button
         onClick={() => {
-          console.log(new Big(123.4567).toString());
+          console.log(Big(123.4567).toString());
+          const percent = new Percent(25, 100);
+          console.log(percent.toFixed());
         }}
       >
         Big

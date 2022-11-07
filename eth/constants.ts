@@ -9,9 +9,11 @@ export enum ChainId {
 }
 
 export enum TradeDirection {
-  input = 'input',
-  output = 'output',
+  input = 0,
+  output = 1,
 }
+
+// export const tradeDirection: 'input' | 'output' = 'input';
 
 export const FACTORY_ADDRESS = '0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73';
 
