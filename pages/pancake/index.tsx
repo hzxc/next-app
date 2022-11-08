@@ -78,14 +78,14 @@ const Pancake: NextPageWithLayout = () => {
     amountToTrade: '',
     direction: TradeDirection.input,
   });
-  const [amountToTradeDebounce] = useDebounce(tradeParam.amountToTrade, 400);
-  const [directionDebounce] = useDebounce(tradeParam.direction, 400);
+  // const [amountToTradeDebounce] = useDebounce(tradeParam.amountToTrade, 400);
+  // const [directionDebounce] = useDebounce(tradeParam.direction, 400);
 
   const { data: tradeData } = useTrade({
     fromToken: pancake.inputCurrency,
     toToken: pancake.outputCurrency,
-    amountToTrade: amountToTradeDebounce,
-    direction: directionDebounce,
+    amountToTrade: tradeParam.amountToTrade,
+    direction: tradeParam.direction,
   });
 
   useEffect(() => {

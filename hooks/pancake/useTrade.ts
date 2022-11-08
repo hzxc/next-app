@@ -97,7 +97,7 @@ export const useTrade = (param: {
     {
       refetchOnWindowFocus: false,
       // retry: false,
-      // keepPreviousData: true,
+      keepPreviousData: true,
       refetchInterval: 10 * 1000,
     }
   );
