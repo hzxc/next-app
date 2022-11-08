@@ -59,15 +59,15 @@ export const useTrade = (param: {
   return useQuery<Trade<Currency, Currency, TradeType> | null, Error>(
     [
       'PanTrade',
-      fromToken.address,
-      toToken.address,
+      // fromToken.address,
+      // toToken.address,
       amountToTrade,
       pairsData ? pairsData[1] : '0x0eD7e52944161450477ee417DE9Cd3a859b14fD0',
       direction,
     ],
     () => {
       console.log('get trade data');
-      console.log('amountToTrade', amountToTrade);
+      // console.log('amountToTrade', amountToTrade);
       if (!amountToTrade || !pairsData || amountToTrade === '0') {
         return null;
       }
@@ -97,7 +97,7 @@ export const useTrade = (param: {
     {
       refetchOnWindowFocus: false,
       // retry: false,
-      keepPreviousData: true,
+      // keepPreviousData: true,
       refetchInterval: 10 * 1000,
     }
   );

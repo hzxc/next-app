@@ -22,7 +22,8 @@ export const TokenModal: React.FC<{
   visible: boolean;
   modalClose: () => void;
   source?: 'in' | 'out';
-}> = ({ visible, modalClose, source }) => {
+  setTradeDirection: () => void;
+}> = ({ visible, modalClose, source, setTradeDirection }) => {
   const pancake = useAppSelector(selectPancake);
   const dispatch = useAppDispatch();
   const [searchParam, setSearchParam] = useState('');
@@ -36,12 +37,13 @@ export const TokenModal: React.FC<{
     }
   };
 
-  const handleTknClick = (tkn: IToken) => {
+  const tknClick = (tkn: IToken) => {
     if (source === 'in' && tkn.address !== pancake.inputCurrency.address) {
       if (tkn.address === pancake.outputCurrency.address) {
         const tmp = { ...pancake.inputCurrency };
         dispatch(setInputCurrency(tkn));
         dispatch(setOutputCurrency(tmp));
+        setTradeDirection();
         close();
       } else {
         dispatch(setInputCurrency(tkn));
@@ -55,6 +57,7 @@ export const TokenModal: React.FC<{
         const tmp = { ...pancake.outputCurrency };
         dispatch(setOutputCurrency(tkn));
         dispatch(setInputCurrency(tmp));
+        setTradeDirection();
         close();
       } else {
         dispatch(setOutputCurrency(tkn));
@@ -96,6 +99,7 @@ export const TokenModal: React.FC<{
                       const tmp = { ...pancake.inputCurrency };
                       dispatch(setInputCurrency(tokens[index]));
                       dispatch(setOutputCurrency(tmp));
+                      setTradeDirection();
                       close();
                     } else {
                       dispatch(setInputCurrency(tokens[index]));
@@ -111,6 +115,7 @@ export const TokenModal: React.FC<{
                       const tmp = { ...pancake.outputCurrency };
                       dispatch(setOutputCurrency(tokens[index]));
                       dispatch(setInputCurrency(tmp));
+                      setTradeDirection();
                       close();
                     } else {
                       dispatch(setOutputCurrency(tokens[index]));
@@ -227,7 +232,7 @@ export const TokenModal: React.FC<{
             <div className='flex items-center justify-around'>
               <IconButton
                 onClick={() => {
-                  handleTknClick(BNB);
+                  tknClick(BNB);
                 }}
                 className={`hover:bg-[#faf9fa] p-[6px] rounded-xl border border-[#f6f6f6] ${tknClass(
                   BNB
@@ -238,7 +243,7 @@ export const TokenModal: React.FC<{
               </IconButton>
               <IconButton
                 onClick={() => {
-                  handleTknClick(BUSD);
+                  tknClick(BUSD);
                 }}
                 className={`hover:bg-[#faf9fa] p-[6px] rounded-xl border border-[#f6f6f6] ${tknClass(
                   BUSD
@@ -249,7 +254,7 @@ export const TokenModal: React.FC<{
               </IconButton>
               <IconButton
                 onClick={() => {
-                  handleTknClick(CAKE);
+                  tknClick(CAKE);
                 }}
                 className={`hover:bg-[#faf9fa] p-[6px] rounded-xl border border-[#f6f6f6] ${tknClass(
                   CAKE
@@ -260,7 +265,7 @@ export const TokenModal: React.FC<{
               </IconButton>
               <IconButton
                 onClick={() => {
-                  handleTknClick(BTCB);
+                  tknClick(BTCB);
                 }}
                 className={`hover:bg-[#faf9fa] p-[6px] rounded-xl border border-[#f6f6f6] ${tknClass(
                   BTCB

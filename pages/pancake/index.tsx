@@ -79,26 +79,52 @@ const Pancake: NextPageWithLayout = () => {
     direction: TradeDirection.input,
   });
   const [amountToTradeDebounce] = useDebounce(tradeParam.amountToTrade, 400);
-  // const [directionDebounce] = useDebounce(tradeParam.direction, 400);
+  const [directionDebounce] = useDebounce(tradeParam.direction, 400);
 
   const { data: tradeData } = useTrade({
     fromToken: pancake.inputCurrency,
     toToken: pancake.outputCurrency,
     amountToTrade: amountToTradeDebounce,
-    direction: tradeParam.direction,
+    direction: directionDebounce,
   });
 
   useEffect(() => {
-    console.log('useEffect tradeData');
     if (tradeData) {
       tradeParam.direction
         ? setInVal(tradeData.inputAmount.toSignificant())
         : setOutVal(tradeData.outputAmount.toSignificant());
     } else {
-      setInVal('');
-      setOutVal('');
+      if (tradeParam.direction) {
+        setInVal('');
+      } else if (!tradeParam.direction) {
+        setOutVal('');
+      }
     }
   }, [tradeData]);
+
+  const setTradeDirection = () => {
+    if (tradeParam.direction) {
+      setInVal(outVal);
+      setOutVal('');
+    } else {
+      setOutVal(inVal);
+      setInVal('');
+    }
+    setTradeParam({
+      ...tradeParam,
+      direction: tradeParam.direction
+        ? TradeDirection.input
+        : TradeDirection.output,
+    });
+  };
+
+  const tknEx = () => {
+    const tmp = { ...pancake.outputCurrency };
+    dispatch(setOutputCurrency({ ...pancake.inputCurrency }));
+    dispatch(setInputCurrency(tmp));
+
+    setTradeDirection();
+  };
 
   return (
     <div>
@@ -107,8 +133,13 @@ const Pancake: NextPageWithLayout = () => {
       <div>{directionDebounce}</div> */}
       {/* <div>{pancake.inputCurrency.address}</div> */}
       {/* <div>{pancake.outputCurrency.address}</div> */}
-      {/* {JSON.stringify(tradeParam)} */}
-      <TokenModal visible={visible} modalClose={close} source={source} />
+      {JSON.stringify(tradeParam)}
+      <TokenModal
+        visible={visible}
+        modalClose={close}
+        source={source}
+        setTradeDirection={setTradeDirection}
+      />
       <div className='flex flex-col border border-[#e7e3eb] rounded-3xl bg-white shadow-sm'>
         <div className='p-6 border-b'>
           <div className='flex items-center justify-between'>
@@ -189,21 +220,7 @@ const Pancake: NextPageWithLayout = () => {
               rightSize='20px'
               leftIcon={<PanExDown />}
               rightIcon={<PanExUpDown className='text-white' />}
-              onClick={() => {
-                const tmp = { ...pancake.outputCurrency };
-                dispatch(setOutputCurrency(pancake.inputCurrency));
-                dispatch(setInputCurrency(tmp));
-
-                const tmpVal = inVal;
-                setInVal(outVal);
-                setOutVal(tmpVal);
-                setTradeParam({
-                  ...tradeParam,
-                  direction: tradeParam.direction
-                    ? TradeDirection.input
-                    : TradeDirection.output,
-                });
-              }}
+              onClick={tknEx}
             ></IconButton>
           </div>
           <div className='w-full flex items-center justify-between px-2 space-x-2'>
