@@ -5,7 +5,7 @@ import { ReactElement } from 'react';
 import ArrowDownSvg from 'public/images/pancake/arrowDown.svg';
 import { IconButton } from 'components';
 
-const MenuButtonDemo: NextPageWithLayout = () => {
+const MenuButtonPage: NextPageWithLayout = () => {
   return (
     <div className='flex p-8'>
       <MenuButton
@@ -32,8 +32,8 @@ const MenuButtonDemo: NextPageWithLayout = () => {
   );
 };
 
-MenuButtonDemo.getLayout = function getLayout(page: ReactElement) {
+MenuButtonPage.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };
 
-export default MenuButtonDemo;
+export default MenuButtonPage;

@@ -5,7 +5,7 @@ import { NextPageWithLayout } from 'pages/_app';
 import { ReactElement } from 'react';
 import ArrowUpRightSvg from 'public/images/pancake/arrowUpRight.svg';
 
-const TabDemo: NextPageWithLayout = () => {
+const TabPage: NextPageWithLayout = () => {
   return (
     <div className='p-8'>
       <Tab>
@@ -26,8 +26,8 @@ const TabDemo: NextPageWithLayout = () => {
   );
 };
 
-TabDemo.getLayout = function getLayout(page: ReactElement) {
+TabPage.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };
 
-export default TabDemo;
+export default TabPage;

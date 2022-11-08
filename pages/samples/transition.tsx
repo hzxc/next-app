@@ -5,7 +5,7 @@ import { ReactElement } from 'react';
 import { NextPageWithLayout } from 'pages/_app';
 import { Layout } from 'components/layout';
 
-const TransitionDemo: NextPageWithLayout = () => {
+const TransitionPage: NextPageWithLayout = () => {
   const { visible, toggle } = useToggle();
   return (
     <div className='p-4 space-y-2'>
@@ -67,8 +67,8 @@ const TransitionDemo: NextPageWithLayout = () => {
   );
 };
 
-TransitionDemo.getLayout = function getLayout(page: ReactElement) {
+TransitionPage.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };
 
-export default TransitionDemo;
+export default TransitionPage;

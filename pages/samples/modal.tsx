@@ -6,7 +6,7 @@ import { Layout } from 'components/layout';
 import { ReactElement } from 'react';
 import { NextPageWithLayout } from 'pages/_app';
 
-const Modal: NextPageWithLayout = () => {
+const ModalPage: NextPageWithLayout = () => {
   const { visible, close, open } = useToggle(false);
   return (
     <Layout>
@@ -18,8 +18,8 @@ const Modal: NextPageWithLayout = () => {
   );
 };
 
-Modal.getLayout = function getLayout(page: ReactElement) {
+ModalPage.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };
 
-export default Modal;
+export default ModalPage;

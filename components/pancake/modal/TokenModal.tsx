@@ -22,7 +22,7 @@ export const TokenModal: React.FC<{
   visible: boolean;
   modalClose: () => void;
   source?: 'in' | 'out';
-  setTradeDirection: () => void;
+  setTradeDirection?: () => void;
 }> = ({ visible, modalClose, source, setTradeDirection }) => {
   const pancake = useAppSelector(selectPancake);
   const dispatch = useAppDispatch();
@@ -43,7 +43,7 @@ export const TokenModal: React.FC<{
         const tmp = { ...pancake.inputCurrency };
         dispatch(setInputCurrency(tkn));
         dispatch(setOutputCurrency(tmp));
-        setTradeDirection();
+        setTradeDirection?.();
         close();
       } else {
         dispatch(setInputCurrency(tkn));
@@ -57,7 +57,7 @@ export const TokenModal: React.FC<{
         const tmp = { ...pancake.outputCurrency };
         dispatch(setOutputCurrency(tkn));
         dispatch(setInputCurrency(tmp));
-        setTradeDirection();
+        setTradeDirection?.();
         close();
       } else {
         dispatch(setOutputCurrency(tkn));
@@ -99,7 +99,7 @@ export const TokenModal: React.FC<{
                       const tmp = { ...pancake.inputCurrency };
                       dispatch(setInputCurrency(tokens[index]));
                       dispatch(setOutputCurrency(tmp));
-                      setTradeDirection();
+                      setTradeDirection?.();
                       close();
                     } else {
                       dispatch(setInputCurrency(tokens[index]));
@@ -115,7 +115,7 @@ export const TokenModal: React.FC<{
                       const tmp = { ...pancake.outputCurrency };
                       dispatch(setOutputCurrency(tokens[index]));
                       dispatch(setInputCurrency(tmp));
-                      setTradeDirection();
+                      setTradeDirection?.();
                       close();
                     } else {
                       dispatch(setOutputCurrency(tokens[index]));
