@@ -77,7 +77,7 @@ export default function Sidebar() {
             <Link href='/samples/lodash'>Lodash</Link>
           </MenuItem>
           <MenuItem>
-            <Link href='/samples/ping'>Ping</Link>
+            <Link href='/samples/got'>Got</Link>
           </MenuItem>
         </SubMenu>
         <SubMenu subTitle='Wagmi'>

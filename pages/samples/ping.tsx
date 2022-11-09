@@ -1,15 +1,30 @@
+import axios from 'axios';
+import { Button } from 'components';
 import { Layout } from 'components/layout';
 import { NextPageWithLayout } from 'pages/_app';
 import { ReactElement } from 'react';
-import { Button } from 'components';
-import ping from 'ping.js/dist';
 
 const PingPage: NextPageWithLayout = () => {
-  const pingClick = () => {};
-
+  const handleClick = async () => {
+    axios
+      .get('https://bsc-dataseed2.defibit.io')
+      // .get('https://api.binance.com/api/v3/time')
+      .then(function (response) {
+        // handle success
+        console.log(response.status);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+        console.log(error.response?.status);
+      })
+      .finally(function () {
+        // always executed
+      });
+  };
   return (
-    <div className='p-4'>
-      <Button onClick={pingClick}>Ping</Button>
+    <div className='font-sans p-4'>
+      <Button onClick={handleClick}>axios</Button>
     </div>
   );
 };
