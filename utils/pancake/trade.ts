@@ -12,7 +12,7 @@ export const tradeExactIn = async (
   currencyAmountIn: CurrencyAmount<Currency>,
   currencyOut: Currency
 ): Promise<Trade<Currency, Currency, TradeType> | null> => {
-  const [allowedPairs] = await getAllCommonPairs(
+  const allowedPairs = await getAllCommonPairs(
     currencyAmountIn.currency,
     currencyOut
   );
@@ -47,7 +47,7 @@ export async function tradeExactOut(
   currencyIn: Currency,
   currencyAmountOut: CurrencyAmount<Currency>
 ): Promise<Trade<Currency, Currency, TradeType> | null> {
-  const [allowedPairs] = await getAllCommonPairs(
+  const allowedPairs = await getAllCommonPairs(
     currencyIn,
     currencyAmountOut?.currency
   );
