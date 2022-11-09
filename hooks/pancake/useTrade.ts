@@ -4,12 +4,14 @@ import {
   Currency,
   CurrencyAmount,
   ERC20Token,
+  Pair,
   Trade,
   TradeDirection,
   TradeType,
   WNATIVE,
 } from 'eth';
 import { ethers } from 'ethers';
+import { useEffect, useState } from 'react';
 import { IToken } from 'redux/pancake/pancakeSlice';
 import { tradeExactInByPairs, tradeExactOutByPairs } from 'utils/pancake';
 import { usePairs } from './usePairs';
@@ -51,18 +53,34 @@ export const useTrade = (param: {
         );
   // console.log('useTrade', fromCurrency.address, toCurrency.address);
 
-  const tradeQueryKey = `PanTrade-${direction}-${amountToTrade}`;
+  // ${Pair.getAddress(
+  //   fromCurrency,
+  //   toCurrency
+  // )}
   // 'PanTrade',
   // amountToTrade,
   // // pairsData ? pairsData[1] : '0x0eD7e52944161450477ee417DE9Cd3a859b14fD0',
   // direction,
   // ];
 
-  const { data: pairsData } = usePairs({
+  const { data: pairs, isFetching } = usePairs({
     tokenA: fromCurrency,
     tokenB: toCurrency,
-    tradeQueryKey: tradeQueryKey,
   });
+
+  const [tag, setTag] = useState<boolean>();
+
+  useEffect(() => {
+    console.log('pair change');
+    if (pairs && !isFetching) {
+      setTag(!tag);
+    }
+  }, [pairs, isFetching]);
+
+  const tradeQueryKey = `PanTrade-${Pair.getAddress(
+    fromCurrency,
+    toCurrency
+  )}-${direction}-${amountToTrade}`;
 
   // const queryClient = useQueryClient();
   // queryClient.invalidateQueries({ queryKey: ['todos'] });
@@ -76,16 +94,21 @@ export const useTrade = (param: {
   // );
 
   return useQuery<Trade<Currency, Currency, TradeType> | null, Error>(
-    [tradeQueryKey],
+    // [tradeQueryKey, dataUpdatedAt],
+    [tradeQueryKey, tag],
     () => {
       console.log('get trade data');
+      console.log('pair', pairs ? 'yes' : 'undefined');
+      console.log(tradeQueryKey, tag);
+      console.log('tag', tag ? 'true' : 'false');
+      // console.log('dataUpdatedAt', dataUpdatedAt);
 
-      console.log(pairsData?.[1]);
       // console.log('amountToTrade', amountToTrade);
       // console.log('direction', direction);
 
       // console.log('amountToTrade', amountToTrade);
-      if (!amountToTrade || !pairsData || amountToTrade === '0') {
+      if (!amountToTrade || !pairs || amountToTrade === '0') {
+        console.log('return null');
         return null;
       }
       // invariant(amountToTrade, 'invalid amountToTrade');
@@ -97,7 +120,7 @@ export const useTrade = (param: {
             ethers.utils.parseEther(amountToTrade).toString()
           ),
           toCurrency,
-          pairsData[0]
+          pairs
         );
       } else if (param.direction === TradeDirection.output) {
         return tradeExactOutByPairs(
@@ -106,7 +129,7 @@ export const useTrade = (param: {
             toCurrency,
             ethers.utils.parseEther(amountToTrade).toString()
           ),
-          pairsData[0]
+          pairs
         );
       }
       return null;
@@ -114,7 +137,7 @@ export const useTrade = (param: {
     {
       refetchOnWindowFocus: false,
       // retry: false,
-      keepPreviousData: false,
+      keepPreviousData: true,
       // refetchInterval: 10 * 1000,
     }
   );

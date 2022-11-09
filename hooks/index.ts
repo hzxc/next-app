@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 export * from './useToggle';
 export * from './useBestExactIn';
-export * from './useToggle';
 
 export const useDebounce = <V>(value: V, delay?: number) => {
   const [debouncedValue, setDebouncedValue] = useState<V>(value);
