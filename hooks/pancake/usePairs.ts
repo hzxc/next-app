@@ -1,5 +1,5 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { ERC20Token, Pair, TradeDirection } from 'eth';
+import { useQuery } from '@tanstack/react-query';
+import { ERC20Token, Pair } from 'eth';
 import { getAllCommonPairs } from 'utils/pancake';
 
 export const usePairs = (param: { tokenA: ERC20Token; tokenB: ERC20Token }) => {
