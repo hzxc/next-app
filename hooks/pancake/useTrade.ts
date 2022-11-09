@@ -71,7 +71,6 @@ export const useTrade = (param: {
   const [tag, setTag] = useState<boolean>();
 
   useEffect(() => {
-    console.log('pair change');
     if (pairs && !isFetching) {
       setTag(!tag);
     }
@@ -98,9 +97,9 @@ export const useTrade = (param: {
     [tradeQueryKey, tag],
     () => {
       console.log('get trade data');
-      console.log('pair', pairs ? 'yes' : 'undefined');
-      console.log(tradeQueryKey, tag);
-      console.log('tag', tag ? 'true' : 'false');
+      // console.log('pair', pairs ? 'yes' : 'undefined');
+      // console.log(tradeQueryKey, tag);
+      // console.log('tag', tag ? 'true' : 'false');
       // console.log('dataUpdatedAt', dataUpdatedAt);
 
       // console.log('amountToTrade', amountToTrade);
@@ -108,7 +107,6 @@ export const useTrade = (param: {
 
       // console.log('amountToTrade', amountToTrade);
       if (!amountToTrade || !pairs || amountToTrade === '0') {
-        console.log('return null');
         return null;
       }
       // invariant(amountToTrade, 'invalid amountToTrade');
