@@ -23,7 +23,6 @@ import { IoMdRefresh } from 'react-icons/io';
 import { ethers } from 'ethers';
 import { JSBI, Percent, TradeDirection, _10000, _9975 } from 'eth';
 import { useTrade } from 'hooks/pancake/useTrade';
-import { useDebounce } from 'use-debounce';
 
 import _Big from 'big.js';
 import toFormat from 'toformat';

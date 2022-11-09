@@ -51,22 +51,39 @@ export const useTrade = (param: {
         );
   // console.log('useTrade', fromCurrency.address, toCurrency.address);
 
+  const tradeQueryKey = `PanTrade-${direction}-${amountToTrade}`;
+  // 'PanTrade',
+  // amountToTrade,
+  // // pairsData ? pairsData[1] : '0x0eD7e52944161450477ee417DE9Cd3a859b14fD0',
+  // direction,
+  // ];
+
   const { data: pairsData } = usePairs({
     tokenA: fromCurrency,
     tokenB: toCurrency,
+    tradeQueryKey: tradeQueryKey,
   });
 
+  // const queryClient = useQueryClient();
+  // queryClient.invalidateQueries({ queryKey: ['todos'] });
+
+  // const keccak256Ret = utils.keccak256(
+  //   utils.toUtf8Bytes(JSON.stringify(pairsData))
+  // );
+  // console.log('allpairs', JSON.stringify(allPairs));
+  // const sha256Ret = utils.sha256(
+  //   utils.toUtf8Bytes(JSON.stringify(pairsData?.[0] || ''))
+  // );
+
   return useQuery<Trade<Currency, Currency, TradeType> | null, Error>(
-    [
-      'PanTrade',
-      // fromToken.address,
-      // toToken.address,
-      amountToTrade,
-      pairsData ? pairsData[1] : '0x0eD7e52944161450477ee417DE9Cd3a859b14fD0',
-      direction,
-    ],
+    [tradeQueryKey],
     () => {
       console.log('get trade data');
+
+      console.log(pairsData?.[1]);
+      // console.log('amountToTrade', amountToTrade);
+      // console.log('direction', direction);
+
       // console.log('amountToTrade', amountToTrade);
       if (!amountToTrade || !pairsData || amountToTrade === '0') {
         return null;
@@ -97,8 +114,8 @@ export const useTrade = (param: {
     {
       refetchOnWindowFocus: false,
       // retry: false,
-      keepPreviousData: true,
-      refetchInterval: 10 * 1000,
+      keepPreviousData: false,
+      // refetchInterval: 10 * 1000,
     }
   );
 };
