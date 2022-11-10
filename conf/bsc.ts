@@ -1,3 +1,5 @@
+import axios from 'axios';
+import dayjs from 'dayjs';
 import { ethers } from 'ethers';
 
 const bscUrls: string[] = [
@@ -20,13 +22,26 @@ const bscUrls: string[] = [
 
 const bscTestUrls: string[] = ['https://bsctestapi.terminet.io/rpc'];
 
-export const bscProvider = new ethers.providers.JsonRpcProvider(
+export let bscProvider = new ethers.providers.JsonRpcProvider(
   bscUrls[Math.floor(Math.random() * 13)],
   {
     name: 'bsc',
     chainId: 56,
   }
 );
+export let bscUrl = '';
+
+export const getBestBscProvider = async () => {
+  if (!bscUrl) {
+    getBscUrl().then((ret) => {
+      bscUrl = ret;
+      bscProvider = new ethers.providers.JsonRpcProvider(bscUrl, {
+        name: 'bsc',
+        chainId: 56,
+      });
+    });
+  }
+};
 
 export const bscTestProvider = new ethers.providers.JsonRpcProvider(
   bscTestUrls[0],
@@ -35,3 +50,26 @@ export const bscTestProvider = new ethers.providers.JsonRpcProvider(
     chainId: 97,
   }
 );
+
+export const getBscUrl = () => {
+  const reqs = bscUrls.map(async (item, i) => {
+    const start = dayjs().valueOf();
+    let duration = 0;
+    await axios
+      .options(item, { timeout: 1000 })
+      .catch(() => {})
+      .finally(() => {
+        duration = dayjs().valueOf() - start;
+      });
+
+    return { url: item, duration: duration };
+  });
+
+  return Promise.all(reqs).then((results) => {
+    const sortResults = results.sort((a, b) => {
+      return a.duration - b.duration;
+    });
+
+    return sortResults[0].url;
+  });
+};

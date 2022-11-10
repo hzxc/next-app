@@ -2,8 +2,9 @@ import axios from 'axios';
 import { Button } from 'components';
 import { Layout } from 'components/layout';
 import { NextPageWithLayout } from 'pages/_app';
-import { ReactElement } from 'react';
+import { ReactElement, useEffect } from 'react';
 import dayjs from 'dayjs';
+import { bscUrl, getBestBscProvider, getBscUrl } from 'conf';
 
 const PingPage: NextPageWithLayout = () => {
   const handleClick = async () => {
@@ -54,9 +55,21 @@ const PingPage: NextPageWithLayout = () => {
       // console.log(results);
     });
   };
+
+  useEffect(() => {
+    getBestBscProvider();
+  }, []);
+
   return (
-    <div className='font-sans p-4'>
+    <div className='font-sans p-4 space-x-2'>
       <Button onClick={handleClick}>axios</Button>
+      <Button
+        onClick={() => {
+          console.log(bscUrl);
+        }}
+      >
+        get bsc url
+      </Button>
     </div>
   );
 };

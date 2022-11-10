@@ -15,12 +15,13 @@ import { isError } from 'utils';
 
 import { useInitConnect } from 'hooks/useInitConnect';
 import { ChainId, FACTORY_ADDRESS_MAP, INIT_CODE_HASH_MAP } from 'eth';
+import { getBestBscProvider } from 'conf';
 
 const Index: NextPageWithLayout = () => {
   const { data, isFetching } = useCakePrice();
-  // useEffect(() => {
-  //   console.log(isFetching ? 'fetching' : 'idle');
-  // }, [isFetching]);
+  useEffect(() => {
+    getBestBscProvider();
+  }, []);
 
   const [bnbBal, setBnbBal] = useState('');
   const [addr, setAddr] = useState(

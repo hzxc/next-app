@@ -1,17 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import { PancakeRouterABI } from 'abis/bsc';
-import { bscProvider } from 'conf';
+import { bscProvider, bscUrl } from 'conf';
 import { bscBusdAddr, bscCakeAddr, bscPancakeRouterAddr } from 'data/constants';
 import { ethers, utils } from 'ethers';
 
-const router = new ethers.Contract(
-  bscPancakeRouterAddr,
-  PancakeRouterABI,
-  bscProvider
-);
-
 const getCakeSellPrice = async () => {
-  // console.log('getCakePrice');
+  const router = new ethers.Contract(
+    bscPancakeRouterAddr,
+    PancakeRouterABI,
+    bscProvider
+  );
+
   return router.getAmountsOut(utils.parseEther('1'), [
     bscCakeAddr,
     // busd addr
@@ -22,7 +21,7 @@ const getCakeSellPrice = async () => {
 export const useCakePrice = () => {
   return useQuery<any, Error>(['CakePrice'], getCakeSellPrice, {
     refetchOnWindowFocus: false,
-    refetchInterval: 60 * 1000,
+    refetchInterval: 10 * 1000,
     // retryDelay: 10 * 1000,
   });
 };

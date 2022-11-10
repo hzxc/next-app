@@ -26,6 +26,7 @@ import { useTrade } from 'hooks/pancake/useTrade';
 
 import _Big from 'big.js';
 import toFormat from 'toformat';
+import { getBestBscProvider } from 'conf';
 
 const Big = toFormat(_Big);
 
@@ -98,6 +99,10 @@ const Pancake: NextPageWithLayout = () => {
       }
     }
   }, [tradeData]);
+
+  useEffect(() => {
+    getBestBscProvider();
+  }, []);
 
   const setTradeDirection = () => {
     if (tradeParam.direction) {
