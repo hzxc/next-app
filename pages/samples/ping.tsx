@@ -40,11 +40,9 @@ const PingPage: NextPageWithLayout = () => {
 
     Promise.all([
       ping('https://bsc-dataseed2.defibit.io'),
-      ping('https://xxxx.com'),
-      ping('https://api.binance.com/api/v3/time'),
-      ping('https://api.binance.com'),
-      ping('https://api.mexc.com'),
-      ping('http://www.gstatic.com/generate_204'),
+      ping('/binance/api/v3/time'),
+      ping('/mexc/api/v3/time'),
+      ping('/gstatic/generate_204'),
     ]).then((results) => {
       const sortRet = results.sort((a, b) => {
         return a.duration - b.duration;

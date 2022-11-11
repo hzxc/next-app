@@ -21,6 +21,18 @@ const nextConfig = {
         source: '/pancake/:path*',
         destination: 'https://tokens.pancakeswap.finance/:path*',
       },
+      {
+        source: '/gstatic/:path*',
+        destination: 'http://www.gstatic.com/:path*',
+      },
+      {
+        source: '/binance/:path*',
+        destination: 'https://api.binance.com/:path*',
+      },
+      {
+        source: '/mexc/:path*',
+        destination: 'https://api.mexc.com/:path*',
+      },
     ];
   },
 };
