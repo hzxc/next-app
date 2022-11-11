@@ -27,6 +27,7 @@ import { useTrade } from 'hooks/pancake/useTrade';
 import _Big from 'big.js';
 import toFormat from 'toformat';
 import { getBestBscProvider } from 'conf';
+import { spawn } from 'child_process';
 
 const Big = toFormat(_Big);
 
@@ -349,11 +350,13 @@ const Pancake: NextPageWithLayout = () => {
                 Price Impact
               </IconButton>
               <div className='text-[#280d5f] text-sm'>
-                {tradeData.priceImpact.greaterThan(
-                  new Percent(25, 10000)
-                    .multiply(tradeData.route.pairs.length)
-                    .add(new Percent(1, 10000))
-                ) ? (
+                {tradeData.priceImpact
+                  .subtract(
+                    new Percent(25, 10000).multiply(
+                      tradeData.route.pairs.length
+                    )
+                  )
+                  .greaterThan(new Percent(100, 10000)) ? (
                   <span>
                     {tradeData.priceImpact
                       .subtract(
@@ -365,7 +368,23 @@ const Pancake: NextPageWithLayout = () => {
                     %
                   </span>
                 ) : (
-                  <span className='text-[#31d0aa]'>{'<0.01'}%</span>
+                  <span className='text-[#31d0aa]'>
+                    {tradeData.priceImpact
+                      .subtract(
+                        new Percent(25, 10000).multiply(
+                          tradeData.route.pairs.length
+                        )
+                      )
+                      .lessThan(new Percent(1, 10000))
+                      ? '<0.01%'
+                      : tradeData.priceImpact
+                          .subtract(
+                            new Percent(25, 10000).multiply(
+                              tradeData.route.pairs.length
+                            )
+                          )
+                          .toFixed() + '%'}
+                  </span>
                 )}
               </div>
             </div>

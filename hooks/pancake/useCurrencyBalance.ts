@@ -7,17 +7,17 @@ import { BigNumber, ethers } from 'ethers';
 import { isError } from 'utils';
 import { useAccount } from 'wagmi';
 
-const mutiQueryContr = new ethers.Contract(
-  bscMultiQueryAddr,
-  MultiQueryABI,
-  bscProvider
-);
-
 export const getBnbBalance = (addr: string) => {
   return bscProvider.getBalance(ethers.utils.getAddress(addr));
 };
 
 const getBalance = async (act: string, tokens: string[]) => {
+  const mutiQueryContr = new ethers.Contract(
+    bscMultiQueryAddr,
+    MultiQueryABI,
+    bscProvider
+  );
+
   // console.log('getBalance');
   tokens.forEach((item) => {
     if (!ethers.utils.isAddress(item)) {
