@@ -306,7 +306,9 @@ const Pancake: NextPageWithLayout = () => {
             </div>
           </div>
 
-          <PanButton className='w-72 h-12'>Connect Wallet</PanButton>
+          <PanButton className='w-full min-w-[288px] h-12'>
+            Connect Wallet
+          </PanButton>
         </div>
         {tradeData ? (
           <div className='px-4 pb-4 text-[#7a6eaa] text-sm'>
