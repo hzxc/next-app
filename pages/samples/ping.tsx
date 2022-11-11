@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { Button } from 'components';
 import { Layout } from 'components/layout';
 import { NextPageWithLayout } from 'pages/_app';
@@ -54,6 +54,58 @@ const PingPage: NextPageWithLayout = () => {
     });
   };
 
+  const getServerTime = () => {
+    axios
+      .get('/binance/api/v3/time', {
+        // .get('https://api.binance.com/api/v3/time', {
+        timeout: 2000,
+        proxy: {
+          protocol: 'http',
+          host: '127.0.0.1',
+          port: 7890,
+        },
+      })
+      .then((ret) => {
+        console.log('----------------------');
+        console.log('get /binance/api/v3/time');
+        console.log('status', ret.status);
+        console.log(ret);
+      })
+      .catch((err: AxiosError) => {
+        console.log('----------------------');
+        console.log('catch /binance/api/v3/time');
+        console.log('status', err.response?.status);
+        console.log(err);
+      });
+
+    // axios
+    //   .options('/pancake/pancakeswap-extended.json')
+    //   .then((ret) => {
+    //     console.log('options /pancake/pancakeswap-extended.json');
+    //     console.log(ret.status);
+    //   })
+    //   .catch((err: AxiosError) => {
+    //     console.log(err);
+    //     console.log('catch /pancake/pancakeswap-extended.json');
+    //     console.log(err.response?.status);
+    //   });
+
+    // axios.options('/binance/api/v3/time').then((ret) => {
+    //   console.log('options /binance/api/v3/time');
+    //   console.log(ret);
+    // });
+
+    // axios.options('/gstatic/generate_204').then((ret) => {
+    //   console.log('options generate_204');
+    //   console.log(ret);
+    // });
+
+    // axios.get('https://api.binance.com/api/v3/time').then((ret) => {
+    //   console.log('get https://api.binance.com/api/v3/time');
+    //   console.log(ret);
+    // });
+  };
+
   useEffect(() => {
     getBestBscProvider();
   }, []);
@@ -68,6 +120,7 @@ const PingPage: NextPageWithLayout = () => {
       >
         get bsc url
       </Button>
+      <Button onClick={getServerTime}>Get Server Time</Button>
     </div>
   );
 };
