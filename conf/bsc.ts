@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import dayjs from 'dayjs';
 import { ethers } from 'ethers';
 
@@ -57,10 +57,19 @@ export const getBscUrl = () => {
     let duration = 0;
     await axios
       .options(item, { timeout: 1000 })
-      .catch(() => {})
-      .finally(() => {
+      .then(() => {
         duration = dayjs().valueOf() - start;
+      })
+      .catch((err: AxiosError) => {
+        if (err.response?.status && err.response.status >= 500) {
+          duration = 9999;
+        } else {
+          duration = dayjs().valueOf() - start;
+        }
       });
+    // .finally(() => {
+    //   duration = dayjs().valueOf() - start;
+    // });
 
     return { url: item, duration: duration };
   });
@@ -69,6 +78,8 @@ export const getBscUrl = () => {
     const sortResults = results.sort((a, b) => {
       return a.duration - b.duration;
     });
+
+    // console.log(sortResults);
 
     return sortResults[0].url;
   });

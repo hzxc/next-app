@@ -55,29 +55,30 @@ const PingPage: NextPageWithLayout = () => {
   };
 
   const getServerTime = () => {
+    // getBscUrl();
     axios
-      .get('/binance/api/v3/time', {
-        // .get('https://api.binance.com/api/v3/time', {
-        timeout: 2000,
-        proxy: {
-          protocol: 'http',
-          host: '127.0.0.1',
-          port: 7890,
-        },
+      .get('/mexc/api/v3/time', {
+        // .get('https://api.mexc.com/api/v3/time', {
+        // timeout: 2000,
+        // headers: { Accept: '*/*', ContentType: 'application/json' },
+        // proxy: {
+        //   protocol: 'http',
+        //   host: '127.0.0.1',
+        //   port: 7890,
+        // },
       })
       .then((ret) => {
         console.log('----------------------');
-        console.log('get /binance/api/v3/time');
+        console.log('get /mexc/api/v3/time');
         console.log('status', ret.status);
         console.log(ret);
       })
       .catch((err: AxiosError) => {
         console.log('----------------------');
-        console.log('catch /binance/api/v3/time');
+        console.log('catch /mexc/api/v3/time');
         console.log('status', err.response?.status);
         console.log(err);
       });
-
     // axios
     //   .options('/pancake/pancakeswap-extended.json')
     //   .then((ret) => {
@@ -89,17 +90,14 @@ const PingPage: NextPageWithLayout = () => {
     //     console.log('catch /pancake/pancakeswap-extended.json');
     //     console.log(err.response?.status);
     //   });
-
     // axios.options('/binance/api/v3/time').then((ret) => {
     //   console.log('options /binance/api/v3/time');
     //   console.log(ret);
     // });
-
     // axios.options('/gstatic/generate_204').then((ret) => {
     //   console.log('options generate_204');
     //   console.log(ret);
     // });
-
     // axios.get('https://api.binance.com/api/v3/time').then((ret) => {
     //   console.log('get https://api.binance.com/api/v3/time');
     //   console.log(ret);
