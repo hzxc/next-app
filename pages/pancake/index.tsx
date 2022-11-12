@@ -42,8 +42,8 @@ const Pancake: NextPageWithLayout = () => {
   const [outVal, setOutVal] = useState('');
 
   const { data: bal } = useCurrencyBalance([
-    pancake.inputCurrency.address,
-    pancake.outputCurrency.address,
+    pancake.inputCurrency,
+    pancake.outputCurrency,
   ]);
 
   const [curBal, setCurBal] = useState({
@@ -61,16 +61,10 @@ const Pancake: NextPageWithLayout = () => {
   }, [isIdle, mutate]);
 
   useEffect(() => {
-    if (bal && bal.length > 1) {
-      const inNum = bal[0].isZero()
-        ? '0'
-        : ethers.utils.formatUnits(bal[0], pancake.inputCurrency.decimals);
-      const outNum = bal[1].isZero()
-        ? '0'
-        : ethers.utils.formatUnits(bal[1], pancake.outputCurrency.decimals);
+    if (bal) {
       setCurBal({
-        inBal: inNum.substring(0, inNum.indexOf('.') + 6),
-        outBal: outNum.substring(0, outNum.indexOf('.') + 6),
+        inBal: bal[0],
+        outBal: bal[1],
       });
     }
   }, [bal]);

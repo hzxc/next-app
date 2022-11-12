@@ -1,5 +1,14 @@
 import { ChainId, ERC20Token } from 'eth';
 
+export const BSC_BNB = new ERC20Token(
+  ChainId.BSC,
+  '0x0000000000000000000000000000000000000000',
+  18,
+  'BNB',
+  'Binance Chain Native Token',
+  'https://www.binance.org'
+);
+
 export const CAKE_MAINNET = new ERC20Token(
   ChainId.BSC,
   '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',

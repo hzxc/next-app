@@ -2,28 +2,23 @@ import { spawn } from 'child_process';
 import { Button, IconButton } from 'components';
 import { Layout } from 'components/layout';
 import { bscBusdAddr, bscCakeAddr } from 'data/constants';
-import { utils } from 'ethers';
+import { ethers, utils } from 'ethers';
 import {
   getCreate2Address,
   solidityKeccak256,
   solidityPack,
 } from 'ethers/lib/utils';
-import { getBnbBalance, useCakePrice } from 'hooks/pancake';
+import { useCakePrice } from 'hooks/pancake';
 import { NextPageWithLayout } from 'pages/_app';
 import { ReactElement, useEffect, useState } from 'react';
 import { isError } from 'utils';
 
 import { useInitConnect } from 'hooks/useInitConnect';
-import {
-  ChainId,
-  ERC20Token,
-  FACTORY_ADDRESS_MAP,
-  INIT_CODE_HASH_MAP,
-  NATIVE,
-} from 'eth';
+import { ChainId, FACTORY_ADDRESS_MAP, INIT_CODE_HASH_MAP } from 'eth';
 import { getBestBscProvider } from 'conf';
-import { getTokensBalance } from 'utils/pancake';
-import { bscTokens } from 'data/tokens';
+import { getBnbBalance, getTokensBalance } from 'utils/pancake';
+import { bscTokens, BSC_BNB } from 'data/tokens';
+import { baseTokens } from 'data/pancake';
 
 const Index: NextPageWithLayout = () => {
   const { data, isFetching } = useCakePrice();
@@ -32,7 +27,7 @@ const Index: NextPageWithLayout = () => {
   }, []);
 
   const [bnbBal, setBnbBal] = useState('');
-  const [addr, setAddr] = useState(
+  const [addr, setAddr] = useState<`0x${string}`>(
     '0x55cf452d43efafb505335cee7e0bb368a37c322c'
   );
 
@@ -66,7 +61,11 @@ const Index: NextPageWithLayout = () => {
           type='text'
           value={addr}
           onChange={(e) => {
-            setAddr(e.target.value);
+            try {
+              setAddr(ethers.utils.getAddress(e.target.value));
+            } catch (error) {
+              console.log(error);
+            }
           }}
           placeholder='account address'
         />
@@ -129,7 +128,7 @@ const Index: NextPageWithLayout = () => {
 
         <Button
           onClick={async () => {
-            const token0 = bscTokens.bnb;
+            const token0 = BSC_BNB;
             const token1 = bscTokens.busd;
 
             getTokensBalance('0x55cf452D43EfAfb505335cEe7e0BB368a37c322c', [
@@ -157,6 +156,19 @@ const Index: NextPageWithLayout = () => {
         >
           Get BNB Balance
         </Button>
+
+        {/* <Button
+          onClick={() => {
+            getBalance('0x55cf452D43EfAfb505335cEe7e0BB368a37c322c', [
+              baseTokens[0],
+              baseTokens[1],
+            ]).then((ret) => {
+              console.log(ret);
+            });
+          }}
+        >
+          Get Currency Balance
+        </Button> */}
       </div>
     </div>
   );

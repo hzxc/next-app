@@ -3,15 +3,15 @@ import { MultiQueryABI } from 'abis';
 import { IBEP20ABI } from 'abis/bsc';
 import { bscProvider } from 'conf';
 import { bscMultiQueryAddr } from 'data/constants';
+import { BSC_BNB } from 'data/tokens';
+import { ChainId, CurrencyAmount, ERC20Token } from 'eth';
 import { BigNumber, ethers } from 'ethers';
+import { IToken } from 'redux/pancake/pancakeSlice';
 import { isError } from 'utils';
+import { getBnbBalance, getTokensBalance } from 'utils/pancake';
 import { useAccount } from 'wagmi';
 
-export const getBnbBalance = (addr: string) => {
-  return bscProvider.getBalance(ethers.utils.getAddress(addr));
-};
-
-const getBalance = async (act: string, tokens: string[]) => {
+const getCurrencyBalance = async (act: `0x${string}`, tokens: string[]) => {
   const mutiQueryContr = new ethers.Contract(
     bscMultiQueryAddr,
     MultiQueryABI,
@@ -61,10 +61,10 @@ const getBalance = async (act: string, tokens: string[]) => {
   return result;
 };
 
-export const useCurrencyBalance = (tokens: string[]) => {
+export const useCurrencyBalance = (tokens: IToken[]) => {
   const { address, isConnected } = useAccount();
-  return useQuery<BigNumber[], Error>(
-    ['PanBalanceOf', isConnected, tokens],
+  return useQuery<string[], Error>(
+    ['PanBalanceOf', isConnected, tokens[0].address, tokens[1].address],
     () => {
       if (isConnected && address) {
         return getBalance(address, tokens);
@@ -74,4 +74,41 @@ export const useCurrencyBalance = (tokens: string[]) => {
     },
     { refetchOnWindowFocus: false, refetchInterval: 15 * 1000 }
   );
+};
+
+const getBalance = async (act: `0x${string}`, tokens: IToken[]) => {
+  let result: string[] = [];
+  let bIndex = -1;
+  let queryTokens: ERC20Token[] = [];
+  tokens.forEach((item, index) => {
+    if (item.address !== ethers.constants.AddressZero) {
+      queryTokens.push(
+        new ERC20Token(
+          ChainId.BSC,
+          item.address,
+          item.decimals,
+          item.symbol,
+          item.name,
+          item.projectLink,
+          item.logoURI,
+          item.source
+        )
+      );
+    } else {
+      bIndex = index;
+    }
+  });
+
+  const bals = await getTokensBalance(act, queryTokens);
+  bals.forEach((b) => {
+    result.push(b.toSignificant());
+  });
+
+  if (bIndex >= 0) {
+    const bnbBal = await getBnbBalance(act);
+    const bnbAmount = CurrencyAmount.fromRawAmount(BSC_BNB, bnbBal._hex);
+    result.splice(bIndex, 0, bnbAmount.toSignificant());
+  }
+
+  return result;
 };
