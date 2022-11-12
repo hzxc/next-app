@@ -2,7 +2,7 @@ import { spawn } from 'child_process';
 import { Button, IconButton } from 'components';
 import { Layout } from 'components/layout';
 import { bscBusdAddr, bscCakeAddr } from 'data/constants';
-import { ethers, utils } from 'ethers';
+import { utils } from 'ethers';
 import {
   getCreate2Address,
   solidityKeccak256,
@@ -14,8 +14,16 @@ import { ReactElement, useEffect, useState } from 'react';
 import { isError } from 'utils';
 
 import { useInitConnect } from 'hooks/useInitConnect';
-import { ChainId, FACTORY_ADDRESS_MAP, INIT_CODE_HASH_MAP } from 'eth';
+import {
+  ChainId,
+  ERC20Token,
+  FACTORY_ADDRESS_MAP,
+  INIT_CODE_HASH_MAP,
+  NATIVE,
+} from 'eth';
 import { getBestBscProvider } from 'conf';
+import { getTokensBalance } from 'utils/pancake';
+import { bscTokens } from 'data/tokens';
 
 const Index: NextPageWithLayout = () => {
   const { data, isFetching } = useCakePrice();
@@ -66,7 +74,7 @@ const Index: NextPageWithLayout = () => {
         {bnbBal ? <span>{bnbBal}</span> : undefined}
       </div>
       <div>{err}</div>
-      <div className='p-8 space-x-2'>
+      <div className='flex items-center justify-start flex-wrap p-4 gap-2'>
         <Button
           onClick={() => {
             console.log(
@@ -117,6 +125,37 @@ const Index: NextPageWithLayout = () => {
           }}
         >
           ChainId Test
+        </Button>
+
+        <Button
+          onClick={async () => {
+            const token0 = bscTokens.bnb;
+            const token1 = bscTokens.busd;
+
+            getTokensBalance('0x55cf452D43EfAfb505335cEe7e0BB368a37c322c', [
+              token0,
+              token1,
+            ]).then((ret) => {
+              console.log(ret);
+              ret.forEach((item) => {
+                console.log(item.currency.address, item.toSignificant());
+              });
+            });
+          }}
+        >
+          Get Balance
+        </Button>
+
+        <Button
+          onClick={() => {
+            getBnbBalance('0x55cf452D43EfAfb505335cEe7e0BB368a37c322c').then(
+              (ret) => {
+                console.log(ret);
+              }
+            );
+          }}
+        >
+          Get BNB Balance
         </Button>
       </div>
     </div>

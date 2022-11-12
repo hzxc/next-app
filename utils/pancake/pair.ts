@@ -1,7 +1,7 @@
 import { ContractCallContext, Multicall } from 'ethereum-multicall';
 import IPancakePairABI from 'abis/bsc/IPancakePair.json';
 import { bscProvider } from 'conf';
-import { Currency, CurrencyAmount, ERC20Token, Pair, Token } from 'eth';
+import { Currency, CurrencyAmount, Pair, Token } from 'eth';
 import { wrappedCurrency } from 'utils/wrappedCurrency';
 import invariant from 'tiny-invariant';
 import { compact, flatMap } from 'lodash';
