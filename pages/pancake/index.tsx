@@ -24,12 +24,7 @@ import { ethers } from 'ethers';
 import { JSBI, Percent, TradeDirection, _10000, _9975 } from 'eth';
 import { useTrade } from 'hooks/pancake/useTrade';
 
-import _Big from 'big.js';
-import toFormat from 'toformat';
 import { getBestBscProvider } from 'conf';
-import { spawn } from 'child_process';
-
-const Big = toFormat(_Big);
 
 const Pancake: NextPageWithLayout = () => {
   const { visible, close, open } = useToggle(false);
@@ -125,11 +120,6 @@ const Pancake: NextPageWithLayout = () => {
 
   return (
     <div>
-      {/* <div>{tradeData ? tradeData?.route.path.length : 'undefined'}</div>
-      <div>{amountToTradeDebounce}</div>
-      <div>{directionDebounce}</div> */}
-      {/* <div>{pancake.inputCurrency.address}</div> */}
-      {/* <div>{pancake.outputCurrency.address}</div> */}
       {JSON.stringify(tradeParam)}
       <TokenModal
         visible={visible}

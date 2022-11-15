@@ -39,7 +39,19 @@ const PingPage: NextPageWithLayout = () => {
     };
 
     Promise.all([
+      ping('https://bsc-dataseed.binance.org'),
+      ping('https://bsc-dataseed1.binance.org'),
+      ping('https://bsc-dataseed2.binance.org'),
+      ping('https://bsc-dataseed3.binance.org'),
+      ping('https://bsc-dataseed4.binance.org'),
+      ping('https://bsc-dataseed1.defibit.io'),
       ping('https://bsc-dataseed2.defibit.io'),
+      ping('https://bsc-dataseed3.defibit.io'),
+      ping('https://bsc-dataseed4.defibit.io'),
+      ping('https://bsc-dataseed1.ninicoin.io'),
+      ping('https://bsc-dataseed2.ninicoin.io'),
+      ping('https://bsc-dataseed3.ninicoin.io'),
+      ping('https://bsc-dataseed4.ninicoin.io'),
       ping('/binance/api/v3/time'),
       ping('/mexc/api/v3/time'),
       ping('/gstatic/generate_204'),
