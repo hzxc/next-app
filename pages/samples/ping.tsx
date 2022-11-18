@@ -27,12 +27,25 @@ const PingPage: NextPageWithLayout = () => {
       const start = dayjs().valueOf();
       let duration = 0;
       await axios
-        .options(url, { timeout: 1000 })
-        .catch(() => {})
-        .finally(() => {
+        .options(url, { timeout: 3000 })
+        .then(() => {
           duration = dayjs().valueOf() - start;
-          // return duration;
+        })
+        .catch((err: AxiosError) => {
+          console.log(err);
+          if (err.response?.status && err.response.status >= 400) {
+            duration = 9999;
+          } else if (err.code === 'ECONNABORTED') {
+            duration = 8888;
+          } else {
+            duration = dayjs().valueOf() - start;
+          }
+
+          // return { url: url, duration: duration };
         });
+      // .finally(() => {
+      //   duration = dayjs().valueOf() - start;
+      // });
 
       return { url: url, duration: duration };
       // return axios.options(url, { timeout: 3000 });
@@ -52,6 +65,7 @@ const PingPage: NextPageWithLayout = () => {
       ping('https://bsc-dataseed2.ninicoin.io'),
       ping('https://bsc-dataseed3.ninicoin.io'),
       ping('https://bsc-dataseed4.ninicoin.io'),
+      ping('/xxx'),
       ping('/binance/api/v3/time'),
       ping('/mexc/api/v3/time'),
       ping('/gstatic/generate_204'),
@@ -121,8 +135,8 @@ const PingPage: NextPageWithLayout = () => {
   }, []);
 
   return (
-    <div className='font-sans p-4 space-x-2'>
-      <Button onClick={handleClick}>axios</Button>
+    <div className='p-4 space-x-2'>
+      <Button onClick={handleClick}>Ping</Button>
       <Button
         onClick={() => {
           console.log(bscUrl);

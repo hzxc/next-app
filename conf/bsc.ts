@@ -61,8 +61,10 @@ export const getBscUrl = () => {
         duration = dayjs().valueOf() - start;
       })
       .catch((err: AxiosError) => {
-        if (err.response?.status && err.response.status >= 500) {
+        if (err.response?.status && err.response.status >= 400) {
           duration = 9999;
+        } else if (err.code === 'ECONNABORTED') {
+          duration = 8888;
         } else {
           duration = dayjs().valueOf() - start;
         }
