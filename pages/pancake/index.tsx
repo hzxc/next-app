@@ -120,7 +120,10 @@ const Pancake: NextPageWithLayout = () => {
 
   return (
     <div>
-      {JSON.stringify(tradeParam)}
+      <div>
+        <p>{JSON.stringify(tradeParam)}</p>
+        <p>length:{pancakePersist.tokens?.length}</p>
+      </div>
       <TokenModal
         visible={visible}
         modalClose={close}

@@ -27,8 +27,16 @@ const PingPage: NextPageWithLayout = () => {
       const start = dayjs().valueOf();
       let duration = 0;
       await axios
-        .options(url, { timeout: 3000 })
-        .then(() => {
+        .get(url, {
+          timeout: 3000,
+          // proxy: {
+          //   protocol: 'http',
+          //   host: '127.0.0.1',
+          //   port: 7890,
+          // },
+        })
+        .then((data) => {
+          // console.log(data);
           duration = dayjs().valueOf() - start;
         })
         .catch((err: AxiosError) => {
@@ -52,23 +60,27 @@ const PingPage: NextPageWithLayout = () => {
     };
 
     Promise.all([
-      ping('https://bsc-dataseed.binance.org'),
-      ping('https://bsc-dataseed1.binance.org'),
-      ping('https://bsc-dataseed2.binance.org'),
-      ping('https://bsc-dataseed3.binance.org'),
-      ping('https://bsc-dataseed4.binance.org'),
-      ping('https://bsc-dataseed1.defibit.io'),
-      ping('https://bsc-dataseed2.defibit.io'),
-      ping('https://bsc-dataseed3.defibit.io'),
-      ping('https://bsc-dataseed4.defibit.io'),
-      ping('https://bsc-dataseed1.ninicoin.io'),
-      ping('https://bsc-dataseed2.ninicoin.io'),
-      ping('https://bsc-dataseed3.ninicoin.io'),
-      ping('https://bsc-dataseed4.ninicoin.io'),
-      ping('/xxx'),
+      // ping('https://bsc-dataseed.binance.org'),
+      // ping('https://bsc-dataseed1.binance.org'),
+      // ping('https://bsc-dataseed2.binance.org'),
+      // ping('https://bsc-dataseed3.binance.org'),
+      // ping('https://bsc-dataseed4.binance.org'),
+      // ping('https://bsc-dataseed1.defibit.io'),
+      // ping('https://bsc-dataseed2.defibit.io'),
+      // ping('https://bsc-dataseed3.defibit.io'),
+      // ping('https://bsc-dataseed4.defibit.io'),
+      // ping('https://bsc-dataseed1.ninicoin.io'),
+      // ping('https://bsc-dataseed2.ninicoin.io'),
+      // ping('https://bsc-dataseed3.ninicoin.io'),
+      // ping('https://bsc-dataseed4.ninicoin.io'),
+      // ping('https://tokens.pancakeswap.finance/pancakeswap-extended.json'),
+      ping('/pancake/pancakeswap-extended.json'),
+      // ping('https://ifconfig.me/'),
       ping('/binance/api/v3/time'),
+      ping('https://api.binance.com/api/v3/time'),
+      // ping('/gstatic/generate_204'),
+      // ping('/google'),
       ping('/mexc/api/v3/time'),
-      ping('/gstatic/generate_204'),
     ]).then((results) => {
       const sortRet = results.sort((a, b) => {
         return a.duration - b.duration;
@@ -134,6 +146,22 @@ const PingPage: NextPageWithLayout = () => {
     getBestBscProvider();
   }, []);
 
+  const fetchClick = () => {
+    fetch('/binance/api/v3/time', {
+      // fetch('/mexc/api/v3/time', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((resp) => {
+        console.log(resp);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className='p-4 space-x-2'>
       <Button onClick={handleClick}>Ping</Button>
@@ -145,6 +173,7 @@ const PingPage: NextPageWithLayout = () => {
         get bsc url
       </Button>
       <Button onClick={getServerTime}>Get Server Time</Button>
+      <Button onClick={fetchClick}>Fetch</Button>
     </div>
   );
 };

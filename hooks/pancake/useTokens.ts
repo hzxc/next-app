@@ -17,6 +17,13 @@ const getTokens = async () => {
   const extended = await http('/pancake/pancakeswap-extended.json');
   const cmc = await http('/pancake/cmc.json');
   const coingecko = await http('/pancake/coingecko.json');
+  // const extended = await http(
+  //   'https://tokens.pancakeswap.finance/pancakeswap-extended.json'
+  // );
+  // const cmc = await http('https://tokens.pancakeswap.finance/cmc.json');
+  // const coingecko = await http(
+  //   'https://tokens.pancakeswap.finance/coingecko.json'
+  // );
 
   baseTokens.forEach((item: IToken) => {
     if (!map.has(item.address)) {

@@ -2,7 +2,7 @@ import { spawn } from 'child_process';
 import { Button, IconButton, ToggleButton } from 'components';
 import { Layout } from 'components/layout';
 import { ethers, utils } from 'ethers';
-import { getBnbBalance, useCakePrice } from 'hooks/pancake';
+import { useCakePrice } from 'hooks/pancake';
 import { NextPageWithLayout } from 'pages/_app';
 import { ReactElement, useState } from 'react';
 import { bscBusdAddr, bscCakeAddr } from 'data/constants';
