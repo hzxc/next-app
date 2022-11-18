@@ -56,7 +56,7 @@ export const getBscUrl = () => {
     const start = dayjs().valueOf();
     let duration = 0;
     await axios
-      .options(item, { timeout: 1000 })
+      .options(item, { timeout: 3000 })
       .then(() => {
         duration = dayjs().valueOf() - start;
       })
