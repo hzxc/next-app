@@ -195,9 +195,9 @@ const PingPage: NextPageWithLayout = () => {
   const axios1Click = () => {
     axios({
       method: 'options',
-      // url: 'https://ifconfig.me/',
+      url: 'https://ifconfig.me/',
       // url: 'http://www.gstatic.com/generate_204',
-      url: 'https://tokens.pancakeswap.finance/pancakeswap-extended.json',
+      // url: 'https://tokens.pancakeswap.finance/pancakeswap-extended.json',
       // url: 'https://api.binance.com/api/v3/time',
       // url: 'https://api.mexc.com/api/v3/time',
     })
