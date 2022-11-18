@@ -63,6 +63,8 @@ export const getBscUrl = () => {
       .catch((err: AxiosError) => {
         if (err.response?.status && err.response.status >= 400) {
           duration = 9999;
+        } else if (err.code === 'ERR_NETWORK') {
+          duration = 9999;
         } else if (err.code === 'ECONNABORTED') {
           duration = 8888;
         } else {

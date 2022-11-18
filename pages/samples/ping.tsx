@@ -47,6 +47,8 @@ const PingPage: NextPageWithLayout = () => {
             duration = 9999;
           } else if (err.code === 'ECONNABORTED') {
             duration = 8888;
+          } else if (err.code === 'ERR_NETWORK') {
+            duration = 9999;
           } else {
             duration = dayjs().valueOf() - start;
           }
@@ -195,8 +197,8 @@ const PingPage: NextPageWithLayout = () => {
       method: 'options',
       // url: 'https://ifconfig.me/',
       // url: 'http://www.gstatic.com/generate_204',
-      // url: 'https://tokens.pancakeswap.finance/pancakeswap-extended.json',
-      url: 'https://api.binance.com/api/v3/time',
+      url: 'https://tokens.pancakeswap.finance/pancakeswap-extended.json',
+      // url: 'https://api.binance.com/api/v3/time',
       // url: 'https://api.mexc.com/api/v3/time',
     })
       .then(function (response) {
