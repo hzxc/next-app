@@ -175,7 +175,7 @@ const PingPage: NextPageWithLayout = () => {
       // .get('https://ifconfig.me/')
       // .get('http://www.gstatic.com/generate_204')
       // .get('https://tokens.pancakeswap.finance/pancakeswap-extended.json')
-      .get('https://api.mexc.com/api/v3/time')
+      .options('https://api.mexc.com/api/v3/time')
       .then(function (response) {
         // handle success
         console.log(response);
@@ -192,12 +192,12 @@ const PingPage: NextPageWithLayout = () => {
 
   const axios1Click = () => {
     axios({
-      method: 'get',
+      method: 'options',
       // url: 'https://ifconfig.me/',
       // url: 'http://www.gstatic.com/generate_204',
       // url: 'https://tokens.pancakeswap.finance/pancakeswap-extended.json',
-      // url: 'https://api.binance.com/api/v3/time',
-      url: 'https://api.mexc.com/api/v3/time',
+      url: 'https://api.binance.com/api/v3/time',
+      // url: 'https://api.mexc.com/api/v3/time',
     })
       .then(function (response) {
         // handle success
