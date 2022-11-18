@@ -10,20 +10,21 @@ import { bscProvider } from 'conf';
 import { IBEP20ABI } from 'abis/bsc';
 import { bscMultiQueryAddr } from 'data/constants';
 import { MultiQueryABI } from 'abis';
+import axios from 'axios';
 
 const getTokens = async () => {
   const array: IToken[] = [];
   const map = new Map<string, number>();
-  const extended = await http('/pancake/pancakeswap-extended.json');
-  const cmc = await http('/pancake/cmc.json');
-  const coingecko = await http('/pancake/coingecko.json');
-  // const extended = await http(
-  //   'https://tokens.pancakeswap.finance/pancakeswap-extended.json'
-  // );
-  // const cmc = await http('https://tokens.pancakeswap.finance/cmc.json');
-  // const coingecko = await http(
-  //   'https://tokens.pancakeswap.finance/coingecko.json'
-  // );
+  // const extended = await http('/pancake/pancakeswap-extended.json');
+  // const cmc = await http('/pancake/cmc.json');
+  // const coingecko = await http('/pancake/coingecko.json');
+  const extended = await http(
+    'https://tokens.pancakeswap.finance/pancakeswap-extended.json'
+  );
+  const cmc = await http('https://tokens.pancakeswap.finance/cmc.json');
+  const coingecko = await http(
+    'https://tokens.pancakeswap.finance/coingecko.json'
+  );
 
   baseTokens.forEach((item: IToken) => {
     if (!map.has(item.address)) {

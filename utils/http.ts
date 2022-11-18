@@ -12,10 +12,10 @@ export const http = (
   const config = {
     url: url,
     method: 'get',
-    headers: {
-      Authorization: token ? `Bearer ${token}` : '',
-      'Content-Type': data ? 'application/json' : '',
-    },
+    // headers: {
+    //   Authorization: token ? `Bearer ${token}` : '',
+    //   'Content-Type': data ? 'application/json' : '',
+    // },
     data,
     ...restonfig,
   };

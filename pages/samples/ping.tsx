@@ -29,7 +29,7 @@ const PingPage: NextPageWithLayout = () => {
       const start = dayjs().valueOf();
       let duration = 0;
       await axios
-        .get(url, {
+        .options(url, {
           timeout: 3000,
           // proxy: {
           //   protocol: 'http',
@@ -62,27 +62,25 @@ const PingPage: NextPageWithLayout = () => {
     };
 
     Promise.all([
-      // ping('https://bsc-dataseed.binance.org'),
-      // ping('https://bsc-dataseed1.binance.org'),
-      // ping('https://bsc-dataseed2.binance.org'),
-      // ping('https://bsc-dataseed3.binance.org'),
-      // ping('https://bsc-dataseed4.binance.org'),
-      // ping('https://bsc-dataseed1.defibit.io'),
-      // ping('https://bsc-dataseed2.defibit.io'),
-      // ping('https://bsc-dataseed3.defibit.io'),
-      // ping('https://bsc-dataseed4.defibit.io'),
-      // ping('https://bsc-dataseed1.ninicoin.io'),
-      // ping('https://bsc-dataseed2.ninicoin.io'),
-      // ping('https://bsc-dataseed3.ninicoin.io'),
-      // ping('https://bsc-dataseed4.ninicoin.io'),
-      // ping('https://tokens.pancakeswap.finance/pancakeswap-extended.json'),
-      ping('/pancake/pancakeswap-extended.json'),
-      // ping('https://ifconfig.me/'),
-      ping('/binance/api/v3/time'),
+      ping('https://bsc-dataseed.binance.org'),
+      ping('https://bsc-dataseed1.binance.org'),
+      ping('https://bsc-dataseed2.binance.org'),
+      ping('https://bsc-dataseed3.binance.org'),
+      ping('https://bsc-dataseed4.binance.org'),
+      ping('https://bsc-dataseed1.defibit.io'),
+      ping('https://bsc-dataseed2.defibit.io'),
+      ping('https://bsc-dataseed3.defibit.io'),
+      ping('https://bsc-dataseed4.defibit.io'),
+      ping('https://bsc-dataseed1.ninicoin.io'),
+      ping('https://bsc-dataseed2.ninicoin.io'),
+      ping('https://bsc-dataseed3.ninicoin.io'),
+      ping('https://bsc-dataseed4.ninicoin.io'),
+      ping('https://tokens.pancakeswap.finance/pancakeswap-extended.json'),
+      ping('https://ifconfig.me/'),
+      ping('http://www.gstatic.com/generate_204'),
+      ping('https://www.google.com'),
       ping('https://api.binance.com/api/v3/time'),
-      // ping('/gstatic/generate_204'),
-      // ping('/google'),
-      ping('/mexc/api/v3/time'),
+      ping('https://api.mexc.com/api/v3/time'),
     ]).then((results) => {
       const sortRet = results.sort((a, b) => {
         return a.duration - b.duration;
@@ -166,8 +164,57 @@ const PingPage: NextPageWithLayout = () => {
       });
   };
 
+  const axiosClick = () => {
+    axios
+      // .get('https://api.binance.com/api/v3/time')
+      //   // url: 'https://ifconfig.me/',
+      //   // url: 'http://www.gstatic.com/generate_204',
+      //   // url: 'https://tokens.pancakeswap.finance/pancakeswap-extended.json',
+      //   url: 'https://api.binance.com/api/v3/time',
+      //   // url: 'https://api.mexc.com/api/v3/time',
+      // .get('https://ifconfig.me/')
+      // .get('http://www.gstatic.com/generate_204')
+      // .get('https://tokens.pancakeswap.finance/pancakeswap-extended.json')
+      .get('https://api.mexc.com/api/v3/time')
+      .then(function (response) {
+        // handle success
+        console.log(response);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .finally(function () {
+        console.log('----------------');
+        // always executed
+      });
+  };
+
+  const axios1Click = () => {
+    axios({
+      method: 'get',
+      // url: 'https://ifconfig.me/',
+      // url: 'http://www.gstatic.com/generate_204',
+      // url: 'https://tokens.pancakeswap.finance/pancakeswap-extended.json',
+      // url: 'https://api.binance.com/api/v3/time',
+      url: 'https://api.mexc.com/api/v3/time',
+    })
+      .then(function (response) {
+        // handle success
+        console.log(response);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .finally(function () {
+        console.log('----------------');
+        // always executed
+      });
+  };
+
   return (
-    <div className='p-4 space-x-2'>
+    <div className='flex items-center flex-wrap p-4 gap-2'>
       <Button onClick={handleClick}>Ping</Button>
       <Button
         onClick={() => {
@@ -178,6 +225,8 @@ const PingPage: NextPageWithLayout = () => {
       </Button>
       <Button onClick={getServerTime}>Get Server Time</Button>
       <Button onClick={fetchClick}>Fetch</Button>
+      <Button onClick={axiosClick}>Axios</Button>
+      <Button onClick={axios1Click}>Axios1</Button>
 
       <div>{JSON.stringify(axiosRet)}</div>
     </div>
