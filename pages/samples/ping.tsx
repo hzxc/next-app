@@ -2,11 +2,13 @@ import axios, { AxiosError } from 'axios';
 import { Button } from 'components';
 import { Layout } from 'components/layout';
 import { NextPageWithLayout } from 'pages/_app';
-import { ReactElement, useEffect } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import { bscUrl, getBestBscProvider, getBscUrl } from 'conf';
+import { bscUrl, getBestBscProvider } from 'conf';
 
 const PingPage: NextPageWithLayout = () => {
+  const [axiosRet, setAxiosRet] = useState<any>();
+
   const handleClick = async () => {
     // const start = dayjs().valueOf();
     // console.log(start);
@@ -85,6 +87,7 @@ const PingPage: NextPageWithLayout = () => {
       const sortRet = results.sort((a, b) => {
         return a.duration - b.duration;
       });
+      setAxiosRet(sortRet);
       console.log(sortRet);
       // console.log(results);
       // results.map((item, i) => {});
@@ -98,12 +101,12 @@ const PingPage: NextPageWithLayout = () => {
       .get('/mexc/api/v3/time', {
         // .get('https://api.mexc.com/api/v3/time', {
         // timeout: 2000,
-        // headers: { Accept: '*/*', ContentType: 'application/json' },
-        // proxy: {
-        //   protocol: 'http',
-        //   host: '127.0.0.1',
-        //   port: 7890,
-        // },
+        headers: { Accept: '*/*', ContentType: 'application/json' },
+        proxy: {
+          protocol: 'http',
+          host: '127.0.0.1',
+          port: 7890,
+        },
       })
       .then((ret) => {
         console.log('----------------------');
@@ -147,8 +150,9 @@ const PingPage: NextPageWithLayout = () => {
   }, []);
 
   const fetchClick = () => {
-    fetch('/binance/api/v3/time', {
+    fetch('https://api.binance.com/api/v3/time', {
       // fetch('/mexc/api/v3/time', {
+      mode: 'cors',
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -174,6 +178,8 @@ const PingPage: NextPageWithLayout = () => {
       </Button>
       <Button onClick={getServerTime}>Get Server Time</Button>
       <Button onClick={fetchClick}>Fetch</Button>
+
+      <div>{JSON.stringify(axiosRet)}</div>
     </div>
   );
 };
