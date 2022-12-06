@@ -113,7 +113,7 @@ const PingPage: NextPageWithLayout = () => {
     //     console.log(err);
     //   });
     axios
-      .get('https://api.mexc.com/api/v3/time', {
+      .get('/mexc/api/v3/time', {
         // .get('https://tokens.pancakeswap.finance/pancakeswap-extended.json', {
         // https://tokens.pancakeswap.finance/pancakeswap-extended.json
         // .get('https://api.mexc.com/api/v3/time', {
@@ -163,14 +163,13 @@ const PingPage: NextPageWithLayout = () => {
   };
 
   useEffect(() => {
-    getBestBscProvider();
-    getServerTime();
+    // getBestBscProvider();
+    // getServerTime();
   }, []);
 
   const fetchClick = () => {
-    fetch('https://api.binance.com/api/v3/time', {
-      // fetch('/mexc/api/v3/time', {
-      mode: 'cors',
+    // fetch('https://api.binance.com/api/v3/time', {
+    fetch('/pancake/pancakeswap-extended.json', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
