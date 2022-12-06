@@ -96,17 +96,34 @@ const PingPage: NextPageWithLayout = () => {
   };
 
   const getServerTime = () => {
-    // getBscUrl();
+    // axios({
+    //   method: 'get',
+    //   url: 'https://api.mexc.com/api/v3/time',
+    // })
+    //   .then((ret) => {
+    //     console.log('----------------------');
+    //     console.log('get /mexc/api/v3/time');
+    //     console.log('status', ret.status);
+    //     console.log(ret);
+    //   })
+    //   .catch((err: AxiosError) => {
+    //     console.log('----------------------');
+    //     console.log('catch /mexc/api/v3/time');
+    //     console.log('status', err.response?.status);
+    //     console.log(err);
+    //   });
     axios
-      .get('/mexc/api/v3/time', {
+      .get('https://api.mexc.com/api/v3/time', {
+        // .get('https://tokens.pancakeswap.finance/pancakeswap-extended.json', {
+        // https://tokens.pancakeswap.finance/pancakeswap-extended.json
         // .get('https://api.mexc.com/api/v3/time', {
         // timeout: 2000,
-        headers: { Accept: '*/*', ContentType: 'application/json' },
-        proxy: {
-          protocol: 'http',
-          host: '127.0.0.1',
-          port: 7890,
-        },
+        // headers: { ContentType: 'application/json' },
+        // proxy: {
+        //   protocol: 'http',
+        //   host: '192.168.123.88',
+        //   port: 7890,
+        // },
       })
       .then((ret) => {
         console.log('----------------------');
@@ -147,6 +164,7 @@ const PingPage: NextPageWithLayout = () => {
 
   useEffect(() => {
     getBestBscProvider();
+    getServerTime();
   }, []);
 
   const fetchClick = () => {
