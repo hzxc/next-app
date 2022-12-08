@@ -41,6 +41,9 @@ export default function Sidebar() {
               Ethereum Multicall
             </Link>
           </MenuItem>
+          <MenuItem>
+            <Link href='/samples/ethers/swap'>Swap</Link>
+          </MenuItem>
         </SubMenu>
         <SubMenu subTitle='Samples'>
           <MenuItem>
