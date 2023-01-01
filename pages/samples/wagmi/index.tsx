@@ -1,7 +1,4 @@
-import { IconButton } from 'components';
 import { Layout } from 'components/layout';
-import { utils } from 'ethers';
-import { useCakePrice } from 'hooks/pancake';
 import { NextPageWithLayout } from 'pages/_app';
 import { ReactElement } from 'react';
 

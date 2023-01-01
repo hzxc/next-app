@@ -10,7 +10,6 @@ import { bscProvider } from 'conf';
 import { IBEP20ABI } from 'abis/bsc';
 import { bscMultiQueryAddr } from 'data/constants';
 import { MultiQueryABI } from 'abis';
-import axios from 'axios';
 
 const getTokens = async () => {
   const array: IToken[] = [];
@@ -22,6 +21,7 @@ const getTokens = async () => {
     'https://tokens.pancakeswap.finance/pancakeswap-extended.json'
   );
   const cmc = await http('https://tokens.pancakeswap.finance/cmc.json');
+
   const coingecko = await http(
     'https://tokens.pancakeswap.finance/coingecko.json'
   );
