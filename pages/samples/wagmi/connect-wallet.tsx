@@ -6,8 +6,8 @@ import {
   useAccount,
   useConnect,
   useDisconnect,
+  useEnsAddress,
   useEnsAvatar,
-  useEnsName,
 } from 'wagmi';
 import { Button } from 'components';
 import dayjs from 'dayjs';
@@ -15,9 +15,15 @@ import dayjs from 'dayjs';
 const ConnectWallet: NextPageWithLayout = () => {
   const { address, connector, isConnected } = useAccount();
   // const { data: ensAvatar } = useEnsAvatar({ addressOrName: address });
-  const { data: ensAvatar } = useEnsAvatar({ addressOrName: 'nick.eth' });
 
-  // const { data: ensName } = useEnsName({ address });
+  const {
+    data: ensAvatar,
+    isError: ensAvatarIsError,
+    isLoading: ensAvatarIsLoading,
+  } = useEnsAvatar({
+    addressOrName: 'nick.eth',
+  });
+
   const { connect, connectors, error, isLoading, pendingConnector } =
     useConnect();
   const { disconnect } = useDisconnect();
@@ -25,23 +31,31 @@ const ConnectWallet: NextPageWithLayout = () => {
   if (isConnected) {
     return (
       // <div className='p-4 space-y-1'>
-      <div className='w-96 mx-auto text-center rounded-xl shadow-lg p-8 space-y-2'>
+      <div className='flex flex-col items-center w-96 mx-auto mt-4 rounded-3xl shadow-xl p-4 gap-1 border-4 border-zinc-400 text-lg'>
         {/* {ensAvatar ? (
           <Image src={ensAvatar} alt='avatar' width={48} height={48} />
         ) : undefined} */}
-        {ensAvatar ? (
-          <div className='h-20 w-20'>
+        {/* {ensAvatar ? (
+          <div className='relative h-20 w-20'>
             <Image
               src={ensAvatar}
               alt='avatar'
               layout='fill'
-              objectFit='cover'
               className='rounded-full'
             />
           </div>
-        ) : undefined}
+        ) : undefined} */}
 
         <div className='relative h-20 w-20'>
+          <Image
+            src={ensAvatar ?? `https://robohash.org/${dayjs().unix()}`}
+            alt='avatar'
+            layout='fill'
+            className='rounded-full'
+          />
+        </div>
+
+        {/* <div className='relative h-20 w-20'>
           <Image
             src={`https://robohash.org/${dayjs().unix()}`}
             alt='avatar'
@@ -49,7 +63,7 @@ const ConnectWallet: NextPageWithLayout = () => {
             objectFit='cover'
             className='rounded-full'
           />
-        </div>
+        </div> */}
 
         <div>
           {address
@@ -70,8 +84,8 @@ const ConnectWallet: NextPageWithLayout = () => {
   }
 
   return (
-    <div className='w-96 mx-auto my-4'>
-      <div className='flex flex-col items-stretch gap-2 rounded-3xl border-4 p-6 border-zinc-400 text-lg text-zinc-300'>
+    <div className='w-96 mx-auto mt-4 '>
+      <div className='flex flex-col items-stretch gap-2 rounded-3xl shadow-xl border-4 p-6 border-zinc-400 text-lg text-zinc-300'>
         {connectors.map((connector) => (
           <button
             className='rounded-2xl bg-zinc-700 p-4 hover:opacity-80 active:translate-y-px'

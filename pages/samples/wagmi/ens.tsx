@@ -6,19 +6,18 @@ import Image from 'next/image';
 
 const EnsDemo: NextPageWithLayout = () => {
   const {
-    data: ensAddr,
-    isError: ensAddrIsError,
-    isLoading: ensAddrIsLoading,
-  } = useEnsAddress({
-    name: 'nick.eth',
-  });
-
-  const {
     data: ensAvatar,
     isError: ensAvatarIsError,
     isLoading: ensAvatarIsLoading,
   } = useEnsAvatar({
     addressOrName: 'nick.eth',
+  });
+  const {
+    data: ensAddr,
+    isError: ensAddrIsError,
+    isLoading: ensAddrIsLoading,
+  } = useEnsAddress({
+    name: 'nick.eth',
   });
 
   const {
