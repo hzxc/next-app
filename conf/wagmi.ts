@@ -37,8 +37,8 @@ const bscTestChain: Chain = {
     decimals: 18,
   },
   rpcUrls: {
-    public: '/bsctestapi/rpc/',
-    default: '/bsctestapi/rpc/',
+    public: 'https://data-seed-prebsc-2-s3.binance.org:8545',
+    default: 'https://data-seed-prebsc-2-s3.binance.org:8545',
   },
   blockExplorers: {
     default: { name: 'bscscan testnet', url: 'https://testnet.bscscan.com/' },
