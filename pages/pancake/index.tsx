@@ -122,7 +122,8 @@ const Pancake: NextPageWithLayout = () => {
     <div>
       <div>
         <p>{JSON.stringify(tradeParam)}</p>
-        <p>length:{pancakePersist.tokens?.length}</p>
+        <p>tokens length:{pancakePersist.tokens?.length}</p>
+        <p>base tokens length:{pancakePersist.baseTokens?.length}</p>
       </div>
       <TokenModal
         visible={visible}

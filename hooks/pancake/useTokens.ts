@@ -38,7 +38,7 @@ const getTokens = async () => {
   extended.tokens?.forEach((item: IToken) => {
     if (!map.has(item.address)) {
       map.set(item.address, 0);
-      item.source = 'PancakeSwap Extended';
+      // item.source = 'PancakeSwap Extended';
       baseArray.push(item);
     }
   });
@@ -159,7 +159,7 @@ export const useTokens = () => {
     onSuccess: (data) => {
       const { baseArray, array } = data;
       dispatch(setTokens(array));
-      dispatch(setBaseTokens(array));
+      dispatch(setBaseTokens(baseArray));
     },
   });
 };
