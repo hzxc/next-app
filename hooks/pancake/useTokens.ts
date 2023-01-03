@@ -3,7 +3,7 @@ import { baseTokens } from 'data/pancake';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import { IToken } from 'redux/pancake/pancakeSlice';
 import { http } from 'utils';
-import { setTokens } from 'redux/pancake/pancakePersistSlice';
+import { setBaseTokens, setTokens } from 'redux/pancake/pancakePersistSlice';
 import { selectPancakePersist } from 'redux/pancake/pancakePersistSlice';
 import { BigNumber, ethers } from 'ethers';
 import { bscProvider } from 'conf';
@@ -12,7 +12,9 @@ import { bscMultiQueryAddr } from 'data/constants';
 import { MultiQueryABI } from 'abis';
 
 const getTokens = async () => {
+  const baseArray: IToken[] = [];
   const array: IToken[] = [];
+
   const map = new Map<string, number>();
   // const extended = await http('/pancake/pancakeswap-extended.json');
   // const cmc = await http('/pancake/cmc.json');
@@ -29,7 +31,7 @@ const getTokens = async () => {
   baseTokens.forEach((item: IToken) => {
     if (!map.has(item.address)) {
       map.set(item.address, 0);
-      // array.push(item);
+      baseArray.push(item);
     }
   });
 
@@ -37,7 +39,7 @@ const getTokens = async () => {
     if (!map.has(item.address)) {
       map.set(item.address, 0);
       item.source = 'PancakeSwap Extended';
-      array.push(item);
+      baseArray.push(item);
     }
   });
 
@@ -57,7 +59,7 @@ const getTokens = async () => {
     }
   });
 
-  return array;
+  return { baseArray, array };
 };
 
 const searchTokens = async (
@@ -155,7 +157,9 @@ export const useTokens = () => {
   const dispatch = useAppDispatch();
   return useMutation(getTokens, {
     onSuccess: (data) => {
-      dispatch(setTokens(data));
+      const { baseArray, array } = data;
+      dispatch(setTokens(array));
+      dispatch(setBaseTokens(array));
     },
   });
 };
