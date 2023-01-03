@@ -5,16 +5,12 @@ import Image from 'next/image';
 import { useAccount, useConnect, useDisconnect, useEnsAvatar } from 'wagmi';
 import { Button } from 'components';
 import dayjs from 'dayjs';
+import React from 'react';
 
-const ConnectWallet: NextPageWithLayout = () => {
+const SendTransaction: NextPageWithLayout = () => {
   const { address, connector, isConnected } = useAccount();
-  // const { data: ensAvatar } = useEnsAvatar({ addressOrName: address });
 
-  const {
-    data: ensAvatar,
-    isError: ensAvatarIsError,
-    isLoading: ensAvatarIsLoading,
-  } = useEnsAvatar({
+  const { data: ensAvatar } = useEnsAvatar({
     addressOrName: 'nick.eth',
   });
 
@@ -22,24 +18,13 @@ const ConnectWallet: NextPageWithLayout = () => {
     useConnect();
   const { disconnect } = useDisconnect();
 
+  const [to, setTo] = React.useState('');
+
+  const [amount, setAmount] = React.useState('');
+
   if (isConnected) {
     return (
-      // <div className='p-4 space-y-1'>
-      <div className='flex flex-col items-center w-96 mx-auto mt-4 rounded-3xl shadow-xl p-4 gap-1 border-4 border-zinc-400 text-lg'>
-        {/* {ensAvatar ? (
-          <Image src={ensAvatar} alt='avatar' width={48} height={48} />
-        ) : undefined} */}
-        {/* {ensAvatar ? (
-          <div className='relative h-20 w-20'>
-            <Image
-              src={ensAvatar}
-              alt='avatar'
-              layout='fill'
-              className='rounded-full'
-            />
-          </div>
-        ) : undefined} */}
-
+      <div className='flex flex-col items-center w-96 mx-auto mt-4 rounded-3xl shadow-xl p-4 gap-2 border-4 border-zinc-400 text-lg'>
         <div className='relative h-20 w-20'>
           <Image
             src={ensAvatar ?? `https://robohash.org/${dayjs().unix()}`}
@@ -48,16 +33,6 @@ const ConnectWallet: NextPageWithLayout = () => {
             className='rounded-full'
           />
         </div>
-
-        {/* <div className='relative h-20 w-20'>
-          <Image
-            src={`https://robohash.org/${dayjs().unix()}`}
-            alt='avatar'
-            layout='fill'
-            objectFit='cover'
-            className='rounded-full'
-          />
-        </div> */}
 
         <div>
           {address
@@ -73,6 +48,28 @@ const ConnectWallet: NextPageWithLayout = () => {
         >
           Disconnect
         </Button>
+        <div className='w-full space-y-1'>
+          <p>Recipient</p>
+          <input
+            className='p-3 w-full bg-zinc-200 rounded-2xl focus-visible:outline-0 focus:ring'
+            aria-label='Recipient'
+            placeholder='0xA0Cf…251e'
+            onChange={(e) => setTo(e.target.value)}
+            value={to}
+          />
+        </div>
+        <div className='w-full space-y-1'>
+          <p>Amount (ether)</p>
+          <input
+            className='p-3 w-full bg-zinc-200 rounded-2xl focus-visible:outline-0 focus:ring'
+            aria-label='Amount (ether)'
+            placeholder='0.05'
+            onChange={(e) => setAmount(e.target.value)}
+            value={amount}
+          />
+        </div>
+
+        <Button disabled={!to || !amount}>Send</Button>
       </div>
     );
   }
@@ -101,8 +98,8 @@ const ConnectWallet: NextPageWithLayout = () => {
   );
 };
 
-ConnectWallet.getLayout = function getLayout(page: ReactElement) {
+SendTransaction.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };
 
-export default ConnectWallet;
+export default SendTransaction;
