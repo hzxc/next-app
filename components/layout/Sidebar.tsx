@@ -114,6 +114,9 @@ export default function Sidebar() {
             </Link>
           </MenuItem>
           <MenuItem>
+            <Link href='/samples/wagmi/sign-message'>Sign Message</Link>
+          </MenuItem>
+          <MenuItem>
             <Link href='/samples/wagmi/contract-read'>Contract Read</Link>
           </MenuItem>
         </SubMenu>
