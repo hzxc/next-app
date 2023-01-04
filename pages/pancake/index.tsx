@@ -1,4 +1,9 @@
-import { Layout, PanButton, TokenModal } from 'components/pancake';
+import {
+  ConnectWalletModal,
+  Layout,
+  PanButton,
+  TokenModal,
+} from 'components/pancake';
 import ChartSvg from '/public/images/pancake/chart.svg';
 import SettingSvg from '/public/images/pancake/setting.svg';
 import HistorySvg from '/public/images/pancake/history.svg';
@@ -25,9 +30,15 @@ import { JSBI, Percent, TradeDirection, _10000, _9975 } from 'eth';
 import { useTrade } from 'hooks/pancake/useTrade';
 
 import { getBestBscProvider } from 'conf';
+import { useAccount } from 'wagmi';
 
 const Pancake: NextPageWithLayout = () => {
   const { visible, close, open } = useToggle(false);
+  const {
+    visible: connModalVisible,
+    close: connModalClose,
+    open: connModalOpen,
+  } = useToggle(false);
   const { mutate, isIdle } = useTokens();
   const pancake = useAppSelector(selectPancake);
   const pancakePersist = useAppSelector(selectPancakePersist);
@@ -118,12 +129,32 @@ const Pancake: NextPageWithLayout = () => {
     setTradeDirection();
   };
 
+  const { address, isConnected } = useAccount();
+
+  const [btnTxt, setBtnTxt] = useState('Connect Wallet');
+
+  useEffect(() => {
+    if (!isConnected) {
+      setBtnTxt('Connect Wallet');
+    } else if (!tradeParam.direction && Number(tradeParam.amountToTrade) <= 0) {
+      setBtnTxt('Enter an amount');
+    } else if (tradeParam.direction && Number(tradeParam.amountToTrade) <= 0) {
+      setBtnTxt('Enter an amount');
+    } else if (Number(inVal) > Number(curBal.inBal)) {
+      setBtnTxt(`Insufficient ${pancake.inputCurrency.symbol} balance`);
+    } else {
+      setBtnTxt('Swap');
+    }
+  }, [isConnected, tradeParam, inVal, curBal]);
+
   return (
-    <div>
+    <div className='w-[328px]'>
       <div>
         <p>{JSON.stringify(tradeParam)}</p>
         <p>tokens length:{pancakePersist.tokens?.length}</p>
         <p>base tokens length:{pancakePersist.baseTokens?.length}</p>
+        <p>isConnected:{JSON.stringify(isConnected)}</p>
+        <p>address:{address}</p>
       </div>
       <TokenModal
         visible={visible}
@@ -131,6 +162,7 @@ const Pancake: NextPageWithLayout = () => {
         source={source}
         setTradeDirection={setTradeDirection}
       />
+      <ConnectWalletModal visible={connModalVisible} close={connModalClose} />
       <div className='flex flex-col border border-[#e7e3eb] rounded-3xl bg-white shadow-sm'>
         <div className='p-6 border-b'>
           <div className='flex items-center justify-between'>
@@ -195,10 +227,13 @@ const Pancake: NextPageWithLayout = () => {
             value={inVal}
             onChange={(e) => {
               if (!isNaN(Number(e.target.value))) {
+                // if (Number(e.target.value) > 0) {
                 setTradeParam({
                   amountToTrade: e.target.value,
                   direction: TradeDirection.input,
                 });
+                // }
+
                 setInVal(e.target.value);
               }
             }}
@@ -252,10 +287,13 @@ const Pancake: NextPageWithLayout = () => {
             value={outVal}
             onChange={(e) => {
               if (!isNaN(Number(e.target.value))) {
+                // if (Number(e.target.value) > 0) {
                 setTradeParam({
                   amountToTrade: e.target.value,
                   direction: TradeDirection.output,
                 });
+                // }
+
                 setOutVal(e.target.value);
               }
             }}
@@ -269,24 +307,23 @@ const Pancake: NextPageWithLayout = () => {
             {tradeData ? (
               <div className='flex items-center justify-between px-4 gap-3'>
                 <span>Price</span>
-                <div>
-                  <span className='text-[#280d5f] text-base font-normal'>
-                    {`${tradeData.executionPrice
-                      .invert()
-                      .toSignificant()} ${tradeData.executionPrice.baseCurrency.symbol.replace(
-                      'WBNB',
-                      'BNB'
-                    )} per ${tradeData.executionPrice.quoteCurrency.symbol.replace(
-                      'WBNB',
-                      'BNB'
-                    )}`}
-                  </span>
-                  <IconButton
-                    className='bg-gray-100 hover:bg-gray-200 rounded-full p-1 ml-1 align-bottom'
-                    rightSize='14px'
-                    rightSrc='/images/pancake/refresh.svg'
-                  ></IconButton>
-                </div>
+                <span className='text-[#280d5f] text-base font-normal'>
+                  {`${tradeData.executionPrice
+                    .invert()
+                    .toSignificant()} ${tradeData.executionPrice.baseCurrency.symbol.replace(
+                    'WBNB',
+                    'BNB'
+                  )} per ${tradeData.executionPrice.quoteCurrency.symbol.replace(
+                    'WBNB',
+                    'BNB'
+                  )}`}
+                </span>
+
+                <IconButton
+                  className='bg-gray-100 hover:bg-gray-200 rounded-full p-1 ml-1 align-bottom'
+                  rightSize='14px'
+                  rightSrc='/images/pancake/refresh.svg'
+                ></IconButton>
               </div>
             ) : undefined}
             <div className='flex items-center justify-between px-4'>
@@ -295,15 +332,25 @@ const Pancake: NextPageWithLayout = () => {
             </div>
           </div>
 
-          <PanButton className='w-full min-w-[288px] h-12'>
-            Connect Wallet
+          <PanButton
+            className='w-full min-w-[288px] h-12 disabled:cursor-not-allowed disabled:text-zinc-400 disabled:bg-zinc-200'
+            disabled={
+              btnTxt === 'Enter an amount' || btnTxt.startsWith('Insufficient')
+            }
+            onClick={() => {
+              if (btnTxt === 'Connect Wallet') {
+                connModalOpen();
+              }
+            }}
+          >
+            {btnTxt}
           </PanButton>
         </div>
         {tradeData ? (
           <div className='px-4 pb-4 text-[#7a6eaa] text-sm'>
             <div className='flex items-center justify-between gap-3'>
               <IconButton
-                className='cursor-text'
+                className='cursor-text shrink-0'
                 rightSize='16px'
                 rightIcon={<PanQuestionMask />}
               >
@@ -331,7 +378,7 @@ const Pancake: NextPageWithLayout = () => {
             </div>
             <div className='flex items-center justify-between'>
               <IconButton
-                className='cursor-text'
+                className='cursor-text shrink-0'
                 rightSize='16px'
                 rightIcon={<PanQuestionMask />}
               >
@@ -378,7 +425,7 @@ const Pancake: NextPageWithLayout = () => {
             </div>
             <div className='flex items-center justify-between'>
               <IconButton
-                className='cursor-text'
+                className='cursor-text shrink-0'
                 rightSize='16px'
                 rightIcon={<PanQuestionMask />}
               >
