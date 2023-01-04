@@ -97,19 +97,19 @@ export default function Sidebar() {
             <Link href='/samples/wagmi'>Index</Link>
           </MenuItem>
           <MenuItem>
-            <Link href='/samples/wagmi/contract-read'>Contract Read</Link>
-          </MenuItem>
-          <MenuItem>
-            <Link href='/samples/wagmi'>Getting Started</Link>
+            <Link href='/samples/wagmi/ens'>ENS</Link>
           </MenuItem>
           <MenuItem>
             <Link href='/samples/wagmi/connect-wallet'>Connect Wallet</Link>
           </MenuItem>
           <MenuItem>
-            <Link href='/samples/wagmi/ens'>ENS</Link>
+            <Link href='/samples/wagmi/send-transaction'>Send Transaction</Link>
           </MenuItem>
           <MenuItem>
-            <Link href='/samples/wagmi/send-transaction'>Send Transaction</Link>
+            <Link href='/samples/wagmi/contract-write'>Contract Write</Link>
+          </MenuItem>
+          <MenuItem>
+            <Link href='/samples/wagmi/contract-read'>Contract Read</Link>
           </MenuItem>
         </SubMenu>
         <SubMenu subTitle='Binance Smart Chain'>
