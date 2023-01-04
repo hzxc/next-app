@@ -13,8 +13,13 @@ const ConnectWallet: NextPageWithLayout = () => {
     addressOrName: 'nick.eth',
   });
 
-  const { connect, connectors, error, isLoading, pendingConnector } =
-    useConnect();
+  const {
+    connect,
+    connectors,
+    error: connError,
+    isLoading: connLoading,
+    pendingConnector,
+  } = useConnect();
   const { disconnect } = useDisconnect();
 
   if (isConnected) {
@@ -59,13 +64,13 @@ const ConnectWallet: NextPageWithLayout = () => {
           >
             {connector.name}
             {!connector.ready && ' (unsupported)'}
-            {isLoading &&
+            {connLoading &&
               connector.id === pendingConnector?.id &&
               ' (connecting)'}
           </button>
         ))}
 
-        {error && <div>{error.message}</div>}
+        {connError && <div>{connError.message}</div>}
       </div>
     </div>
   );

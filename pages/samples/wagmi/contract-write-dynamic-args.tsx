@@ -13,8 +13,10 @@ import {
 } from 'wagmi';
 import { Button } from 'components';
 import dayjs from 'dayjs';
+import React from 'react';
+import { useDebounce } from 'use-debounce';
 
-const ContractWrite: NextPageWithLayout = () => {
+const ContractWriteDynamicArgs: NextPageWithLayout = () => {
   const { address, connector, isConnected } = useAccount();
 
   const { data: ensAvatar } = useEnsAvatar({
@@ -30,6 +32,9 @@ const ContractWrite: NextPageWithLayout = () => {
   } = useConnect();
   const { disconnect } = useDisconnect();
 
+  const [tokenId, setTokenId] = React.useState('');
+  const [debouncedTokenId] = useDebounce(tokenId, 500);
+
   const {
     config,
     error: prepareError,
@@ -41,20 +46,24 @@ const ContractWrite: NextPageWithLayout = () => {
         name: 'mint',
         type: 'function',
         stateMutability: 'nonpayable',
-        inputs: [],
+        inputs: [{ internalType: 'uint32', name: 'tokenId', type: 'uint32' }],
         outputs: [],
       },
     ],
     functionName: 'mint',
+    args: [parseInt(debouncedTokenId)],
+    enabled: Boolean(debouncedTokenId),
   });
+
   const { data, error, isError, write } = useContractWrite(config);
+
   const { isLoading, isSuccess } = useWaitForTransaction({
     hash: data?.hash,
   });
 
   if (isConnected) {
     return (
-      <div className='flex flex-col items-center w-[460px] mx-auto mt-4 rounded-3xl shadow-xl p-4 gap-1 border-4 border-zinc-400 text-lg'>
+      <div className='flex flex-col items-center w-[460px] mx-auto mt-4 rounded-3xl shadow-xl p-4 gap-2 border-4 border-zinc-400 text-lg'>
         <div className='relative h-20 w-20'>
           <Image
             src={ensAvatar ?? `https://robohash.org/${dayjs().unix()}`}
@@ -79,10 +88,20 @@ const ContractWrite: NextPageWithLayout = () => {
           Disconnect
         </Button>
 
-        <div>
+        <div className='space-x-2'>
+          <label>Token ID</label>
+          <input
+            className='p-3 bg-zinc-200 rounded-2xl focus-visible:outline-0 focus:ring'
+            id='tokenId'
+            placeholder='420'
+            onChange={(e) => setTokenId(e.target.value)}
+            value={tokenId}
+          />
+
           <Button disabled={!write || isLoading} onClick={() => write?.()}>
             {isLoading ? 'Minting...' : 'Mint'}
           </Button>
+
           {isSuccess && (
             <div>
               Successfully minted your NFT!
@@ -93,7 +112,10 @@ const ContractWrite: NextPageWithLayout = () => {
           )}
 
           {(isPrepareError || isError) && (
-            <div>Error: {(prepareError || error)?.message}</div>
+            // <div>Error: {(prepareError || error)?.message}</div>
+            <div className='w-full whitespace-normal break-all'>
+              Error: {JSON.stringify(prepareError || error)}
+            </div>
           )}
         </div>
       </div>
@@ -101,7 +123,7 @@ const ContractWrite: NextPageWithLayout = () => {
   }
 
   return (
-    <div className='w-[460px] mx-auto mt-4 '>
+    <div className='w-[460px] mx-auto mt-4'>
       <div className='flex flex-col items-stretch gap-2 rounded-3xl shadow-xl border-4 p-6 border-zinc-400 text-lg text-zinc-300'>
         {connectors.map((connector) => (
           <button
@@ -124,8 +146,8 @@ const ContractWrite: NextPageWithLayout = () => {
   );
 };
 
-ContractWrite.getLayout = function getLayout(page: ReactElement) {
+ContractWriteDynamicArgs.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };
 
-export default ContractWrite;
+export default ContractWriteDynamicArgs;

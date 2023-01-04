@@ -109,6 +109,11 @@ export default function Sidebar() {
             <Link href='/samples/wagmi/contract-write'>Contract Write</Link>
           </MenuItem>
           <MenuItem>
+            <Link href='/samples/wagmi/contract-write-dynamic-args'>
+              Contract Write (Dynamic Args)
+            </Link>
+          </MenuItem>
+          <MenuItem>
             <Link href='/samples/wagmi/contract-read'>Contract Read</Link>
           </MenuItem>
         </SubMenu>
