@@ -27,6 +27,25 @@ export const bscChain: Chain = {
   testnet: false,
 };
 
+export const hecoChain: Chain = {
+  id: 128,
+  name: 'Huobi ECO Chain Mainnet',
+  network: '128',
+  nativeCurrency: {
+    name: 'HT',
+    symbol: 'HT',
+    decimals: 18,
+  },
+  rpcUrls: {
+    public: 'https://http-mainnet.hecochain.com',
+    default: 'https://http-mainnet.hecochain.com',
+  },
+  blockExplorers: {
+    default: { name: 'hecoinfo', url: 'https://www.hecoinfo.com/' },
+  },
+  testnet: false,
+};
+
 const bscTestChain: Chain = {
   id: 97,
   name: 'Binance Smart Chain Testnet',
@@ -47,7 +66,7 @@ const bscTestChain: Chain = {
 };
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [chain.mainnet, chain.polygon, bscChain, bscTestChain],
+  [chain.mainnet, chain.polygon, bscChain, bscTestChain, hecoChain],
   [
     publicProvider(),
     jsonRpcProvider({
@@ -55,6 +74,8 @@ const { chains, provider, webSocketProvider } = configureChains(
         if (chain.id === bscChain.id) return { http: bscChain.rpcUrls.default };
         if (chain.id === bscTestChain.id)
           return { http: bscTestChain.rpcUrls.default };
+        if (chain.id === hecoChain.id)
+          return { http: hecoChain.rpcUrls.default };
         return null;
       },
     }),
