@@ -76,8 +76,8 @@ const SignMessage: NextPageWithLayout = () => {
           value={message}
         />
 
-        <Button disabled={isLoading} onClick={() => signMessage({ message })}>
-          {isLoading ? 'Check Wallet' : 'Sign Message'}
+        <Button disabled={connLoading} onClick={() => signMessage({ message })}>
+          {connLoading ? 'Check Wallet' : 'Sign Message'}
         </Button>
 
         {data && (

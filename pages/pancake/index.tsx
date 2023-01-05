@@ -452,28 +452,31 @@ const Pancake: NextPageWithLayout = () => {
                 {tradeData.inputAmount.currency.symbol.replace('WBNB', 'BNB')}
               </div>
             </div>
-            {tradeData.route.pairs.length > 1 ? (
-              <div className='flex items-center justify-between'>
-                <IconButton
-                  className='cursor-text'
-                  rightSize='16px'
-                  rightIcon={<PanQuestionMask />}
-                >
-                  Route
-                </IconButton>
-                <div className='text-[#280d5f] text-sm'>
-                  {tradeData.route.path.map((tkn, i) => {
-                    return (
-                      <span key={i}>
-                        {i
-                          ? ' > ' + tkn.symbol.replace('WBNB', 'BNB')
-                          : tkn.symbol.replace('WBNB', 'BNB')}
-                      </span>
-                    );
-                  })}
-                </div>
-              </div>
-            ) : undefined}
+
+            <div className='flex items-center justify-between'>
+              <IconButton
+                className='cursor-text'
+                rightSize='16px'
+                rightIcon={<PanQuestionMask />}
+              >
+                Route
+              </IconButton>
+              <IconButton
+                rightSrc='/images/pancake/search.svg'
+                rightSize='20px'
+                className='text-[#280d5f] text-sm'
+              >
+                {tradeData.route.path.map((tkn, i) => {
+                  return (
+                    <span key={i}>
+                      {i
+                        ? ' > ' + tkn.symbol.replace('WBNB', 'BNB')
+                        : tkn.symbol.replace('WBNB', 'BNB')}
+                    </span>
+                  );
+                })}
+              </IconButton>
+            </div>
           </div>
         ) : undefined}
       </div>
