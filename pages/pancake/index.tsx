@@ -1,9 +1,4 @@
-import {
-  ConnectWalletModal,
-  Layout,
-  PanButton,
-  TokenModal,
-} from 'components/pancake';
+import { Layout, PanButton, Swap, TokenModal } from 'components/pancake';
 import ChartSvg from '/public/images/pancake/chart.svg';
 import SettingSvg from '/public/images/pancake/setting.svg';
 import HistorySvg from '/public/images/pancake/history.svg';
@@ -30,22 +25,11 @@ import { JSBI, Percent, TradeDirection, _10000, _9975 } from 'eth';
 import { useTrade } from 'hooks/pancake/useTrade';
 
 import { getBestBscProvider } from 'conf';
-import {
-  useAccount,
-  useContractWrite,
-  usePrepareContractWrite,
-  useWaitForTransaction,
-} from 'wagmi';
-import { BSC_PANCAKE_ROUTER_ADDR } from 'data/constants';
-import IPancakeRouterABI from 'abis/bsc/IPancakeRouter.json';
+import { useAccount } from 'wagmi';
 
 const Pancake: NextPageWithLayout = () => {
   const { visible, close, open } = useToggle(false);
-  const {
-    visible: connModalVisible,
-    close: connModalClose,
-    open: connModalOpen,
-  } = useToggle(false);
+
   const { mutate, isIdle } = useTokens();
   const pancake = useAppSelector(selectPancake);
   const pancakePersist = useAppSelector(selectPancakePersist);
@@ -154,53 +138,6 @@ const Pancake: NextPageWithLayout = () => {
     }
   }, [isConnected, tradeParam, inVal, curBal]);
 
-  /* #region  Swap */
-
-  const [tokenId, setTokenId] = useState('');
-  const debouncedTokenId = useDebounce(tokenId);
-
-  const {
-    config: swapExactTokensForTokensConfig,
-    error: prepareError,
-    isError: isPrepareError,
-  } = usePrepareContractWrite({
-    address: BSC_PANCAKE_ROUTER_ADDR,
-    abi: [
-      {
-        inputs: [
-          { internalType: 'uint256', name: 'amountIn', type: 'uint256' },
-          { internalType: 'uint256', name: 'amountOutMin', type: 'uint256' },
-          { internalType: 'address[]', name: 'path', type: 'address[]' },
-          { internalType: 'address', name: 'to', type: 'address' },
-          { internalType: 'uint256', name: 'deadline', type: 'uint256' },
-        ],
-        name: 'swapExactTokensForTokens',
-        outputs: [
-          { internalType: 'uint256[]', name: 'amounts', type: 'uint256[]' },
-        ],
-        stateMutability: 'nonpayable',
-        type: 'function',
-      },
-    ],
-    functionName: 'swapExactTokensForTokens',
-    // ,swapTokensForExactTokens,swapTokensForExactETH,swapExactTokensForETH,swapETHForExactTokens,swapExactETHForTokens
-    args: [BigNumber.from(1), BigNumber.from(1), [], '0x', BigNumber.from(1)],
-    enabled: Boolean(debouncedTokenId),
-  });
-
-  const {
-    data,
-    error,
-    isError,
-    write: swapExactTokensForTokens,
-  } = useContractWrite(swapExactTokensForTokensConfig);
-
-  const { isLoading, isSuccess } = useWaitForTransaction({
-    hash: data?.hash,
-  });
-
-  /* #endregion */
-
   return (
     <div className='w-[328px]'>
       <div>
@@ -216,7 +153,6 @@ const Pancake: NextPageWithLayout = () => {
         source={source}
         setTradeDirection={setTradeDirection}
       />
-      <ConnectWalletModal visible={connModalVisible} close={connModalClose} />
       <div className='flex flex-col border border-[#e7e3eb] rounded-3xl bg-white shadow-sm'>
         <div className='p-6 border-b'>
           <div className='flex items-center justify-between'>
@@ -386,19 +322,7 @@ const Pancake: NextPageWithLayout = () => {
             </div>
           </div>
 
-          <PanButton
-            className='w-full min-w-[288px] h-12 disabled:cursor-not-allowed disabled:text-zinc-400 disabled:bg-zinc-200'
-            disabled={
-              btnTxt === 'Enter an amount' || btnTxt.startsWith('Insufficient')
-            }
-            onClick={() => {
-              if (btnTxt === 'Connect Wallet') {
-                connModalOpen();
-              }
-            }}
-          >
-            {btnTxt}
-          </PanButton>
+          <Swap btnTxt={btnTxt}></Swap>
         </div>
         {tradeData ? (
           <div className='px-4 pb-4 text-[#7a6eaa] text-sm'>

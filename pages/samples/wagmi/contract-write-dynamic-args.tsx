@@ -98,7 +98,15 @@ const ContractWriteDynamicArgs: NextPageWithLayout = () => {
             value={tokenId}
           />
 
-          <Button disabled={!write || isLoading} onClick={() => write?.()}>
+          {/* <Button disabled={!write || isLoading} onClick={() => write?.({})}> */}
+          <Button
+            disabled={!write || isLoading}
+            onClick={() => {
+              if (write) {
+                write({});
+              }
+            }}
+          >
             {isLoading ? 'Minting...' : 'Mint'}
           </Button>
 
