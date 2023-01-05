@@ -1,12 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import { PancakeRouterABI } from 'abis/bsc';
 import { bscProvider, bscUrl } from 'conf';
-import { bscBusdAddr, bscCakeAddr, bscPancakeRouterAddr } from 'data/constants';
+import {
+  bscBusdAddr,
+  bscCakeAddr,
+  BSC_PANCAKE_ROUTER_ADDR,
+} from 'data/constants';
 import { ethers, utils } from 'ethers';
 
 const getCakeSellPrice = async () => {
   const router = new ethers.Contract(
-    bscPancakeRouterAddr,
+    BSC_PANCAKE_ROUTER_ADDR,
     PancakeRouterABI,
     bscProvider
   );

@@ -9,7 +9,7 @@ import {
   bscBusdAddr,
   bscCakeAddr,
   bscMultiQueryAddr,
-  bscPancakeRouterAddr,
+  BSC_PANCAKE_ROUTER_ADDR,
 } from 'data/constants';
 import { BigNumber, ethers, utils } from 'ethers';
 import { NextPageWithLayout } from 'pages/_app';
@@ -49,7 +49,7 @@ const MultiQuery: NextPageWithLayout = () => {
         [bscCakeAddr, symbol],
         [bscCakeAddr, decimals],
         [bscCakeAddr, name],
-        [bscPancakeRouterAddr, getAmountsOut],
+        [BSC_PANCAKE_ROUTER_ADDR, getAmountsOut],
       ]);
 
       const blockNumberRet = ret[0].toNumber();

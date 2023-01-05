@@ -11,7 +11,7 @@ import PanExDown from 'public/images/pancake/panExDown.svg';
 import PanExUpDown from 'public/images/pancake/PanExUpDown.svg';
 import PanCopy from 'public/images/pancake/panCopy.svg';
 import PanQuestionMask from 'public/images/pancake/panQuestionMark.svg';
-import { useToggle } from 'hooks';
+import { useDebounce, useToggle } from 'hooks';
 import { useCurrencyBalance, useTokens } from 'hooks/pancake';
 import { ReactElement, useEffect, useState } from 'react';
 import { NextPageWithLayout } from 'pages/_app';
@@ -25,12 +25,19 @@ import {
 } from 'redux/pancake/pancakeSlice';
 import { selectPancakePersist } from 'redux/pancake/pancakePersistSlice';
 import { IoMdRefresh } from 'react-icons/io';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { JSBI, Percent, TradeDirection, _10000, _9975 } from 'eth';
 import { useTrade } from 'hooks/pancake/useTrade';
 
 import { getBestBscProvider } from 'conf';
-import { useAccount } from 'wagmi';
+import {
+  useAccount,
+  useContractWrite,
+  usePrepareContractWrite,
+  useWaitForTransaction,
+} from 'wagmi';
+import { BSC_PANCAKE_ROUTER_ADDR } from 'data/constants';
+import IPancakeRouterABI from 'abis/bsc/IPancakeRouter.json';
 
 const Pancake: NextPageWithLayout = () => {
   const { visible, close, open } = useToggle(false);
@@ -146,6 +153,53 @@ const Pancake: NextPageWithLayout = () => {
       setBtnTxt('Swap');
     }
   }, [isConnected, tradeParam, inVal, curBal]);
+
+  /* #region  Swap */
+
+  const [tokenId, setTokenId] = useState('');
+  const debouncedTokenId = useDebounce(tokenId);
+
+  const {
+    config: swapExactTokensForTokensConfig,
+    error: prepareError,
+    isError: isPrepareError,
+  } = usePrepareContractWrite({
+    address: BSC_PANCAKE_ROUTER_ADDR,
+    abi: [
+      {
+        inputs: [
+          { internalType: 'uint256', name: 'amountIn', type: 'uint256' },
+          { internalType: 'uint256', name: 'amountOutMin', type: 'uint256' },
+          { internalType: 'address[]', name: 'path', type: 'address[]' },
+          { internalType: 'address', name: 'to', type: 'address' },
+          { internalType: 'uint256', name: 'deadline', type: 'uint256' },
+        ],
+        name: 'swapExactTokensForTokens',
+        outputs: [
+          { internalType: 'uint256[]', name: 'amounts', type: 'uint256[]' },
+        ],
+        stateMutability: 'nonpayable',
+        type: 'function',
+      },
+    ],
+    functionName: 'swapExactTokensForTokens',
+    // ,swapTokensForExactTokens,swapTokensForExactETH,swapExactTokensForETH,swapETHForExactTokens,swapExactETHForTokens
+    args: [BigNumber.from(1), BigNumber.from(1), [], '0x', BigNumber.from(1)],
+    enabled: Boolean(debouncedTokenId),
+  });
+
+  const {
+    data,
+    error,
+    isError,
+    write: swapExactTokensForTokens,
+  } = useContractWrite(swapExactTokensForTokensConfig);
+
+  const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: data?.hash,
+  });
+
+  /* #endregion */
 
   return (
     <div className='w-[328px]'>
