@@ -16,7 +16,7 @@ export const ConnectWalletModal: React.FC<{
     if (isConnected) {
       close();
     }
-  }, [isConnected]);
+  }, [isConnected, close]);
   return (
     <PanModal visible={visible} close={close}>
       <div className='overflow-hidden w-80 rounded-3xl text-[#280d5f] bg-white'>

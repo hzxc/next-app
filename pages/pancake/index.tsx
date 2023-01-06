@@ -55,7 +55,7 @@ const Pancake: NextPageWithLayout = () => {
     } else {
       console.log('get tokens from local storage');
     }
-  }, [isIdle, mutate]);
+  }, [isIdle, mutate, pancakePersist.tokens]);
 
   useEffect(() => {
     if (bal) {
@@ -90,7 +90,7 @@ const Pancake: NextPageWithLayout = () => {
         setOutVal('');
       }
     }
-  }, [tradeData]);
+  }, [tradeData, tradeParam.direction]);
 
   useEffect(() => {
     getBestBscProvider();
@@ -136,7 +136,7 @@ const Pancake: NextPageWithLayout = () => {
     } else {
       setBtnTxt('Swap');
     }
-  }, [isConnected, tradeParam, inVal, curBal]);
+  }, [isConnected, tradeParam, inVal, curBal, pancake.inputCurrency.symbol]);
 
   return (
     <div className='w-[328px]'>
