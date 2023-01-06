@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   ChainId,
   Currency,
@@ -10,7 +10,7 @@ import {
   TradeType,
   WNATIVE,
 } from 'eth';
-import { ethers } from 'ethers';
+import { ethers, utils } from 'ethers';
 import { useEffect, useState } from 'react';
 import { IToken } from 'redux/pancake/pancakeSlice';
 import { tradeExactInByPairs, tradeExactOutByPairs } from 'utils/pancake';
@@ -52,26 +52,39 @@ export const useTrade = (param: {
           toToken.source
         );
 
-  const { data: pairs, isFetching } = usePairs({
+  const { data: pairs, dataUpdatedAt } = usePairs({
     tokenA: fromCurrency,
     tokenB: toCurrency,
   });
 
-  const [tag, setTag] = useState<boolean>();
+  const [tag, setTag] = useState<boolean>(false);
+
+  // useEffect(() => {
+  //   console.log('paris change');
+  //   if (pairs && !isFetching) {
+  //     setTag(!tag);
+  //   }
+  // }, [pairs, isFetching]);
+
+  const { mutate } = useMutation(async () => {
+    setTag(!tag);
+  });
 
   useEffect(() => {
-    if (pairs && !isFetching) {
-      setTag(!tag);
-    }
-  }, [pairs, isFetching]);
+    console.log('paris change');
+    mutate();
+  }, [dataUpdatedAt, mutate]);
 
   const tradeQueryKey = `PanTrade-${Pair.getAddress(
     fromCurrency,
     toCurrency
   )}-${direction}-${amountToTrade}`;
 
+  // utils.id(JSON.stringify(pairs)) : 'undefined'
+
   return useQuery<Trade<Currency, Currency, TradeType> | null, Error>(
     [tradeQueryKey, tag],
+    // [tradeQueryKey],
     () => {
       console.log('get trade data');
 

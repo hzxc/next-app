@@ -28,7 +28,7 @@ export const Header: React.FC = () => {
     <>
       <ConnectWalletModal visible={visible} close={close} />
       <SwitchNetworkModal
-        visible={chain ? chain.id !== 56 : false}
+        visible={chain ? chain.id !== 56 && chain.id !== 97 : false}
         close={() => {}}
       />
       <div className='flex h-14 items-center justify-between border-b px-4 z-40'>

@@ -91,6 +91,9 @@ export default function Sidebar() {
           <MenuItem>
             <Link href='/samples/business-card'>Business Card</Link>
           </MenuItem>
+          <MenuItem>
+            <Link href='/samples/time'>Time</Link>
+          </MenuItem>
         </SubMenu>
         <SubMenu subTitle='Wagmi'>
           <MenuItem>

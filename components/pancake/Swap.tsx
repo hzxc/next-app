@@ -1,7 +1,9 @@
 import { BSC_PANCAKE_ROUTER_ADDR } from 'data/constants';
-import { BigNumber } from 'ethers';
+import dayjs from 'dayjs';
+import { BigNumber, Contract, ethers, Signer } from 'ethers';
 import { useDebounce, useToggle } from 'hooks';
 import React, { useState } from 'react';
+import { IToken } from 'redux/pancake/pancakeSlice';
 import {
   useContractWrite,
   usePrepareContractWrite,
@@ -68,6 +70,18 @@ export const Swap: React.FC<SwapProps> = (props) => {
   const { isLoading, isSuccess } = useWaitForTransaction({
     hash: data?.hash,
   });
+
+  const swapTokens = async (
+    from: IToken,
+    to: IToken,
+    path: string,
+    amount: number | string,
+    routerContract: Contract,
+    accountAddress: string,
+    signer: Signer
+  ) => {
+    const deadline = BigNumber.from(dayjs().add(30, 'minute').unix());
+  };
 
   /* #endregion */
 
