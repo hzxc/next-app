@@ -1,86 +1,155 @@
 import { BSC_PANCAKE_ROUTER_ADDR } from 'data/constants';
 import dayjs from 'dayjs';
-import { BigNumber, Contract, ethers, Signer } from 'ethers';
+import { BigNumber, Contract, ethers, Signer, utils } from 'ethers';
 import { useDebounce, useToggle } from 'hooks';
 import React, { useState } from 'react';
 import { IToken } from 'redux/pancake/pancakeSlice';
 import {
+  useAccount,
   useContractWrite,
   usePrepareContractWrite,
+  useSigner,
   useWaitForTransaction,
 } from 'wagmi';
 import { ConnectWalletModal } from '.';
 import { PanButton } from './button';
+import IPancakeRouterABI from 'abis/bsc/IPancakeRouter.json';
+import { bscProvider } from 'conf';
+import path from 'path';
 
 interface SwapProps {
   btnTxt: string;
-  //   direction: 0 | 1;
-  //   amountToTrade: string;
+  swapParam: Param;
+}
+
+interface Param {
+  from: IToken;
+  to: IToken;
+  path: string[] | undefined;
+  direction: 0 | 1;
+  amount: number | string;
 }
 
 export const Swap: React.FC<SwapProps> = (props) => {
-  const { btnTxt, ...restProps } = props;
+  const { btnTxt, swapParam } = props;
   const {
     visible: connModalVisible,
     close: connModalClose,
     open: connModalOpen,
   } = useToggle(false);
 
+  const { data: signer } = useSigner();
+  const { address, isConnected } = useAccount();
+
+  const confirmSwap = async () => {
+    if (!signer || !address || !swapParam.path) return;
+
+    const router = new ethers.Contract(
+      BSC_PANCAKE_ROUTER_ADDR,
+      IPancakeRouterABI,
+      signer
+    );
+
+    swapTokens(swapParam, router, address);
+  };
+
   /* #region  Swap */
 
-  const [tokenId, setTokenId] = useState('');
-  const debouncedTokenId = useDebounce(tokenId);
-
-  const {
-    config: swapExactTokensForTokensConfig,
-    error: prepareError,
-    isError: isPrepareError,
-  } = usePrepareContractWrite({
-    address: BSC_PANCAKE_ROUTER_ADDR,
-    abi: [
-      {
-        inputs: [
-          { internalType: 'uint256', name: 'amountIn', type: 'uint256' },
-          { internalType: 'uint256', name: 'amountOutMin', type: 'uint256' },
-          { internalType: 'address[]', name: 'path', type: 'address[]' },
-          { internalType: 'address', name: 'to', type: 'address' },
-          { internalType: 'uint256', name: 'deadline', type: 'uint256' },
-        ],
-        name: 'swapExactTokensForTokens',
-        outputs: [
-          { internalType: 'uint256[]', name: 'amounts', type: 'uint256[]' },
-        ],
-        stateMutability: 'nonpayable',
-        type: 'function',
-      },
-    ],
-    functionName: 'swapExactTokensForTokens',
-    // ,swapTokensForExactTokens,swapTokensForExactETH,swapExactTokensForETH,swapETHForExactTokens,swapExactETHForTokens
-    // args: [BigNumber.from(1), BigNumber.from(1), [], '0x', BigNumber.from(1)],
-    enabled: Boolean(debouncedTokenId),
-  });
-
-  const {
-    data,
-    error,
-    isError,
-    write: swapExactTokensForTokens,
-  } = useContractWrite(swapExactTokensForTokensConfig);
-
-  const { isLoading, isSuccess } = useWaitForTransaction({
-    hash: data?.hash,
-  });
-
   const swapTokens = async (
-    from: IToken,
-    to: IToken,
-    path: string,
-    amount: number | string,
+    param: Param,
     routerContract: Contract,
-    accountAddress: string,
-    signer: Signer
+    accountAddress: string
+    // slippageTolerance: number,
+    // signer: Signer
   ) => {
+    const { from, to, path, direction, amount } = param;
     const deadline = BigNumber.from(dayjs().add(30, 'minute').unix());
+
+    if (direction) {
+      const amountOut = ethers.utils.parseUnits(
+        typeof amount === 'number' ? amount.toString() : amount,
+        to.decimals
+      );
+      const amountIn = await routerContract.callStatic.getAmountsIn(
+        amountOut,
+        path
+      );
+
+      const amountInMax = BigNumber.from(amountIn[0])
+        .mul(BigNumber.from(11))
+        .div(BigNumber.from(10));
+
+      if (to.address === ethers.constants.AddressZero) {
+        // swapTokensForExactETH
+        await routerContract.swapTokensForExactETH(
+          amountOut,
+          amountInMax,
+          path,
+          accountAddress,
+          deadline
+        );
+      } else if (from.address === ethers.constants.AddressZero) {
+        // swapETHForExactTokens
+        await routerContract.swapETHForExactTokens(
+          amountOut,
+          path,
+          accountAddress,
+          deadline,
+          { value: amountInMax }
+        );
+      } else {
+        // swapTokensForExactTokens
+        await routerContract.swapTokensForExactTokens(
+          amountOut,
+          amountInMax,
+          path,
+          accountAddress,
+          deadline
+        );
+      }
+    } else {
+      const amountIn = ethers.utils.parseUnits(
+        typeof amount === 'number' ? amount.toString() : amount,
+        from.decimals
+      );
+      const amountOut = await routerContract.callStatic.getAmountsOut(
+        amountIn,
+        path
+      );
+
+      const amountOutMin = BigNumber.from(amountOut[1])
+        .mul(BigNumber.from(9))
+        .div(BigNumber.from(10));
+
+      if (from.address === ethers.constants.AddressZero) {
+        // swapExactETHForTokens
+        await routerContract.swapExactETHForTokens(
+          amountOutMin,
+          path,
+          accountAddress,
+          deadline,
+          { value: amountIn }
+        );
+      } else if (to.address === ethers.constants.AddressZero) {
+        // swapExactTokensForETH
+        await routerContract.swapExactTokensForETH(
+          amountIn,
+          amountOutMin,
+          path,
+          accountAddress,
+          deadline
+        );
+      } else {
+        // swapExactTokensForTokens
+        await routerContract.swapExactTokensForTokens(
+          amountIn,
+          amountOutMin,
+          path,
+          accountAddress,
+          deadline
+        );
+      }
+    }
   };
 
   /* #endregion */
@@ -96,6 +165,10 @@ export const Swap: React.FC<SwapProps> = (props) => {
         onClick={() => {
           if (btnTxt === 'Connect Wallet') {
             connModalOpen();
+          }
+
+          if (btnTxt === 'Swap') {
+            confirmSwap();
           }
         }}
       >

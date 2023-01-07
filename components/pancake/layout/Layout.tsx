@@ -42,7 +42,7 @@ export const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
       </div>
       <div className='shrink-0 min-h-[calc(100vh-98px)] bg-gradient-to-br from-cyan-50 to-purple-50'>
         <div className='flex flex-col justify-between items-center pt-8 h-full'>
-          <div>{children}</div>
+          {children}
           <LinkBar />
         </div>
       </div>

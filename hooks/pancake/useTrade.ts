@@ -96,7 +96,9 @@ export const useTrade = (param: {
         return tradeExactInByPairs(
           CurrencyAmount.fromRawAmount(
             fromCurrency,
-            ethers.utils.parseEther(amountToTrade).toString()
+            ethers.utils
+              .parseUnits(amountToTrade, fromCurrency.decimals)
+              .toString()
           ),
           toCurrency,
           pairs
@@ -106,7 +108,9 @@ export const useTrade = (param: {
           fromCurrency,
           CurrencyAmount.fromRawAmount(
             toCurrency,
-            ethers.utils.parseEther(amountToTrade).toString()
+            ethers.utils
+              .parseUnits(amountToTrade, toCurrency.decimals)
+              .toString()
           ),
           pairs
         );

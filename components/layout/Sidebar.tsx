@@ -77,7 +77,7 @@ export default function Sidebar() {
             <Link href='/samples/tab'>Tab</Link>
           </MenuItem>
           <MenuItem>
-            <Link href='/samples/lodash'>Lodash</Link>
+            <Link href='/samples/array'>Array</Link>
           </MenuItem>
           <MenuItem>
             <Link href='/samples/ping'>Ping</Link>

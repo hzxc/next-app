@@ -1,0 +1,2 @@
+export const ACT_ADDR = '0xfFc76ff0d2Ac03c1AaFfff12c362317218d6440a';
+export const ACT1_ADDR = '0x41b8CB5D1037a3A88cd308022Ff01db58a4e082B';

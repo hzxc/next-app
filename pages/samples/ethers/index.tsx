@@ -2,7 +2,7 @@ import { spawn } from 'child_process';
 import { Button, IconButton } from 'components';
 import { Layout } from 'components/layout';
 import { bscBusdAddr, bscCakeAddr } from 'data/constants';
-import { ethers, utils } from 'ethers';
+import { BigNumber, ethers, utils } from 'ethers';
 import {
   getCreate2Address,
   solidityKeccak256,
@@ -14,7 +14,14 @@ import { ReactElement, useEffect, useState } from 'react';
 import { isError } from 'utils';
 
 import { useInitConnect } from 'hooks/useInitConnect';
-import { ChainId, FACTORY_ADDRESS_MAP, INIT_CODE_HASH_MAP } from 'eth';
+import {
+  ChainId,
+  CurrencyAmount,
+  FACTORY_ADDRESS_MAP,
+  Fraction,
+  INIT_CODE_HASH_MAP,
+  JSBI,
+} from 'eth';
 import { getBestBscProvider } from 'conf';
 import { getBnbBalance, getTokensBalance } from 'utils/pancake';
 import { bscTokens, BSC_BNB } from 'data/tokens';
@@ -47,6 +54,21 @@ const Index: NextPageWithLayout = () => {
   };
   const [isConnected, address, activeConnector] = useInitConnect();
 
+  useEffect(() => {
+    // console.log(data);
+    if (data) {
+      console.log(data[1]._hex);
+      // const ret = new Fraction(JSBI.BigInt(data[1]._hex));
+      const ca = CurrencyAmount.fromRawAmount(bscTokens.cake, data[1]._hex);
+      const bn = BigNumber.from(data[1]);
+      console.log('toSignificant', ca.toSignificant());
+      console.log('BigNumber.toString()', bn.toString());
+      const am = bn.mul(BigNumber.from(5)).div(BigNumber.from(1000));
+      console.log('0.5%', am.toString());
+      // console.log(ret.divide(18).toSignificant(6));
+    }
+  }, [data]);
+
   return (
     <div className='p-8'>
       <IconButton
@@ -55,6 +77,9 @@ const Index: NextPageWithLayout = () => {
       >
         {data ? utils.formatUnits(data[1], 18) : undefined}
       </IconButton>
+      <p>{JSON.stringify(data)}</p>
+      {/* <p>{data ? data[1].hex : ''}</p> */}
+      {/* <p>{new Fraction(JSBI.BigInt(data[1].hex))}</p> */}
       <div className='space-x-4 py-4'>
         <input
           className='border w-96'

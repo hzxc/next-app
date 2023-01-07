@@ -33,7 +33,6 @@ export const useGetAmounts = (param: {
   amount: string;
   path: string[];
 }) => {
-  const pancake = useAppSelector(selectPancake);
   return useQuery<any>(['PanGetAmounts', param], () => {
     return getAmounts(param);
   });

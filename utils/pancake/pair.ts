@@ -75,8 +75,8 @@ export const getPairs = async (
       return null;
     }
 
-    const tokenA = tkn[0];
-    const tokenB = tkn[1];
+    const tokenA: any = tkn[0];
+    const tokenB: any = tkn[1];
 
     const [reserve0, reserve1] = reserves;
     const [token0, token1] = tokenA.sortsBefore(tokenB)
@@ -88,7 +88,6 @@ export const getPairs = async (
       CurrencyAmount.fromRawAmount(token1, reserve1.hex)
     );
   });
-
   return compact(pairs);
 };
 
