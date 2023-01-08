@@ -6,11 +6,15 @@ import { IToken } from './pancakeSlice';
 interface PancakePersistState {
   baseTokens: IToken[];
   tokens: IToken[] | null;
+  // baseTokensRc: Record<number, IToken[]>;
+  // tokenRc: Record<number, IToken[]>;
 }
 
 const initialState: PancakePersistState = {
   baseTokens: baseTokens,
   tokens: null,
+  // baseTokensRc: {},
+  // tokenRc: {},
 };
 export const pancakePersistSlice = createSlice({
   name: 'pancakePersist',

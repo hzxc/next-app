@@ -77,9 +77,6 @@ export default function Sidebar() {
             <Link href='/samples/tab'>Tab</Link>
           </MenuItem>
           <MenuItem>
-            <Link href='/samples/array'>Array</Link>
-          </MenuItem>
-          <MenuItem>
             <Link href='/samples/ping'>Ping</Link>
           </MenuItem>
           <MenuItem>
@@ -93,6 +90,12 @@ export default function Sidebar() {
           </MenuItem>
           <MenuItem>
             <Link href='/samples/time'>Time</Link>
+          </MenuItem>
+          <MenuItem>
+            <Link href='/samples/array'>Array</Link>
+          </MenuItem>
+          <MenuItem>
+            <Link href='/samples/map-record'>Map&Record</Link>
           </MenuItem>
         </SubMenu>
         <SubMenu subTitle='Wagmi'>
