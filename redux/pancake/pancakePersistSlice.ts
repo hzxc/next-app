@@ -1,46 +1,58 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ChainId } from 'eth';
 import { RootState } from 'redux/store';
-import { baseTokens } from '../../data/pancake/baseTokens';
+import { tokens56 } from '../../data/baseTokens/56';
 import { IToken } from './pancakeSlice';
 
 interface PancakePersistState {
-  baseTokens: IToken[];
-  tokens: IToken[] | null;
+  // baseTokens: IToken[];
+  // tokens: IToken[] | null;
+  baseTokens: Record<number, IToken[]>;
+  tokens: Record<number, IToken[]>;
   // baseTokensRc: Record<number, IToken[]>;
   // tokenRc: Record<number, IToken[]>;
 }
 
 const initialState: PancakePersistState = {
-  baseTokens: baseTokens,
-  tokens: null,
-  // baseTokensRc: {},
-  // tokenRc: {},
+  // baseTokens: baseTokens,
+  // tokens: null,
+  baseTokens: { 56: tokens56 },
+  tokens: {},
 };
 export const pancakePersistSlice = createSlice({
   name: 'pancakePersist',
   initialState,
   reducers: {
-    importToken: (state, action: PayloadAction<IToken>) => {
-      state.baseTokens.push({
-        ...action.payload,
-        name: `Added by user•${action.payload.name}`,
+    importToken: (
+      state,
+      action: PayloadAction<{ chainId: number; tkn: IToken }>
+    ) => {
+      state.baseTokens[action.payload.chainId].push({
+        ...action.payload.tkn,
+        name: `Added by user•${action.payload.tkn.name}`,
         source: undefined,
       });
 
-      if (state.tokens) {
-        const idx = state.tokens.findIndex((e) => {
-          return e.address === action.payload.address;
-        });
-        if (idx) {
-          state.tokens.splice(idx, 1);
-        }
+      // if (state.tokens) {
+      const idx = state.tokens[action.payload.chainId].findIndex((e) => {
+        return e.address === action.payload.tkn.address;
+      });
+      if (idx) {
+        state.tokens[action.payload.chainId].splice(idx, 1);
       }
+      // }
     },
-    setBaseTokens: (state, action: PayloadAction<IToken[]>) => {
-      state.baseTokens = action.payload;
+    setBaseTokens: (
+      state,
+      action: PayloadAction<{ chainId: number; tkns: IToken[] }>
+    ) => {
+      state.baseTokens[action.payload.chainId] = action.payload.tkns;
     },
-    setTokens: (state, action: PayloadAction<IToken[]>) => {
-      state.tokens = action.payload;
+    setTokens: (
+      state,
+      action: PayloadAction<{ chainId: number; tkns: IToken[] }>
+    ) => {
+      state.tokens[action.payload.chainId] = action.payload.tkns;
     },
   },
 });

@@ -25,7 +25,7 @@ import {
 import { getBestBscProvider } from 'conf';
 import { getBnbBalance, getTokensBalance } from 'utils/pancake';
 import { bscTokens, BSC_BNB } from 'data/tokens';
-import { baseTokens } from 'data/pancake';
+import { tokens56 } from 'data/baseTokens';
 
 const Index: NextPageWithLayout = () => {
   const { data, isFetching } = useCakePrice();

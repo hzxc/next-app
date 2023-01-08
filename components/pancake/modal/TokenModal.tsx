@@ -16,7 +16,9 @@ import {
 } from 'redux/pancake/pancakeSlice';
 
 import { importToken } from 'redux/pancake/pancakePersistSlice';
-import { BNB, BTCB, BUSD, CAKE } from 'data/pancake';
+import { BNB, BTCB, BUSD, CAKE } from 'data/baseTokens';
+import { useNetwork } from 'wagmi';
+import { ChainId } from 'eth';
 
 export const TokenModal: React.FC<{
   visible: boolean;
@@ -24,12 +26,12 @@ export const TokenModal: React.FC<{
   source?: 'in' | 'out';
   setTradeDirection?: () => void;
 }> = ({ visible, modalClose, source, setTradeDirection }) => {
+  const { chain } = useNetwork();
   const pancake = useAppSelector(selectPancake);
   const dispatch = useAppDispatch();
   const [searchParam, setSearchParam] = useState('');
   const [debouncedSearchParam] = useDebounce(searchParam, 400);
   const { data: tokens } = useSearch(debouncedSearchParam);
-  // const tokens = data || [];
   const close = () => {
     if (visible) {
       modalClose();
@@ -175,7 +177,12 @@ export const TokenModal: React.FC<{
             {tokens[index].source ? (
               <PanButton
                 onClick={() => {
-                  dispatch(importToken(tokens[index]));
+                  dispatch(
+                    importToken({
+                      chainId: chain?.id ?? ChainId.BSC,
+                      tkn: tokens[index],
+                    })
+                  );
                   if (source === 'in') {
                     dispatch(setInputCurrency(tokens[index]));
                   } else if (source === 'out') {

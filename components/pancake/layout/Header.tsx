@@ -22,13 +22,14 @@ export const Header: React.FC = () => {
   const { chain } = useNetwork();
   const [isConnected, address] = useInitConnect();
   const { data: cakePrice } = useCakePrice();
-  useEffect(() => {}, []);
 
   return (
     <>
       <ConnectWalletModal visible={visible} close={close} />
       <SwitchNetworkModal
-        visible={chain ? chain.id !== 56 && chain.id !== 97 : false}
+        visible={
+          chain ? chain.id !== 56 && chain.id !== 97 && chain.id !== 1 : false
+        }
         close={() => {}}
       />
       <div className='flex h-14 items-center justify-between border-b px-4 z-40'>

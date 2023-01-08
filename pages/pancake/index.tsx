@@ -20,20 +20,29 @@ import {
 } from 'redux/pancake/pancakeSlice';
 import { selectPancakePersist } from 'redux/pancake/pancakePersistSlice';
 import { IoMdRefresh } from 'react-icons/io';
-import { BigNumber, ethers } from 'ethers';
-import { JSBI, Percent, TradeDirection, _10000, _9975 } from 'eth';
+import { ethers } from 'ethers';
+import { ChainId, JSBI, Percent, TradeDirection, _10000, _9975 } from 'eth';
 import { useTrade } from 'hooks/pancake/useTrade';
 
 import { getBestBscProvider } from 'conf';
-import { useAccount } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 
 const Pancake: NextPageWithLayout = () => {
   const { visible, close, open } = useToggle(false);
 
-  const { mutate, isIdle } = useTokens();
+  /* #region  wagmi */
+  const { address, isConnected } = useAccount();
+  const { chain } = useNetwork();
+  /* #endregion */
+
+  /* #region  redux */
   const pancake = useAppSelector(selectPancake);
   const pancakePersist = useAppSelector(selectPancakePersist);
   const dispatch = useAppDispatch();
+  /* #endregion */
+
+  const { mutate, isIdle } = useTokens();
+
   const [source, setSource] = useState<'in' | 'out'>('in');
   const [inVal, setInVal] = useState('');
   const [outVal, setOutVal] = useState('');
@@ -49,13 +58,13 @@ const Pancake: NextPageWithLayout = () => {
   });
 
   useEffect(() => {
-    if (!pancakePersist.tokens && isIdle) {
+    if (!pancakePersist.tokens[chain?.id ?? ChainId.BSC] && isIdle) {
       console.log('get tokens from network');
       mutate();
     } else {
       console.log('get tokens from local storage');
     }
-  }, [isIdle, mutate, pancakePersist.tokens]);
+  }, [chain?.id, isIdle, mutate, pancakePersist.tokens]);
 
   useEffect(() => {
     if (bal) {
@@ -120,8 +129,6 @@ const Pancake: NextPageWithLayout = () => {
     setTradeDirection();
   };
 
-  const { address, isConnected } = useAccount();
-
   const [btnTxt, setBtnTxt] = useState('Connect Wallet');
 
   useEffect(() => {
@@ -140,10 +147,13 @@ const Pancake: NextPageWithLayout = () => {
 
   return (
     <>
-      <div>
+      <div className='p-8 break-all'>
         <p>{JSON.stringify(tradeParam)}</p>
-        <p>tokens length:{pancakePersist.tokens?.length}</p>
-        <p>base tokens length:{pancakePersist.baseTokens?.length}</p>
+        <p>chainId:{chain?.id}</p>
+        {/* <p>chain:{JSON.stringify(chain)}</p> */}
+        {/* <div>Available chains: {chains.map((chain) => chain.name + ',')}</div> */}
+        {/* <p>tokens length:{pancakePersist.tokens[connector?.id]?.length}</p>
+        <p>base tokens length:{pancakePersist.baseTokens?.length}</p> */}
         <p>isConnected:{JSON.stringify(isConnected)}</p>
         <p>address:{address}</p>
         <p className='break-all'>

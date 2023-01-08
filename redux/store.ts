@@ -20,7 +20,7 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from './storage';
-import { baseTokens } from 'data/pancake';
+import { tokens56 } from 'data/baseTokens';
 
 const persistConfig = {
   key: 'root',
@@ -33,7 +33,7 @@ const persistConfig = {
       // expireSeconds: 60,
       expiredState: {
         tokens: null,
-        baseTokens: baseTokens,
+        baseTokens: tokens56,
       },
       autoExpire: true,
     }),

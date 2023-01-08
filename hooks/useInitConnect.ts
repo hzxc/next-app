@@ -14,7 +14,7 @@ export const useInitConnect = () => {
     if (window.ethereum?._state?.isUnlocked && !isConnected) {
       mutate({});
     }
-  }, []);
+  }, [isConnected, mutate]);
 
   return [isConnected, address, activeConnector] as const;
 };

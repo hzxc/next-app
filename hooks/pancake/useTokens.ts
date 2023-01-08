@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { baseTokens } from 'data/pancake';
+import { tokens56 } from 'data/baseTokens';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import { IToken } from 'redux/pancake/pancakeSlice';
 import { http } from 'utils';
@@ -10,60 +10,69 @@ import { bscProvider } from 'conf';
 import { IBEP20ABI } from 'abis/bsc';
 import { bscMultiQueryAddr } from 'data/constants';
 import { MultiQueryABI } from 'abis';
+import { ChainId } from 'eth';
+import { useNetwork } from 'wagmi';
+import { tokens97 } from 'data/baseTokens/97';
 
-const getTokens = async () => {
+const getTokens = async (chainId: number) => {
   const baseArray: IToken[] = [];
   const array: IToken[] = [];
-
   const map = new Map<string, number>();
-  // const extended = await http('/pancake/pancakeswap-extended.json');
-  // const cmc = await http('/pancake/cmc.json');
-  // const coingecko = await http('/pancake/coingecko.json');
-  const extended = await http(
-    'https://tokens.pancakeswap.finance/pancakeswap-extended.json'
-  );
-  const cmc = await http('https://tokens.pancakeswap.finance/cmc.json');
+  if (chainId === ChainId.BSC) {
+    const extended = await http(
+      'https://tokens.pancakeswap.finance/pancakeswap-extended.json'
+    );
+    const cmc = await http('https://tokens.pancakeswap.finance/cmc.json');
 
-  const coingecko = await http(
-    'https://tokens.pancakeswap.finance/coingecko.json'
-  );
+    const coingecko = await http(
+      'https://tokens.pancakeswap.finance/coingecko.json'
+    );
 
-  baseTokens.forEach((item: IToken) => {
-    if (!map.has(item.address)) {
-      map.set(item.address, 0);
-      baseArray.push(item);
-    }
-  });
+    tokens56.forEach((item: IToken) => {
+      if (!map.has(item.address)) {
+        map.set(item.address, 0);
+        baseArray.push(item);
+      }
+    });
 
-  extended.tokens?.forEach((item: IToken) => {
-    if (!map.has(item.address)) {
-      map.set(item.address, 0);
-      // item.source = 'PancakeSwap Extended';
-      baseArray.push(item);
-    }
-  });
+    extended.tokens?.forEach((item: IToken) => {
+      if (!map.has(item.address)) {
+        map.set(item.address, 0);
+        // item.source = 'PancakeSwap Extended';
+        baseArray.push(item);
+      }
+    });
 
-  cmc.tokens?.forEach((item: IToken) => {
-    if (!map.has(item.address)) {
-      map.set(item.address, 0);
-      item.source = 'CoinMarketCap';
-      array.push(item);
-    }
-  });
+    cmc.tokens?.forEach((item: IToken) => {
+      if (!map.has(item.address)) {
+        map.set(item.address, 0);
+        item.source = 'CoinMarketCap';
+        array.push(item);
+      }
+    });
 
-  coingecko.tokens?.forEach((item: IToken) => {
-    if (!map.has(item.address)) {
-      map.set(item.address, 0);
-      item.source = 'CoinGecko';
-      array.push(item);
-    }
-  });
+    coingecko.tokens?.forEach((item: IToken) => {
+      if (!map.has(item.address)) {
+        map.set(item.address, 0);
+        item.source = 'CoinGecko';
+        array.push(item);
+      }
+    });
+  } else if (chainId === ChainId.BSC_TESTNET) {
+    tokens97.forEach((item: IToken) => {
+      if (!map.has(item.address)) {
+        map.set(item.address, 0);
+        baseArray.push(item);
+      }
+    });
+  }
 
   return { baseArray, array };
 };
 
 const searchTokens = async (
   param: string,
+  chainId: number,
   tokens: IToken[],
   baseTokens: IToken[]
 ) => {
@@ -115,7 +124,7 @@ const searchTokens = async (
           name: name,
           symbol: symbol,
           address: param,
-          chainId: 56,
+          chainId: chainId,
           decimals: decimals,
           logoURI: '/images/pancake/panQuestionMark.svg',
           source: 'BscScan',
@@ -142,7 +151,7 @@ const searchTokens = async (
           name: 'Expanded results from inactive Token Lists',
           symbol: '',
           address: '',
-          chainId: 56,
+          chainId: chainId,
           decimals: 18,
         },
         ...extendedResult,
@@ -155,23 +164,40 @@ const searchTokens = async (
 
 export const useTokens = () => {
   const dispatch = useAppDispatch();
-  return useMutation(getTokens, {
-    onSuccess: (data) => {
-      const { baseArray, array } = data;
-      dispatch(setTokens(array));
-      dispatch(setBaseTokens(baseArray));
+  const { chain } = useNetwork();
+
+  return useMutation(
+    () => {
+      return getTokens(chain?.id ?? ChainId.BSC);
     },
-  });
+    {
+      onSuccess: (data) => {
+        const { baseArray, array } = data;
+        dispatch(setTokens({ chainId: chain?.id ?? ChainId.BSC, tkns: array }));
+        dispatch(
+          setBaseTokens({
+            chainId: chain?.id ?? ChainId.BSC,
+            tkns: baseArray,
+          })
+        );
+      },
+    }
+  );
 };
 
 export const useSearch = (param: string) => {
   const pancake = useAppSelector(selectPancakePersist);
-
+  const { chain } = useNetwork();
   return useQuery<IToken[], Error>(['searchPancakeTokens', param], () => {
     if (param === '') {
-      return pancake.baseTokens;
+      return pancake.baseTokens[chain?.id ?? ChainId.BSC];
     } else {
-      return searchTokens(param, pancake.tokens || [], pancake.baseTokens);
+      return searchTokens(
+        param,
+        chain?.id ?? ChainId.BSC,
+        pancake.tokens[chain?.id ?? ChainId.BSC] || [],
+        pancake.baseTokens[chain?.id ?? ChainId.BSC]
+      );
     }
   });
 };

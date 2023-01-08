@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { bscBusdAddr } from 'data/constants';
-import { baseTokens } from 'data/pancake';
+import { tokens56 } from 'data/baseTokens';
 import { RootState } from 'redux/store';
 
 export interface IToken {
@@ -21,8 +21,8 @@ interface PancakeState {
 }
 
 const initialState: PancakeState = {
-  inputCurrency: baseTokens[0],
-  outputCurrency: baseTokens[1],
+  inputCurrency: tokens56[0],
+  outputCurrency: tokens56[1],
   // bscUrl: bscBusdAddr.
 };
 

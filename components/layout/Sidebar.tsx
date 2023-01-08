@@ -97,6 +97,9 @@ export default function Sidebar() {
           <MenuItem>
             <Link href='/samples/map-record'>Map&Record</Link>
           </MenuItem>
+          <MenuItem>
+            <Link href='/samples/test'>Test</Link>
+          </MenuItem>
         </SubMenu>
         <SubMenu subTitle='Wagmi'>
           <MenuItem>
