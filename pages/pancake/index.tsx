@@ -24,7 +24,7 @@ import { ethers } from 'ethers';
 import { ChainId, JSBI, Percent, TradeDirection, _10000, _9975 } from 'eth';
 import { useTrade } from 'hooks/pancake/useTrade';
 
-import { getBestBscProvider } from 'conf';
+import { getBestUrl } from 'conf';
 import { useAccount, useNetwork } from 'wagmi';
 import { PAN_COMMON_TOKEN } from 'data/constants';
 
@@ -43,6 +43,8 @@ const Pancake: NextPageWithLayout = () => {
 
   useEffect(() => {
     const [NATIVE, TKN1] = PAN_COMMON_TOKEN[chain?.id ?? ChainId.BSC];
+    // console.log(NATIVE);
+    // console.log(TKN1);
     dispatch(setInputCurrency(NATIVE));
     dispatch(setOutputCurrency(TKN1));
   }, [chain, dispatch]);
@@ -109,7 +111,7 @@ const Pancake: NextPageWithLayout = () => {
   }, [tradeData, tradeParam.direction]);
 
   useEffect(() => {
-    getBestBscProvider();
+    getBestUrl();
   }, []);
 
   const setTradeDirection = () => {

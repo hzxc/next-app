@@ -7,10 +7,10 @@ import {
   USDT,
   WBTC_ETH,
 } from 'data/tokens';
-import { ChainId, WNATIVE } from 'eth';
+import { ChainId, ERC20Token, WNATIVE } from 'eth';
 import { IToken } from 'redux/pancake/pancakeSlice';
 
-export const PAN_ROUTER_ADDRESS = {
+export const PAN_ROUTER_ADDRESS: Record<number, string> = {
   [ChainId.ETHEREUM]: '0xEfF92A263d31888d860bD50809A8D171709b7b1c',
   [ChainId.RINKEBY]: '0xEfF92A263d31888d860bD50809A8D171709b7b1c',
   [ChainId.GOERLI]: '0xEfF92A263d31888d860bD50809A8D171709b7b1c',
@@ -32,10 +32,12 @@ export const PAN_COMMON_TOKEN: Record<number, IToken[]> = {
     commonTokens97.busd,
     commonTokens97.wbnb,
   ],
+  [ChainId.RINKEBY]: [],
+  [ChainId.GOERLI]: [],
 };
-
+// [chainId in ChainId]?: { [tokenAddress: string]: Token[] };
 // used to construct intermediary pairs for trading
-export const PAN_BASES_TO_CHECK_TRADES_AGAINST = {
+export const PAN_BASES_TO_CHECK_TRADES_AGAINST: Record<number, ERC20Token[]> = {
   [ChainId.ETHEREUM]: [
     WNATIVE[ChainId.ETHEREUM],
     USDC[ChainId.ETHEREUM],

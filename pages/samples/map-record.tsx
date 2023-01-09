@@ -48,6 +48,7 @@ const RecordDemo: NextPageWithLayout = () => {
           <p className='break-all'>{JSON.stringify(map)}</p>
           <p>{map[ChainId.BSC]}</p>
         </div>
+        <div>record[11]:{typeof record[11]}</div>
       </div>
     </Layout>
   );

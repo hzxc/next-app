@@ -6,7 +6,6 @@ import multicall3ABI from 'abis/multicall3.json';
 import erc20ABI from 'abis/erc20.json';
 import { Interface } from 'ethers/lib/utils';
 import { bscCakeAddr } from 'data/constants';
-import { bscProvider } from 'conf';
 import { Button } from 'components';
 import IPancakePairABI from 'abis/bsc/IPancakePair.json';
 
@@ -17,7 +16,14 @@ import {
 } from 'ethereum-multicall';
 import { BigNumber, ethers } from 'ethers';
 import JSBI from 'jsbi';
-import { CurrencyAmount, ERC20Token, Percent, _10000, _9975 } from 'eth';
+import {
+  ChainId,
+  CurrencyAmount,
+  ERC20Token,
+  Percent,
+  _10000,
+  _9975,
+} from 'eth';
 import { bscTokens } from 'data/tokens';
 import {
   getAllCommonPairs,
@@ -28,6 +34,7 @@ import {
 
 import _Big from 'big.js';
 import toFormat from 'toformat';
+import { BEST_URL } from 'conf';
 
 const Big = toFormat(_Big);
 Big.DP = 18;
@@ -53,7 +60,10 @@ const EthereumMulticall: NextPageWithLayout = () => {
   //     console.log(ret);
   //   };
   //  -------------
-  let provider = bscProvider;
+  let provider = new ethers.providers.JsonRpcProvider(BEST_URL[ChainId.BSC], {
+    name: 'bsc',
+    chainId: 56,
+  });
   const multicall = new Multicall({
     ethersProvider: provider,
     tryAggregate: true,
@@ -114,7 +124,7 @@ const EthereumMulticall: NextPageWithLayout = () => {
       <Button onClick={call}>Ethereum Multicall</Button>
       <Button
         onClick={() => {
-          getPair(bscTokens.wbnb, bscTokens.cake).then((ret) => {
+          getPair(ChainId.BSC, bscTokens.wbnb, bscTokens.cake).then((ret) => {
             console.log(ret);
           });
         }}
@@ -124,7 +134,7 @@ const EthereumMulticall: NextPageWithLayout = () => {
       </Button>
       <Button
         onClick={() => {
-          getAllCommonPairs(bscTokens.wbnb, bscTokens.cake).then((ret) => {
+          getAllCommonPairs(56, bscTokens.wbnb, bscTokens.cake).then((ret) => {
             // console.log(ret);
           });
         }}

@@ -1,16 +1,22 @@
 import { useQuery } from '@tanstack/react-query';
-import { ERC20Token, Pair } from 'eth';
+import { ChainId, ERC20Token, Pair } from 'eth';
+import { useDebounce } from 'use-debounce';
 import { getAllCommonPairs } from 'utils/pancake';
+import { useNetwork } from 'wagmi';
 
 export const usePairs = (param: { tokenA: ERC20Token; tokenB: ERC20Token }) => {
   const { tokenA, tokenB } = param;
 
   const pairAddr = Pair.getAddress(tokenA, tokenB);
+
+  // const debouncePairAddr = useDebounce(pairAddr, 400);
+
+  const { chain } = useNetwork();
   return useQuery<Pair[], Error>(
     ['PanPairs', pairAddr],
     () => {
       console.log('getAllCommonPairs');
-      return getAllCommonPairs(tokenA, tokenB);
+      return getAllCommonPairs(chain?.id ?? ChainId.BSC, tokenA, tokenB);
     },
     {
       refetchOnWindowFocus: false,

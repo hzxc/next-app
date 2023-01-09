@@ -1,7 +1,6 @@
 import { ContractCallContext, Multicall } from 'ethereum-multicall';
-import IPancakePairABI from 'abis/bsc/IPancakePair.json';
-import { bscProvider } from 'conf';
-import { Currency, CurrencyAmount, Pair, Token } from 'eth';
+import PairABI from 'abis/pancake/pair.json';
+import { ChainId, Currency, CurrencyAmount, Pair, Token } from 'eth';
 import { wrappedCurrency } from 'utils/wrappedCurrency';
 import invariant from 'tiny-invariant';
 import { compact, flatMap } from 'lodash';
@@ -10,16 +9,17 @@ import {
   PAN_BASES_TO_CHECK_TRADES_AGAINST,
   CUSTOM_BASES,
 } from 'data/constants';
+import { bscProvider, PROVIDER } from 'conf';
 
 const CHAIN_ID = 56;
 
-const pairCall = async (pairAddresses: string[]) => {
+const pairCall = async (chainId: number, pairAddresses: string[]) => {
   const contractCallContext: ContractCallContext[] = pairAddresses.map(
     (addr, i) => {
       return {
         reference: `pair${i}`,
         contractAddress: addr,
-        abi: IPancakePairABI,
+        abi: PairABI,
         calls: [
           {
             reference: 'getReservesCall',
@@ -32,7 +32,7 @@ const pairCall = async (pairAddresses: string[]) => {
   );
 
   const multicall = new Multicall({
-    ethersProvider: bscProvider,
+    ethersProvider: PROVIDER[chainId],
     tryAggregate: true,
   });
 
@@ -41,11 +41,12 @@ const pairCall = async (pairAddresses: string[]) => {
 };
 
 export const getPairs = async (
+  chainId: number,
   currencies: [Currency, Currency][]
 ): Promise<Pair[]> => {
   let tokens: [Token, Token][] = currencies.map(([currencyA, currencyB]) => [
-    wrappedCurrency(currencyA, CHAIN_ID),
-    wrappedCurrency(currencyB, CHAIN_ID),
+    wrappedCurrency(currencyA, chainId),
+    wrappedCurrency(currencyB, chainId),
   ]);
 
   // const map = new Map<string, [Token, Token]>();
@@ -65,7 +66,7 @@ export const getPairs = async (
   tokens = Object.values(pairAddressesMap);
   const pairAddresses = Object.keys(pairAddressesMap);
 
-  const callResults = await pairCall(pairAddresses);
+  const callResults = await pairCall(chainId, pairAddresses);
 
   const pairs = tokens.map((tkn, i) => {
     const { returnValues: reserves, success } =
@@ -92,31 +93,33 @@ export const getPairs = async (
 };
 
 export const getPair = async (
+  chainId: number,
   tokenA: Currency,
   tokenB: Currency
 ): Promise<Pair> => {
-  const ret = await getPairs([[tokenA, tokenB]]);
+  const ret = await getPairs(chainId, [[tokenA, tokenB]]);
   return ret[0];
 };
 
 export const getAllCommonPairs = async (
+  chainId: number,
   currencyA: Currency,
   currencyB: Currency
 ): Promise<Pair[]> => {
   const [tokenA, tokenB] = [
-    wrappedCurrency(currencyA, CHAIN_ID),
-    wrappedCurrency(currencyB, CHAIN_ID),
+    wrappedCurrency(currencyA, chainId),
+    wrappedCurrency(currencyB, chainId),
   ];
 
-  const common = PAN_BASES_TO_CHECK_TRADES_AGAINST[CHAIN_ID] ?? [];
+  const common = PAN_BASES_TO_CHECK_TRADES_AGAINST[chainId] ?? [];
 
   // Additional bases for specific tokens
   const additionalA = tokenA
-    ? ADDITIONAL_BASES[CHAIN_ID]?.[tokenA.address] ?? []
+    ? ADDITIONAL_BASES[chainId]?.[tokenA.address] ?? []
     : [];
 
   const additionalB = tokenB
-    ? ADDITIONAL_BASES[CHAIN_ID]?.[tokenB.address] ?? []
+    ? ADDITIONAL_BASES[chainId]?.[tokenB.address] ?? []
     : [];
 
   const bases = [...common, ...additionalA, ...additionalB];
@@ -135,7 +138,7 @@ export const getAllCommonPairs = async (
     )
     .filter(([t0, t1]) => t0.address !== t1.address)
     .filter(([tokenA_, tokenB_]) => {
-      const customBases = CUSTOM_BASES[CHAIN_ID];
+      const customBases = CUSTOM_BASES[chainId];
 
       const customBasesA: Token[] | undefined = customBases?.[tokenA_.address];
       const customBasesB: Token[] | undefined = customBases?.[tokenB_.address];
@@ -150,7 +153,7 @@ export const getAllCommonPairs = async (
       return true;
     });
 
-  const allPairs = await getPairs(allPairCombinations);
+  const allPairs = await getPairs(chainId, allPairCombinations);
 
   return allPairs;
 };

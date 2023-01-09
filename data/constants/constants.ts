@@ -14,7 +14,7 @@ import {
  * @example { [WBTC.address]: [renBTC], [renBTC.address]: [WBTC] }
  */
 export const ADDITIONAL_BASES: {
-  [chainId in ChainId]?: { [tokenAddress: string]: Token[] };
+  [chainId in number]?: { [tokenAddress: string]: Token[] };
 } = {
   [ChainId.BSC]: {
     // SNFTS-SFUND
@@ -29,7 +29,7 @@ export const ADDITIONAL_BASES: {
  */
 
 export const CUSTOM_BASES: {
-  [chainId in ChainId]?: { [tokenAddress: string]: Token[] };
+  [chainId in number]?: { [tokenAddress: string]: Token[] };
 } = {
   [ChainId.BSC]: {},
 };

@@ -4,7 +4,7 @@ import { Layout } from 'components/layout';
 import { NextPageWithLayout } from 'pages/_app';
 import { ReactElement, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import { bscUrl, getBestBscProvider } from 'conf';
+import { BEST_URL, getBestUrl } from 'conf';
 
 const PingPage: NextPageWithLayout = () => {
   const [axiosRet, setAxiosRet] = useState<any>();
@@ -42,16 +42,17 @@ const PingPage: NextPageWithLayout = () => {
           duration = dayjs().valueOf() - start;
         })
         .catch((err: AxiosError) => {
-          console.log(err);
-          if (err.response?.status && err.response.status >= 400) {
-            duration = 9999;
-          } else if (err.code === 'ECONNABORTED') {
-            duration = 8888;
-          } else if (err.code === 'ERR_NETWORK') {
-            duration = 9999;
-          } else {
-            duration = dayjs().valueOf() - start;
-          }
+          duration = 9999;
+          // console.log(err);
+          // if (err.response?.status && err.response.status >= 400) {
+          //   duration = 9999;
+          // } else if (err.code === 'ECONNABORTED') {
+          //   duration = 8888;
+          // } else if (err.code === 'ERR_NETWORK') {
+          //   duration = 9999;
+          // } else {
+          //   duration = dayjs().valueOf() - start;
+          // }
 
           // return { url: url, duration: duration };
         });
@@ -63,36 +64,55 @@ const PingPage: NextPageWithLayout = () => {
       // return axios.options(url, { timeout: 3000 });
     };
 
+    // [ChainId.ETHEREUM]: 'https://mainnet.infura.io/v3/',
+    // [ChainId.BSC]: 'https://bsc-dataseed.binance.org',
+    // [ChainId.BSC_TESTNET]: 'https://bsc-testnet.public.blastapi.io',
+
     Promise.all([
-      ping('https://bsc-dataseed.binance.org'),
-      ping('https://bsc-dataseed1.binance.org'),
-      ping('https://bsc-dataseed2.binance.org'),
-      ping('https://bsc-dataseed3.binance.org'),
-      ping('https://bsc-dataseed4.binance.org'),
-      ping('https://bsc-dataseed1.defibit.io'),
-      ping('https://bsc-dataseed2.defibit.io'),
-      ping('https://bsc-dataseed3.defibit.io'),
-      ping('https://bsc-dataseed4.defibit.io'),
-      ping('https://bsc-dataseed1.ninicoin.io'),
-      ping('https://bsc-dataseed2.ninicoin.io'),
-      ping('https://bsc-dataseed3.ninicoin.io'),
-      ping('https://bsc-dataseed4.ninicoin.io'),
-      ping('https://tokens.pancakeswap.finance/pancakeswap-extended.json'),
-      ping('https://ifconfig.me/'),
-      ping('http://www.gstatic.com/generate_204'),
-      ping('https://www.google.com'),
-      ping('https://api.binance.com/api/v3/time'),
-      ping('https://api.mexc.com/api/v3/time'),
-    ]).then((results) => {
-      const sortRet = results.sort((a, b) => {
-        return a.duration - b.duration;
-      });
-      setAxiosRet(sortRet);
-      console.log(sortRet);
-      // console.log(results);
-      // results.map((item, i) => {});
-      // console.log(results);
-    });
+      // ping('https://bsc-dataseed1.binance.org'),
+      // ping('https://bsc-dataseed2.binance.org'),
+      // ping('https://bsc-dataseed3.binance.org'),
+      // ping('https://bsc-dataseed4.binance.org'),
+      // ping('https://bsc-dataseed1.defibit.io'),
+      // ping('https://bsc-dataseed2.defibit.io'),
+      // ping('https://bsc-dataseed3.defibit.io'),
+      // ping('https://bsc-dataseed4.defibit.io'),
+      // ping('https://bsc-dataseed1.ninicoin.io'),
+      // ping('https://bsc-dataseed2.ninicoin.io'),
+      // ping('https://bsc-dataseed3.ninicoin.io'),
+      // ping('https://bsc-dataseed4.ninicoin.io'),
+      // ping('https://bsc-dataseed.binance.org'),
+      ping('https://bsc-testnet.public.blastapi.io'),
+      ping('https://ethereum.publicnode.com'),
+      ping('https://eth-rpc.gateway.pokt.network'),
+      ping('https://mainnet.infura.io/v3/'),
+      ping('https://eth.llamarpc.com'),
+      ping('https://rpc.builder0x69.io'),
+
+      // 'https://ethereum.publicnode.com',
+      // 'https://eth-rpc.gateway.pokt.network',
+      // 'https://mainnet.infura.io/v3/',
+      // 'https://eth.llamarpc.com',
+      // 'https://rpc.builder0x69.io',
+
+      // ping('https://tokens.pancakeswap.finance/pancakeswap-extended.json'),
+      // ping('https://ifconfig.me/'),
+      // ping('http://www.gstatic.com/generate_204'),
+      // ping('https://www.google.com'),
+      // ping('https://api.binance.com/api/v3/time'),
+      // ping('https://api.mexc.com/api/v3/time'),
+    ])
+      .then((results) => {
+        const sortRet = results.sort((a, b) => {
+          return a.duration - b.duration;
+        });
+        setAxiosRet(sortRet);
+        console.log(sortRet);
+        // console.log(results);
+        // results.map((item, i) => {});
+        // console.log(results);
+      })
+      .catch();
   };
 
   const getServerTime = () => {
@@ -163,7 +183,7 @@ const PingPage: NextPageWithLayout = () => {
   };
 
   useEffect(() => {
-    // getBestBscProvider();
+    getBestUrl();
     // getServerTime();
   }, []);
 
@@ -237,7 +257,7 @@ const PingPage: NextPageWithLayout = () => {
       <Button onClick={handleClick}>Ping</Button>
       <Button
         onClick={() => {
-          console.log(bscUrl);
+          console.log(BEST_URL[56]);
         }}
       >
         get bsc url

@@ -5,15 +5,18 @@ import { IToken } from 'redux/pancake/pancakeSlice';
 import { http } from 'utils';
 import { setBaseTokens, setTokens } from 'redux/pancake/pancakePersistSlice';
 import { selectPancakePersist } from 'redux/pancake/pancakePersistSlice';
-import { BigNumber, ethers } from 'ethers';
-import { bscProvider } from 'conf';
-import { IBEP20ABI } from 'abis/bsc';
-import { bscMultiQueryAddr } from 'data/constants';
-import { MultiQueryABI } from 'abis';
 import { ChainId } from 'eth';
 import { useNetwork } from 'wagmi';
 import { tokens97 } from 'data/baseTokens/97';
 import { bscTestnetTokens } from 'data/tokens';
+import {
+  ContractCallContext,
+  ContractCallResults,
+  Multicall,
+} from 'ethereum-multicall';
+import { PROVIDER } from 'conf';
+import TokenABI from 'abis/pancake/token.json';
+import { ethers } from 'ethers';
 
 const getTokens = async (chainId: number) => {
   const baseArray: IToken[] = [];
@@ -67,13 +70,6 @@ const getTokens = async (chainId: number) => {
       }
     });
 
-    tokens97.forEach((item: IToken) => {
-      if (!map.has(item.address)) {
-        map.set(item.address, 0);
-        baseArray.push(item);
-      }
-    });
-
     array.push(bscTestnetTokens.bake);
     array.push(bscTestnetTokens.hbtc);
     array.push(bscTestnetTokens.syrup);
@@ -111,27 +107,80 @@ const searchTokens = async (
       return extendedResult;
     }
 
-    const mutiQueryContr = new ethers.Contract(
-      bscMultiQueryAddr,
-      MultiQueryABI,
-      bscProvider
-    );
-    const bep20Iface = new ethers.utils.Interface(IBEP20ABI);
-    const funcSymbol = bep20Iface.encodeFunctionData('symbol', []);
-    const funcDecimals = bep20Iface.encodeFunctionData('decimals', []);
-    const funcName = bep20Iface.encodeFunctionData('name', []);
-    const abiCoder = ethers.utils.defaultAbiCoder;
+    const multicall = new Multicall({
+      ethersProvider: PROVIDER[chainId],
+      tryAggregate: true,
+    });
+
+    const contractCallContext: ContractCallContext[] = [
+      {
+        reference: 'tokenContract',
+        contractAddress: param,
+        abi: TokenABI,
+        calls: [
+          {
+            reference: 'symbolCall',
+            methodName: 'symbol',
+            methodParameters: [],
+          },
+          {
+            reference: 'decimalsCall',
+            methodName: 'decimals',
+            methodParameters: [],
+          },
+          {
+            reference: 'nameCall',
+            methodName: 'name',
+            methodParameters: [],
+          },
+        ],
+      },
+    ];
+
+    // const mutiQueryContr = new ethers.Contract(
+    //   bscMultiQueryAddr,
+    //   MultiQueryABI,
+    //   bscProvider
+    // );
+
+    // const bep20Iface = new ethers.utils.Interface(IBEP20ABI);
+    // const funcSymbol = bep20Iface.encodeFunctionData('symbol', []);
+    // const funcDecimals = bep20Iface.encodeFunctionData('decimals', []);
+    // const funcName = bep20Iface.encodeFunctionData('name', []);
+    // const abiCoder = ethers.utils.defaultAbiCoder;
 
     try {
-      const ret = await mutiQueryContr.multiQuery([
-        [param, funcSymbol],
-        [param, funcDecimals],
-        [param, funcName],
-      ]);
+      const callResults: ContractCallResults = await multicall.call(
+        contractCallContext
+      );
 
-      const [symbol] = abiCoder.decode(['string'], ret[1][0]);
-      const decimals = BigNumber.from(ret[1][1]).toNumber();
-      const [name] = abiCoder.decode(['string'], ret[1][2]);
+      const ret = callResults.results.tokenContract.callsReturnContext;
+      if (!ret[0].success || !ret[1].success || !ret[2].success) {
+        throw new Error('call error');
+      }
+
+      const [symbol] = ret[0].returnValues;
+      const [decimals] = ret[1].returnValues;
+      const [name] = ret[2].returnValues;
+
+      // const ret = await mutiQueryContr.multiQuery([
+      //   [param, funcSymbol],
+      //   [param, funcDecimals],
+      //   [param, funcName],
+      // ]);
+
+      // const [symbol] = abiCoder.decode(['string'], ret[1][0]);
+      // const decimals = BigNumber.from(ret[1][1]).toNumber();
+      // const [name] = abiCoder.decode(['string'], ret[1][2]);
+
+      // name?: string;
+      // symbol: string;
+      // address: string;
+      // chainId: number;
+      // decimals: number;
+      // projectLink?: string;
+      // logoURI?: string;
+      // source?: string;
 
       return [
         {
@@ -144,7 +193,7 @@ const searchTokens = async (
           source: 'BscScan',
         },
       ];
-    } catch (error) {
+    } catch {
       // throw new Error(
       //   isError(error) ? error.message : 'get token from bsc error'
       // );
@@ -212,7 +261,7 @@ export const useSearch = (param: string) => {
     ['searchPancakeTokens', param, chain?.id ?? ChainId.BSC],
     () => {
       if (param === '') {
-        return pancake.baseTokens[chain?.id ?? ChainId.BSC];
+        return pancake.baseTokens[chain?.id ?? ChainId.BSC] || [];
       } else {
         return searchTokens(
           param,

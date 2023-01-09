@@ -9,10 +9,12 @@ import { getAllCommonPairs } from './pair';
 const MAX_HOPS = 3;
 
 export const tradeExactIn = async (
+  chainId: number,
   currencyAmountIn: CurrencyAmount<Currency>,
   currencyOut: Currency
 ): Promise<Trade<Currency, Currency, TradeType> | null> => {
   const allowedPairs = await getAllCommonPairs(
+    chainId,
     currencyAmountIn.currency,
     currencyOut
   );
@@ -44,10 +46,12 @@ export const tradeExactIn = async (
  * Returns the best trade for the token in to the exact amount of token out
  */
 export async function tradeExactOut(
+  chainId: number,
   currencyIn: Currency,
   currencyAmountOut: CurrencyAmount<Currency>
 ): Promise<Trade<Currency, Currency, TradeType> | null> {
   const allowedPairs = await getAllCommonPairs(
+    chainId,
     currencyIn,
     currencyAmountOut?.currency
   );

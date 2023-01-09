@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
-  ChainId,
   Currency,
   CurrencyAmount,
   ERC20Token,
@@ -10,12 +9,11 @@ import {
   TradeType,
   WNATIVE,
 } from 'eth';
-import { ethers, utils } from 'ethers';
+import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
 import { IToken } from 'redux/pancake/pancakeSlice';
 import { tradeExactInByPairs, tradeExactOutByPairs } from 'utils/pancake';
 import { usePairs } from './usePairs';
-const CHAIN_ID = 56;
 
 export const useTrade = (param: {
   fromToken: IToken;
@@ -26,9 +24,10 @@ export const useTrade = (param: {
   const { fromToken, toToken, amountToTrade, direction } = param;
   const fromCurrency =
     ethers.constants.AddressZero === ethers.utils.getAddress(fromToken.address)
-      ? WNATIVE[CHAIN_ID]
+      ? // ? WNATIVE[chain?.id ?? ChainId.BSC]
+        WNATIVE[fromToken.chainId]
       : new ERC20Token(
-          ChainId.BSC,
+          fromToken.chainId,
           fromToken.address,
           fromToken.decimals,
           fromToken.symbol,
@@ -40,9 +39,10 @@ export const useTrade = (param: {
 
   const toCurrency =
     ethers.constants.AddressZero === ethers.utils.getAddress(toToken.address)
-      ? WNATIVE[CHAIN_ID]
+      ? // ? WNATIVE[chain?.id ?? ChainId.BSC]
+        WNATIVE[toToken.chainId]
       : new ERC20Token(
-          ChainId.BSC,
+          toToken.chainId,
           toToken.address,
           toToken.decimals,
           toToken.symbol,
