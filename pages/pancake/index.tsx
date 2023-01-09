@@ -26,6 +26,7 @@ import { useTrade } from 'hooks/pancake/useTrade';
 
 import { getBestBscProvider } from 'conf';
 import { useAccount, useNetwork } from 'wagmi';
+import { PAN_COMMON_TOKEN } from 'data/constants';
 
 const Pancake: NextPageWithLayout = () => {
   const { visible, close, open } = useToggle(false);
@@ -39,6 +40,12 @@ const Pancake: NextPageWithLayout = () => {
   const pancake = useAppSelector(selectPancake);
   const pancakePersist = useAppSelector(selectPancakePersist);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const [NATIVE, TKN1] = PAN_COMMON_TOKEN[chain?.id ?? ChainId.BSC];
+    dispatch(setInputCurrency(NATIVE));
+    dispatch(setOutputCurrency(TKN1));
+  }, [chain, dispatch]);
   /* #endregion */
 
   const { mutate, isIdle } = useTokens();
@@ -147,13 +154,9 @@ const Pancake: NextPageWithLayout = () => {
 
   return (
     <>
-      <div className='p-8 break-all'>
+      <div>
         <p>{JSON.stringify(tradeParam)}</p>
         <p>chainId:{chain?.id}</p>
-        {/* <p>chain:{JSON.stringify(chain)}</p> */}
-        {/* <div>Available chains: {chains.map((chain) => chain.name + ',')}</div> */}
-        {/* <p>tokens length:{pancakePersist.tokens[connector?.id]?.length}</p>
-        <p>base tokens length:{pancakePersist.baseTokens?.length}</p> */}
         <p>isConnected:{JSON.stringify(isConnected)}</p>
         <p>address:{address}</p>
         <p className='break-all'>

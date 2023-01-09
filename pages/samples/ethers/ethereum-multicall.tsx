@@ -114,7 +114,7 @@ const EthereumMulticall: NextPageWithLayout = () => {
       <Button onClick={call}>Ethereum Multicall</Button>
       <Button
         onClick={() => {
-          getPair(bscTokens.bnb, bscTokens.cake).then((ret) => {
+          getPair(bscTokens.wbnb, bscTokens.cake).then((ret) => {
             console.log(ret);
           });
         }}
@@ -124,7 +124,7 @@ const EthereumMulticall: NextPageWithLayout = () => {
       </Button>
       <Button
         onClick={() => {
-          getAllCommonPairs(bscTokens.bnb, bscTokens.cake).then((ret) => {
+          getAllCommonPairs(bscTokens.wbnb, bscTokens.cake).then((ret) => {
             // console.log(ret);
           });
         }}

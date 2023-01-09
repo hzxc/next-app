@@ -1,3 +1,5 @@
+import { ChainId } from 'eth';
+
 export const bscCakeAddr = '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82';
 export const bscMultiQueryAddr = '0x8D5295E1dee361FB9D5465193625DC005B531a16';
 

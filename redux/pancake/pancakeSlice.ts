@@ -4,7 +4,7 @@ import { tokens56 } from 'data/baseTokens';
 import { RootState } from 'redux/store';
 
 export interface IToken {
-  name: string;
+  name?: string;
   symbol: string;
   address: string;
   chainId: number;
@@ -17,13 +17,11 @@ export interface IToken {
 interface PancakeState {
   inputCurrency: IToken;
   outputCurrency: IToken;
-  // bscUrl: string;
 }
 
 const initialState: PancakeState = {
   inputCurrency: tokens56[0],
   outputCurrency: tokens56[1],
-  // bscUrl: bscBusdAddr.
 };
 
 export const pancakeSlice = createSlice({

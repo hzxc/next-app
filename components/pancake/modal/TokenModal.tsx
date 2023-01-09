@@ -16,9 +16,9 @@ import {
 } from 'redux/pancake/pancakeSlice';
 
 import { importToken } from 'redux/pancake/pancakePersistSlice';
-import { BNB, BTCB, BUSD, CAKE } from 'data/baseTokens';
 import { useNetwork } from 'wagmi';
 import { ChainId } from 'eth';
+import { PAN_COMMON_TOKEN } from 'data/constants';
 
 export const TokenModal: React.FC<{
   visible: boolean;
@@ -27,6 +27,9 @@ export const TokenModal: React.FC<{
   setTradeDirection?: () => void;
 }> = ({ visible, modalClose, source, setTradeDirection }) => {
   const { chain } = useNetwork();
+
+  const [NATIVE, TKN1, TKN2, TKN3] = PAN_COMMON_TOKEN[chain?.id ?? ChainId.BSC];
+
   const pancake = useAppSelector(selectPancake);
   const dispatch = useAppDispatch();
   const [searchParam, setSearchParam] = useState('');
@@ -239,47 +242,47 @@ export const TokenModal: React.FC<{
             <div className='flex items-center justify-around'>
               <IconButton
                 onClick={() => {
-                  tknClick(BNB);
+                  tknClick(NATIVE);
                 }}
                 className={`hover:bg-[#faf9fa] p-[6px] rounded-xl border border-[#f6f6f6] ${tknClass(
-                  BNB
+                  NATIVE
                 )}`}
-                leftSrc='/images/pancake/bnb.svg'
+                leftSrc={NATIVE.logoURI}
               >
-                BNB
+                {NATIVE.symbol}
               </IconButton>
               <IconButton
                 onClick={() => {
-                  tknClick(BUSD);
+                  tknClick(TKN1);
                 }}
                 className={`hover:bg-[#faf9fa] p-[6px] rounded-xl border border-[#f6f6f6] ${tknClass(
-                  BUSD
+                  TKN1
                 )}`}
-                leftSrc='/images/pancake/busd.png'
+                leftSrc={TKN1.logoURI}
               >
-                BUSD
+                {TKN1.symbol}
               </IconButton>
               <IconButton
                 onClick={() => {
-                  tknClick(CAKE);
+                  tknClick(TKN2);
                 }}
                 className={`hover:bg-[#faf9fa] p-[6px] rounded-xl border border-[#f6f6f6] ${tknClass(
-                  CAKE
+                  TKN2
                 )}`}
-                leftSrc='https://tokens.pancakeswap.finance/images/0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82.png'
+                leftSrc={TKN2.logoURI}
               >
-                CAKE
+                {TKN2.symbol}
               </IconButton>
               <IconButton
                 onClick={() => {
-                  tknClick(BTCB);
+                  tknClick(TKN3);
                 }}
                 className={`hover:bg-[#faf9fa] p-[6px] rounded-xl border border-[#f6f6f6] ${tknClass(
-                  BTCB
+                  TKN3
                 )}`}
-                leftSrc='/images/pancake/btc.png'
+                leftSrc={TKN3.logoURI}
               >
-                BTCB
+                {TKN3.symbol}
               </IconButton>
             </div>
           </div>

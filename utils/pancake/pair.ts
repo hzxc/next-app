@@ -7,7 +7,7 @@ import invariant from 'tiny-invariant';
 import { compact, flatMap } from 'lodash';
 import {
   ADDITIONAL_BASES,
-  BASES_TO_CHECK_TRADES_AGAINST,
+  PAN_BASES_TO_CHECK_TRADES_AGAINST,
   CUSTOM_BASES,
 } from 'data/constants';
 
@@ -108,7 +108,7 @@ export const getAllCommonPairs = async (
     wrappedCurrency(currencyB, CHAIN_ID),
   ];
 
-  const common = BASES_TO_CHECK_TRADES_AGAINST[CHAIN_ID] ?? [];
+  const common = PAN_BASES_TO_CHECK_TRADES_AGAINST[CHAIN_ID] ?? [];
 
   // Additional bases for specific tokens
   const additionalA = tokenA

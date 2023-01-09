@@ -13,6 +13,7 @@ import { MultiQueryABI } from 'abis';
 import { ChainId } from 'eth';
 import { useNetwork } from 'wagmi';
 import { tokens97 } from 'data/baseTokens/97';
+import { bscTestnetTokens } from 'data/tokens';
 
 const getTokens = async (chainId: number) => {
   const baseArray: IToken[] = [];
@@ -65,6 +66,19 @@ const getTokens = async (chainId: number) => {
         baseArray.push(item);
       }
     });
+
+    tokens97.forEach((item: IToken) => {
+      if (!map.has(item.address)) {
+        map.set(item.address, 0);
+        baseArray.push(item);
+      }
+    });
+
+    array.push(bscTestnetTokens.bake);
+    array.push(bscTestnetTokens.hbtc);
+    array.push(bscTestnetTokens.syrup);
+    array.push(bscTestnetTokens.usdc);
+    array.push(bscTestnetTokens.wbtc);
   }
 
   return { baseArray, array };
@@ -173,13 +187,19 @@ export const useTokens = () => {
     {
       onSuccess: (data) => {
         const { baseArray, array } = data;
-        dispatch(setTokens({ chainId: chain?.id ?? ChainId.BSC, tkns: array }));
-        dispatch(
-          setBaseTokens({
-            chainId: chain?.id ?? ChainId.BSC,
-            tkns: baseArray,
-          })
-        );
+        if (array.length > 0) {
+          dispatch(
+            setTokens({ chainId: chain?.id ?? ChainId.BSC, tkns: array })
+          );
+        }
+        if (baseArray.length > 0) {
+          dispatch(
+            setBaseTokens({
+              chainId: chain?.id ?? ChainId.BSC,
+              tkns: baseArray,
+            })
+          );
+        }
       },
     }
   );
@@ -188,16 +208,19 @@ export const useTokens = () => {
 export const useSearch = (param: string) => {
   const pancake = useAppSelector(selectPancakePersist);
   const { chain } = useNetwork();
-  return useQuery<IToken[], Error>(['searchPancakeTokens', param], () => {
-    if (param === '') {
-      return pancake.baseTokens[chain?.id ?? ChainId.BSC];
-    } else {
-      return searchTokens(
-        param,
-        chain?.id ?? ChainId.BSC,
-        pancake.tokens[chain?.id ?? ChainId.BSC] || [],
-        pancake.baseTokens[chain?.id ?? ChainId.BSC]
-      );
+  return useQuery<IToken[], Error>(
+    ['searchPancakeTokens', param, chain?.id ?? ChainId.BSC],
+    () => {
+      if (param === '') {
+        return pancake.baseTokens[chain?.id ?? ChainId.BSC];
+      } else {
+        return searchTokens(
+          param,
+          chain?.id ?? ChainId.BSC,
+          pancake.tokens[chain?.id ?? ChainId.BSC] || [],
+          pancake.baseTokens[chain?.id ?? ChainId.BSC]
+        );
+      }
     }
-  });
+  );
 };

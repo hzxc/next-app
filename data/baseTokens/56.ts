@@ -128,41 +128,40 @@ export const tokens56: IToken[] = [
   },
 ];
 
-export const BNB: IToken = {
-  name: 'Binance Chain Native Token',
-  symbol: 'BNB',
-  address: '0x0000000000000000000000000000000000000000',
-  chainId: 56,
-  decimals: 18,
-  logoURI: '/images/pancake/bnb.svg',
-};
-
-export const BUSD: IToken = {
-  name: 'BUSD Token',
-  symbol: 'BUSD',
-  address: '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56',
-  chainId: 56,
-  decimals: 18,
-  logoURI:
-    'https://tokens.pancakeswap.finance/images/0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56.png',
-};
-
-export const CAKE: IToken = {
-  name: 'PancakeSwap Token',
-  symbol: 'CAKE',
-  address: '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
-  chainId: 56,
-  decimals: 18,
-  logoURI:
-    'https://tokens.pancakeswap.finance/images/0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82.png',
-};
-
-export const BTCB: IToken = {
-  name: 'BTCB Token',
-  symbol: 'BTCB',
-  address: '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c',
-  chainId: 56,
-  decimals: 18,
-  logoURI:
-    'https://tokens.pancakeswap.finance/images/0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c.png',
+export const commonTokens56: Record<string, IToken> = {
+  bnb: {
+    name: 'Binance Chain Native Token',
+    symbol: 'BNB',
+    address: '0x0000000000000000000000000000000000000000',
+    chainId: 56,
+    decimals: 18,
+    logoURI: '/images/pancake/bnb.svg',
+  },
+  cake: {
+    name: 'PancakeSwap Token',
+    symbol: 'CAKE',
+    address: '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
+    chainId: 56,
+    decimals: 18,
+    logoURI:
+      'https://tokens.pancakeswap.finance/images/0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82.png',
+  },
+  busd: {
+    name: 'BUSD Token',
+    symbol: 'BUSD',
+    address: '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56',
+    chainId: 56,
+    decimals: 18,
+    logoURI:
+      'https://tokens.pancakeswap.finance/images/0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56.png',
+  },
+  btcb: {
+    name: 'BTCB Token',
+    symbol: 'BTCB',
+    address: '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c',
+    chainId: 56,
+    decimals: 18,
+    logoURI:
+      'https://tokens.pancakeswap.finance/images/0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c.png',
+  },
 };
