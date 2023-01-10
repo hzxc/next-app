@@ -84,7 +84,12 @@ export const useTrade = (param: {
     () => {
       console.log('get trade data');
 
-      if (!amountToTrade || !pairs || Number(amountToTrade) <= 0) {
+      if (
+        !amountToTrade ||
+        !pairs ||
+        pairs.length <= 0 ||
+        Number(amountToTrade) <= 0
+      ) {
         return null;
       }
 

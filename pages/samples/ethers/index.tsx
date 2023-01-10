@@ -23,7 +23,7 @@ import {
   JSBI,
 } from 'eth';
 import { getBestBscProvider } from 'conf';
-import { getBnbBalance, getTokensBalance } from 'utils/pancake';
+import { getNativeBalance, getTokensBalance } from 'utils/pancake';
 import { bscTokens, BSC_BNB } from 'data/tokens';
 import { tokens56 } from 'data/baseTokens';
 
@@ -41,7 +41,7 @@ const Index: NextPageWithLayout = () => {
   const [err, setErr] = useState('');
 
   const bnbBalHandler = async () => {
-    getBnbBalance(addr)
+    getNativeBalance(ChainId.BSC, addr)
       .then((d) => {
         setBnbBal(utils.formatUnits(d, 18));
         setErr('');
@@ -156,10 +156,11 @@ const Index: NextPageWithLayout = () => {
             const token0 = BSC_BNB;
             const token1 = bscTokens.busd;
 
-            getTokensBalance('0x55cf452D43EfAfb505335cEe7e0BB368a37c322c', [
-              token0,
-              token1,
-            ]).then((ret) => {
+            getTokensBalance(
+              ChainId.BSC,
+              '0x55cf452D43EfAfb505335cEe7e0BB368a37c322c',
+              [token0, token1]
+            ).then((ret) => {
               console.log(ret);
               ret.forEach((item) => {
                 console.log(item.currency.address, item.toSignificant());
@@ -172,11 +173,12 @@ const Index: NextPageWithLayout = () => {
 
         <Button
           onClick={() => {
-            getBnbBalance('0x55cf452D43EfAfb505335cEe7e0BB368a37c322c').then(
-              (ret) => {
-                console.log(ret);
-              }
-            );
+            getNativeBalance(
+              ChainId.BSC,
+              '0x55cf452D43EfAfb505335cEe7e0BB368a37c322c'
+            ).then((ret) => {
+              console.log(ret);
+            });
           }}
         >
           Get BNB Balance

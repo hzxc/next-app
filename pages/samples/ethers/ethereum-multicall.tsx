@@ -145,6 +145,7 @@ const EthereumMulticall: NextPageWithLayout = () => {
       <Button
         onClick={() => {
           tradeExactIn(
+            56,
             CurrencyAmount.fromRawAmount(
               bscTokens.vai,
               ethers.utils.parseEther('1').toString()
@@ -214,6 +215,7 @@ const EthereumMulticall: NextPageWithLayout = () => {
       <Button
         onClick={() => {
           tradeExactOut(
+            56,
             bscTokens.usdt,
             CurrencyAmount.fromRawAmount(
               bscTokens.vai,

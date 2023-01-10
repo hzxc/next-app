@@ -8,8 +8,9 @@ import { ChainId, CurrencyAmount, ERC20Token } from 'eth';
 import { BigNumber, ethers } from 'ethers';
 import { IToken } from 'redux/pancake/pancakeSlice';
 import { isError } from 'utils';
-import { getBnbBalance, getTokensBalance } from 'utils/pancake';
+import { getNativeBalance, getTokensBalance } from 'utils/pancake';
 import { useAccount } from 'wagmi';
+import { usePanChainId } from './usePanChainId';
 
 const getCurrencyBalance = async (act: `0x${string}`, tokens: string[]) => {
   const mutiQueryContr = new ethers.Contract(
@@ -46,7 +47,7 @@ const getCurrencyBalance = async (act: `0x${string}`, tokens: string[]) => {
     });
 
     if (bIndex >= 0) {
-      const bnbBal = await getBnbBalance(act);
+      const bnbBal = await getNativeBalance(56, act);
       result.splice(bIndex, 0, bnbBal);
     }
   } catch (err) {
@@ -79,7 +80,7 @@ const getBalance = async (act: `0x${string}`, tokens: IToken[]) => {
     if (item.address !== ethers.constants.AddressZero) {
       queryTokens.push(
         new ERC20Token(
-          ChainId.BSC,
+          item.chainId,
           item.address,
           item.decimals,
           item.symbol,
@@ -94,13 +95,13 @@ const getBalance = async (act: `0x${string}`, tokens: IToken[]) => {
     }
   });
 
-  const bals = await getTokensBalance(act, queryTokens);
+  const bals = await getTokensBalance(queryTokens[0].chainId, act, queryTokens);
   bals.forEach((b) => {
     result.push(b.toSignificant());
   });
 
   if (bIndex >= 0) {
-    const bnbBal = await getBnbBalance(act);
+    const bnbBal = await getNativeBalance(queryTokens[0].chainId, act);
     const bnbAmount = CurrencyAmount.fromRawAmount(BSC_BNB, bnbBal._hex);
     result.splice(bIndex, 0, bnbAmount.toSignificant());
   }

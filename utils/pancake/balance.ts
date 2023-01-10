@@ -1,11 +1,15 @@
 import { ContractCallContext, Multicall } from 'ethereum-multicall';
 import IERC20ABI from 'abis/erc20.json';
-import { bscProvider } from 'conf';
+import { PROVIDER } from 'conf';
 import { CurrencyAmount, ERC20Token } from 'eth';
 import { compact } from 'lodash';
 import { ethers } from 'ethers';
 
-const balanceCall = async (act: `0x${string}`, tokenAddresses: string[]) => {
+const balanceCall = async (
+  chainId: number,
+  act: `0x${string}`,
+  tokenAddresses: string[]
+) => {
   const contractCallContext: ContractCallContext[] = tokenAddresses.map(
     (addr, i) => {
       return {
@@ -24,7 +28,7 @@ const balanceCall = async (act: `0x${string}`, tokenAddresses: string[]) => {
   );
 
   const multicall = new Multicall({
-    ethersProvider: bscProvider,
+    ethersProvider: PROVIDER[chainId],
     tryAggregate: true,
   });
 
@@ -32,11 +36,12 @@ const balanceCall = async (act: `0x${string}`, tokenAddresses: string[]) => {
   return results;
 };
 
-export const getBnbBalance = (act: `0x${string}`) => {
-  return bscProvider.getBalance(ethers.utils.getAddress(act));
+export const getNativeBalance = (chainId: number, act: `0x${string}`) => {
+  return PROVIDER[chainId].getBalance(ethers.utils.getAddress(act));
 };
 
 export const getTokensBalance = async (
+  chainId: number,
   act: `0x${string}`,
   tokens: ERC20Token[]
 ) => {
@@ -47,7 +52,7 @@ export const getTokensBalance = async (
     return memo;
   }, []);
 
-  const callResults = await balanceCall(act, tokenAddresses);
+  const callResults = await balanceCall(chainId, act, tokenAddresses);
 
   const bals = tokens.map((tkn, i) => {
     const { returnValues: bal, success } =

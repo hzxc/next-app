@@ -16,6 +16,7 @@ const Test: NextPageWithLayout = () => {
       <p>
         {bnb.name}, {busd.name}, {cake.name}, {btcb.name}
       </p>
+      <p>[]:{[] ? 'true' : 'false'}</p>
     </div>
   );
 };

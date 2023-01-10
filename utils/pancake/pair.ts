@@ -111,6 +111,10 @@ export const getAllCommonPairs = async (
     wrappedCurrency(currencyB, chainId),
   ];
 
+  if (tokenA.chainId !== tokenB.chainId || tokenA.address === tokenB.address) {
+    return [];
+  }
+
   const common = PAN_BASES_TO_CHECK_TRADES_AGAINST[chainId] ?? [];
 
   // Additional bases for specific tokens

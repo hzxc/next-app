@@ -13,7 +13,7 @@ export const usePairs = (param: { tokenA: ERC20Token; tokenB: ERC20Token }) => {
   // const debouncePairAddr = useDebounce(pairAddr, 400);
 
   const [chainId] = usePanChainId();
-  return useQuery<Pair[], Error>(
+  return useQuery<Pair[] | null, Error>(
     ['PanPairs', pairAddr],
     () => {
       console.log('getAllCommonPairs');

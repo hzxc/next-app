@@ -75,7 +75,11 @@ const Pancake: NextPageWithLayout = () => {
   }, [chainId, isLoading, mutate, pancakePersist.tokens]);
 
   useEffect(() => {
+    console.log('bal', bal);
+
     if (bal) {
+      console.log('bal', bal[0]);
+      console.log('bal', bal[1]);
       setCurBal({
         inBal: bal[0],
         outBal: bal[1],
