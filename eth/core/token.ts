@@ -9,6 +9,8 @@ export interface SerializedToken {
   symbol: string;
   name?: string;
   projectLink?: string;
+  logoURI?: string;
+  source?: string;
 }
 
 /**
@@ -64,16 +66,6 @@ export class Token extends BaseCurrency {
    * @throws if the tokens are on different chains
    */
   public sortsBefore(other: Token): boolean {
-    if (this.chainId !== other.chainId) {
-      console.log(
-        'this.chainId-other.chainId',
-        this.name,
-        this.chainId,
-        other.chainId,
-        other.name
-      );
-    }
-
     invariant(this.chainId === other.chainId, 'CHAIN_IDS');
     invariant(this.address !== other.address, 'ADDRESSES');
     return this.address.toLowerCase() < other.address.toLowerCase();
@@ -94,6 +86,8 @@ export class Token extends BaseCurrency {
       symbol: this.symbol,
       name: this.name,
       projectLink: this.projectLink,
+      logoURI: this.logoURI,
+      source: this.source,
     };
   }
 }

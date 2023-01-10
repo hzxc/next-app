@@ -12,7 +12,8 @@ export const bscTestnetTokens = {
     'SYRUP',
     'SyrupBar Token',
     'https://pancakeswap.finance/',
-    'https://assets-cdn.trustwallet.com/blockchains/smartchain/assets/0x009cF7bC57584b7998236eff51b98A168DceA9B0/logo.png'
+    'https://assets-cdn.trustwallet.com/blockchains/smartchain/assets/0x009cF7bC57584b7998236eff51b98A168DceA9B0/logo.png',
+    'CoinMarketCap'
   ),
   bake: new ERC20Token(
     ChainId.BSC_TESTNET,
@@ -21,7 +22,8 @@ export const bscTestnetTokens = {
     'BAKE',
     'Bakeryswap Token',
     'https://www.bakeryswap.org/',
-    'https://tokens.pancakeswap.finance/images/0xE02dF9e3e622DeBdD69fb838bB799E3F168902c5.png'
+    'https://tokens.pancakeswap.finance/images/0xE02dF9e3e622DeBdD69fb838bB799E3F168902c5.png',
+    'CoinMarketCap'
   ),
   hbtc: new ERC20Token(
     ChainId.BSC_TESTNET,
@@ -30,7 +32,8 @@ export const bscTestnetTokens = {
     'HBTC',
     'Huobi BTC',
     '',
-    'https://tokens.pancakeswap.finance/images/0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c.png'
+    'https://tokens.pancakeswap.finance/images/0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c.png',
+    'CoinMarketCap'
   ),
   wbtc: new ERC20Token(
     ChainId.BSC_TESTNET,
@@ -39,7 +42,8 @@ export const bscTestnetTokens = {
     'WBTC',
     'Wrapped BTC',
     '',
-    'https://tokens.pancakeswap.finance/images/0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c.png'
+    'https://tokens.pancakeswap.finance/images/0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c.png',
+    'CoinMarketCap'
   ),
   usdc: new ERC20Token(
     ChainId.BSC_TESTNET,
@@ -48,6 +52,7 @@ export const bscTestnetTokens = {
     'USDC',
     'Binance-Peg USD Coin',
     '',
-    'https://tokens.pancakeswap.finance/images/0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d.png'
+    'https://tokens.pancakeswap.finance/images/0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d.png',
+    'CoinMarketCap'
   ),
 };

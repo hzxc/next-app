@@ -25,7 +25,7 @@ import { ChainId, JSBI, Percent, TradeDirection, _10000, _9975 } from 'eth';
 import { useTrade } from 'hooks/pancake/useTrade';
 
 import { getBestUrl } from 'conf';
-import { useAccount, useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { PAN_COMMON_TOKEN } from 'data/constants';
 import { usePanChainId } from 'hooks/pancake/usePanChainId';
 
@@ -44,14 +44,12 @@ const Pancake: NextPageWithLayout = () => {
 
   useEffect(() => {
     const [NATIVE, TKN1] = PAN_COMMON_TOKEN[chainId];
-    // console.log(NATIVE);
-    // console.log(TKN1);
     dispatch(setInputCurrency(NATIVE));
     dispatch(setOutputCurrency(TKN1));
   }, [chainId, dispatch]);
   /* #endregion */
 
-  const { mutate, isIdle } = useTokens();
+  const { mutate, isLoading } = useTokens();
 
   const [source, setSource] = useState<'in' | 'out'>('in');
   const [inVal, setInVal] = useState('');
@@ -68,13 +66,13 @@ const Pancake: NextPageWithLayout = () => {
   });
 
   useEffect(() => {
-    if (!pancakePersist.tokens[chainId] && isIdle) {
+    if (!pancakePersist.tokens[chainId]?.length && !isLoading) {
       console.log('get tokens from network');
       mutate();
     } else {
       console.log('get tokens from local storage');
     }
-  }, [chainId, isIdle, mutate, pancakePersist.tokens]);
+  }, [chainId, isLoading, mutate, pancakePersist.tokens]);
 
   useEffect(() => {
     if (bal) {
@@ -98,7 +96,6 @@ const Pancake: NextPageWithLayout = () => {
   });
 
   useEffect(() => {
-    console.log(tradeData);
     if (tradeData) {
       tradeParam.direction
         ? setInVal(tradeData.inputAmount.toSignificant())

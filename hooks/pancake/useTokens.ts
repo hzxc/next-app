@@ -71,11 +71,11 @@ const getTokens = async (chainId: number) => {
       }
     });
 
-    array.push(bscTestnetTokens.bake);
-    array.push(bscTestnetTokens.hbtc);
-    array.push(bscTestnetTokens.syrup);
-    array.push(bscTestnetTokens.usdc);
-    array.push(bscTestnetTokens.wbtc);
+    array.push(bscTestnetTokens.bake.serialize);
+    array.push(bscTestnetTokens.hbtc.serialize);
+    array.push(bscTestnetTokens.syrup.serialize);
+    array.push(bscTestnetTokens.usdc.serialize);
+    array.push(bscTestnetTokens.wbtc.serialize);
   }
 
   return { baseArray, array };

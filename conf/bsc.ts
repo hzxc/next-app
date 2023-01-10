@@ -71,9 +71,6 @@ export const getBscUrl = () => {
           duration = dayjs().valueOf() - start;
         }
       });
-    // .finally(() => {
-    //   duration = dayjs().valueOf() - start;
-    // });
 
     return { url: item, duration: duration };
   });
@@ -82,8 +79,6 @@ export const getBscUrl = () => {
     const sortResults = results.sort((a, b) => {
       return a.duration - b.duration;
     });
-
-    // console.log(sortResults);
 
     return sortResults[0].url;
   });

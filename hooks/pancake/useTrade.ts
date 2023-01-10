@@ -58,7 +58,6 @@ export const useTrade = (param: {
   const [tag, setTag] = useState<boolean>(false);
 
   // useEffect(() => {
-  //   console.log('paris change');
   //   if (pairs && !isFetching) {
   //     setTag(!tag);
   //   }

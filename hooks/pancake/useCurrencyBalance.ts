@@ -18,7 +18,6 @@ const getCurrencyBalance = async (act: `0x${string}`, tokens: string[]) => {
     bscProvider
   );
 
-  // console.log('getBalance');
   tokens.forEach((item) => {
     if (!ethers.utils.isAddress(item)) {
       throw new Error(`address invalid ${item}`);
@@ -43,20 +42,16 @@ const getCurrencyBalance = async (act: `0x${string}`, tokens: string[]) => {
     const ret = await mutiQueryContr.multiQuery([...queryParams]);
     ret[1].forEach((item: string) => {
       const [bn] = ethers.utils.defaultAbiCoder.decode(['uint'], item);
-      // console.log('muti query result', ethers.utils.formatUnits(bn, 18));
       result.push(bn);
     });
 
     if (bIndex >= 0) {
       const bnbBal = await getBnbBalance(act);
-      // console.log('bnb balance result', ethers.utils.formatUnits(bnbBal, 18));
       result.splice(bIndex, 0, bnbBal);
     }
   } catch (err) {
     throw new Error(isError(err) ? err.message : 'unknown error');
   }
-
-  // console.log(result);
 
   return result;
 };

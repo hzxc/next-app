@@ -101,7 +101,6 @@ export const Swap: React.FC<SwapProps> = (props) => {
         }
       } catch (error: any) {
         console.log('error?.reason', error?.reason);
-        console.log('error?.code', error?.code);
       }
     } else {
       const amountIn = ethers.utils.parseUnits(
@@ -148,7 +147,6 @@ export const Swap: React.FC<SwapProps> = (props) => {
         }
       } catch (error: any) {
         console.log('error?.reason:', error?.reason);
-        console.log('error?.code:', error?.code);
       }
     }
   };
