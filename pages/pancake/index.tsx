@@ -206,8 +206,8 @@ const Pancake: NextPageWithLayout = () => {
             </div>
           </div>
           <div className='flex flex-col items-start justify-start p-4 gap-2 text-indigo-900 font-semibold'>
-            <div className='w-full flex items-center justify-between px-2 space-x-2'>
-              <div>
+            <div className='w-full flex items-center justify-between px-2'>
+              <div className='shrink-0'>
                 <IconButton
                   onClick={() => {
                     setSource('in');
@@ -265,8 +265,8 @@ const Pancake: NextPageWithLayout = () => {
                 onClick={tknEx}
               ></IconButton>
             </div>
-            <div className='w-full flex items-center justify-between px-2 space-x-2'>
-              <div>
+            <div className='w-full flex items-center justify-between px-2'>
+              <div className='shrink-0'>
                 <IconButton
                   onClick={() => {
                     setSource('out');

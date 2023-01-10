@@ -1,9 +1,9 @@
-import { BSC_PANCAKE_ROUTER_ADDR, PAN_ROUTER_ADDRESS } from 'data/constants';
+import { PAN_ROUTER_ADDRESS } from 'data/constants';
 import dayjs from 'dayjs';
 import { BigNumber, ethers } from 'ethers';
 import { useToggle } from 'hooks';
 import { IToken } from 'redux/pancake/pancakeSlice';
-import { useAccount, useContract, useSigner } from 'wagmi';
+import { useAccount, useSigner } from 'wagmi';
 import { ConnectWalletModal } from '.';
 import { PanButton } from './button';
 import IRouterABI from 'abis/pancake/router.json';
@@ -33,27 +33,27 @@ export const Swap: React.FC<SwapProps> = (props) => {
   const { data: signer } = useSigner({});
   const { address, isConnected } = useAccount();
   const [chainId] = usePanChainId();
-  const contract = useContract({
-    address: PAN_ROUTER_ADDRESS[chainId],
-    abi: IRouterABI,
-    signerOrProvider: signer,
-  });
+  // const contract = useContract({
+  //   address: PAN_ROUTER_ADDRESS[chainId],
+  //   abi: IRouterABI,
+  //   signerOrProvider: signer,
+  // });
 
   const confirmSwap = async () => {
     if (!signer || !isConnected || !address || !swapParam.path) return;
 
-    // const router = new ethers.Contract(
-    //   BSC_PANCAKE_ROUTER_ADDR,
-    //   IPancakeRouterABI,
-    //   signer
-    // );
+    const contract = new ethers.Contract(
+      PAN_ROUTER_ADDRESS[chainId],
+      IRouterABI,
+      signer
+    );
 
-    swapTokens(swapParam);
+    swapTokens(contract, swapParam);
   };
 
   /* #region  Swap */
 
-  const swapTokens = async (param: Param) => {
+  const swapTokens = async (contract: ethers.Contract, param: Param) => {
     const { from, to, path, direction, amount } = param;
     const deadline = BigNumber.from(dayjs().add(30, 'minute').unix());
 
@@ -62,10 +62,6 @@ export const Swap: React.FC<SwapProps> = (props) => {
         typeof amount === 'number' ? amount.toString() : amount,
         to.decimals
       );
-      // const amountIn = await routerContract.callStatic.getAmountsIn(
-      //   amountOut,
-      //   path
-      // );
 
       const amountIn = await contract?.callStatic.getAmountsIn(amountOut, path);
 
