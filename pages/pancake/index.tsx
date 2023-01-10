@@ -21,7 +21,7 @@ import {
 import { selectPancakePersist } from 'redux/pancake/pancakePersistSlice';
 import { IoMdRefresh } from 'react-icons/io';
 import { ethers } from 'ethers';
-import { ChainId, JSBI, Percent, TradeDirection, _10000, _9975 } from 'eth';
+import { JSBI, Percent, TradeDirection, _10000, _9975 } from 'eth';
 import { useTrade } from 'hooks/pancake/useTrade';
 
 import { getBestUrl } from 'conf';
