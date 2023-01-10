@@ -16,7 +16,6 @@ import {
 } from 'redux/pancake/pancakeSlice';
 
 import { importToken } from 'redux/pancake/pancakePersistSlice';
-import { ChainId } from 'eth';
 import { PAN_COMMON_TOKEN } from 'data/constants';
 import { usePanChainId } from 'hooks/pancake/usePanChainId';
 

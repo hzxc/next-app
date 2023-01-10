@@ -68,7 +68,6 @@ export const useTrade = (param: {
   });
 
   useEffect(() => {
-    console.log('paris change');
     mutate();
   }, [dataUpdatedAt, mutate]);
 

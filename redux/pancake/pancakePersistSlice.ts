@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { tokens97 } from 'data/baseTokens';
 import { ChainId } from 'eth';
 import { RootState } from 'redux/store';
 import { tokens56 } from '../../data/baseTokens/56';
@@ -16,7 +17,7 @@ interface PancakePersistState {
 const initialState: PancakePersistState = {
   // baseTokens: baseTokens,
   // tokens: null,
-  baseTokens: { 56: tokens56 },
+  baseTokens: { 56: tokens56, 97: tokens97 },
   tokens: {},
 };
 export const pancakePersistSlice = createSlice({
@@ -37,7 +38,8 @@ export const pancakePersistSlice = createSlice({
       const idx = state.tokens[action.payload.chainId].findIndex((e) => {
         return e.address === action.payload.tkn.address;
       });
-      if (idx) {
+
+      if (idx >= 0) {
         state.tokens[action.payload.chainId].splice(idx, 1);
       }
       // }
