@@ -16,9 +16,9 @@ import {
 } from 'redux/pancake/pancakeSlice';
 
 import { importToken } from 'redux/pancake/pancakePersistSlice';
-import { useNetwork } from 'wagmi';
 import { ChainId } from 'eth';
 import { PAN_COMMON_TOKEN } from 'data/constants';
+import { usePanChainId } from 'hooks/pancake/usePanChainId';
 
 export const TokenModal: React.FC<{
   visible: boolean;
@@ -26,9 +26,9 @@ export const TokenModal: React.FC<{
   source?: 'in' | 'out';
   setTradeDirection?: () => void;
 }> = ({ visible, modalClose, source, setTradeDirection }) => {
-  const { chain } = useNetwork();
+  const [chainId] = usePanChainId();
 
-  const [NATIVE, TKN1, TKN2, TKN3] = PAN_COMMON_TOKEN[chain?.id ?? ChainId.BSC];
+  const [NATIVE, TKN1, TKN2, TKN3] = PAN_COMMON_TOKEN[chainId];
 
   const pancake = useAppSelector(selectPancake);
   const dispatch = useAppDispatch();
@@ -182,7 +182,7 @@ export const TokenModal: React.FC<{
                 onClick={() => {
                   dispatch(
                     importToken({
-                      chainId: chain?.id ?? ChainId.BSC,
+                      chainId: chainId,
                       tkn: tokens[index],
                     })
                   );

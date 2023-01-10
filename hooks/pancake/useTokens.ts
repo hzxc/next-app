@@ -17,6 +17,7 @@ import {
 import { PROVIDER } from 'conf';
 import TokenABI from 'abis/pancake/token.json';
 import { ethers } from 'ethers';
+import { usePanChainId } from './usePanChainId';
 
 const getTokens = async (chainId: number) => {
   const baseArray: IToken[] = [];
@@ -227,24 +228,22 @@ const searchTokens = async (
 
 export const useTokens = () => {
   const dispatch = useAppDispatch();
-  const { chain } = useNetwork();
+  const [chainId] = usePanChainId();
 
   return useMutation(
     () => {
-      return getTokens(chain?.id ?? ChainId.BSC);
+      return getTokens(chainId);
     },
     {
       onSuccess: (data) => {
         const { baseArray, array } = data;
         if (array.length > 0) {
-          dispatch(
-            setTokens({ chainId: chain?.id ?? ChainId.BSC, tkns: array })
-          );
+          dispatch(setTokens({ chainId: chainId, tkns: array }));
         }
         if (baseArray.length > 0) {
           dispatch(
             setBaseTokens({
-              chainId: chain?.id ?? ChainId.BSC,
+              chainId: chainId,
               tkns: baseArray,
             })
           );
@@ -256,18 +255,18 @@ export const useTokens = () => {
 
 export const useSearch = (param: string) => {
   const pancake = useAppSelector(selectPancakePersist);
-  const { chain } = useNetwork();
+  const [chainId] = usePanChainId();
   return useQuery<IToken[], Error>(
-    ['searchPancakeTokens', param, chain?.id ?? ChainId.BSC],
+    ['searchPancakeTokens', param, chainId],
     () => {
       if (param === '') {
-        return pancake.baseTokens[chain?.id ?? ChainId.BSC] || [];
+        return pancake.baseTokens[chainId] || [];
       } else {
         return searchTokens(
           param,
-          chain?.id ?? ChainId.BSC,
-          pancake.tokens[chain?.id ?? ChainId.BSC] || [],
-          pancake.baseTokens[chain?.id ?? ChainId.BSC]
+          chainId,
+          pancake.tokens[chainId] || [],
+          pancake.baseTokens[chainId]
         );
       }
     }

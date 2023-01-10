@@ -24,8 +24,7 @@ export const useTrade = (param: {
   const { fromToken, toToken, amountToTrade, direction } = param;
   const fromCurrency =
     ethers.constants.AddressZero === ethers.utils.getAddress(fromToken.address)
-      ? // ? WNATIVE[chain?.id ?? ChainId.BSC]
-        WNATIVE[fromToken.chainId]
+      ? WNATIVE[fromToken.chainId]
       : new ERC20Token(
           fromToken.chainId,
           fromToken.address,
@@ -39,8 +38,7 @@ export const useTrade = (param: {
 
   const toCurrency =
     ethers.constants.AddressZero === ethers.utils.getAddress(toToken.address)
-      ? // ? WNATIVE[chain?.id ?? ChainId.BSC]
-        WNATIVE[toToken.chainId]
+      ? WNATIVE[toToken.chainId]
       : new ERC20Token(
           toToken.chainId,
           toToken.address,

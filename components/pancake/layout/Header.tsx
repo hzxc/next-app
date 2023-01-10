@@ -13,7 +13,6 @@ import { IconButton } from 'components';
 import ArrowDownSvg from 'public/images/pancake/arrowDown.svg';
 import WalletSvg from 'public/images/pancake/wallet.svg';
 import { utils } from 'ethers';
-import { useEffect } from 'react';
 import DotSvg from 'public/images/pancake/dot.svg';
 import { useCakePrice } from 'hooks/pancake';
 

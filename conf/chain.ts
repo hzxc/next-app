@@ -57,10 +57,6 @@ export const NODE_URL: Record<number, string[]> = {
   ],
   [ChainId.BSC_TESTNET]: [
     'https://bsc-testnet.public.blastapi.io',
-    'https://data-seed-prebsc-2-s1.binance.org:8545	',
-    'https://data-seed-prebsc-2-s2.binance.org:8545',
-    'https://data-seed-prebsc-1-s2.binance.org:8545',
-    'https://data-seed-prebsc-1-s1.binance.org:8545',
     'https://data-seed-prebsc-1-s3.binance.org:8545',
     'https://data-seed-prebsc-2-s3.binance.org:8545',
   ],

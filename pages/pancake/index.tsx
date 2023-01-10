@@ -27,13 +27,14 @@ import { useTrade } from 'hooks/pancake/useTrade';
 import { getBestUrl } from 'conf';
 import { useAccount, useNetwork } from 'wagmi';
 import { PAN_COMMON_TOKEN } from 'data/constants';
+import { usePanChainId } from 'hooks/pancake/usePanChainId';
 
 const Pancake: NextPageWithLayout = () => {
   const { visible, close, open } = useToggle(false);
 
   /* #region  wagmi */
   const { address, isConnected } = useAccount();
-  const { chain } = useNetwork();
+  const [chainId] = usePanChainId();
   /* #endregion */
 
   /* #region  redux */
@@ -42,12 +43,12 @@ const Pancake: NextPageWithLayout = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const [NATIVE, TKN1] = PAN_COMMON_TOKEN[chain?.id ?? ChainId.BSC];
+    const [NATIVE, TKN1] = PAN_COMMON_TOKEN[chainId];
     // console.log(NATIVE);
     // console.log(TKN1);
     dispatch(setInputCurrency(NATIVE));
     dispatch(setOutputCurrency(TKN1));
-  }, [chain, dispatch]);
+  }, [chainId, dispatch]);
   /* #endregion */
 
   const { mutate, isIdle } = useTokens();
@@ -67,13 +68,13 @@ const Pancake: NextPageWithLayout = () => {
   });
 
   useEffect(() => {
-    if (!pancakePersist.tokens[chain?.id ?? ChainId.BSC] && isIdle) {
+    if (!pancakePersist.tokens[chainId] && isIdle) {
       console.log('get tokens from network');
       mutate();
     } else {
       console.log('get tokens from local storage');
     }
-  }, [chain?.id, isIdle, mutate, pancakePersist.tokens]);
+  }, [chainId, isIdle, mutate, pancakePersist.tokens]);
 
   useEffect(() => {
     if (bal) {
@@ -97,6 +98,7 @@ const Pancake: NextPageWithLayout = () => {
   });
 
   useEffect(() => {
+    console.log(tradeData);
     if (tradeData) {
       tradeParam.direction
         ? setInVal(tradeData.inputAmount.toSignificant())
@@ -158,7 +160,7 @@ const Pancake: NextPageWithLayout = () => {
     <>
       <div>
         <p>{JSON.stringify(tradeParam)}</p>
-        <p>chainId:{chain?.id}</p>
+        <p>chainId:{chainId}</p>
         <p>isConnected:{JSON.stringify(isConnected)}</p>
         <p>address:{address}</p>
         <p className='break-all'>
