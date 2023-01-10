@@ -6,7 +6,6 @@ import { http } from 'utils';
 import { setBaseTokens, setTokens } from 'redux/pancake/pancakePersistSlice';
 import { selectPancakePersist } from 'redux/pancake/pancakePersistSlice';
 import { ChainId } from 'eth';
-import { useNetwork } from 'wagmi';
 import { tokens97 } from 'data/baseTokens/97';
 import { bscTestnetTokens } from 'data/tokens';
 import {
@@ -260,7 +259,7 @@ export const useSearch = (param: string) => {
     ['searchPancakeTokens', param, chainId],
     () => {
       if (param === '') {
-        return pancake.baseTokens[chainId] || [];
+        return pancake.baseTokens[chainId];
       } else {
         return searchTokens(
           param,
