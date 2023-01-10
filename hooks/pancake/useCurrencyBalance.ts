@@ -59,8 +59,9 @@ const getCurrencyBalance = async (act: `0x${string}`, tokens: string[]) => {
 
 export const useCurrencyBalance = (tokens: IToken[]) => {
   const { address, isConnected } = useAccount();
+  console.log('isConnected', isConnected);
   return useQuery<string[], Error>(
-    ['PanBalanceOf', isConnected, tokens[0].address, tokens[1].address],
+    ['PanBalanceOf', address, tokens[0].address, tokens[1].address],
     () => {
       if (isConnected && address) {
         return getBalance(address, tokens);

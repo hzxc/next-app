@@ -1,4 +1,4 @@
-import { BSC_PANCAKE_ROUTER_ADDR } from 'data/constants';
+import { BSC_PANCAKE_ROUTER_ADDR, PAN_ROUTER_ADDRESS } from 'data/constants';
 import dayjs from 'dayjs';
 import { BigNumber, ethers } from 'ethers';
 import { useToggle } from 'hooks';
@@ -6,7 +6,8 @@ import { IToken } from 'redux/pancake/pancakeSlice';
 import { useAccount, useContract, useSigner } from 'wagmi';
 import { ConnectWalletModal } from '.';
 import { PanButton } from './button';
-import IPancakeRouterABI from 'abis/bsc/IPancakeRouter.json';
+import IRouterABI from 'abis/pancake/router.json';
+import { usePanChainId } from 'hooks/pancake/usePanChainId';
 
 interface SwapProps {
   btnTxt: string;
@@ -31,14 +32,15 @@ export const Swap: React.FC<SwapProps> = (props) => {
 
   const { data: signer } = useSigner({});
   const { address, isConnected } = useAccount();
+  const [chainId] = usePanChainId();
   const contract = useContract({
-    address: BSC_PANCAKE_ROUTER_ADDR,
-    abi: IPancakeRouterABI,
+    address: PAN_ROUTER_ADDRESS[chainId],
+    abi: IRouterABI,
     signerOrProvider: signer,
   });
 
   const confirmSwap = async () => {
-    if (!signer || !address || !swapParam.path) return;
+    if (!signer || !isConnected || !address || !swapParam.path) return;
 
     // const router = new ethers.Contract(
     //   BSC_PANCAKE_ROUTER_ADDR,
